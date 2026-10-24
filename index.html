@@ -143,12 +143,12 @@ html.lenis, html.lenis body{ height:auto }
 @media (min-width:640px){ .menu-btn .lbl{ display:inline } }
 
 /* ---------- Hero ---------- */
-.hero{ position:relative; isolation:isolate; overflow:hidden; border-radius:0 0 2rem 2rem; background:#e9e1d2 }
+.hero{ position:relative; isolation:isolate; overflow:hidden; border-radius:0 0 2rem 2rem; background:#c9c9c9 }
 .liquid{ position:absolute; inset:0; z-index:0 }
 .liquid img, .liquid canvas{ position:absolute; inset:0; width:100%; height:100% }
-.liquid img{ object-fit:cover; filter:saturate(.6) brightness(.98) contrast(.95) }
+.liquid img{ object-fit:cover; filter:grayscale(.85) brightness(.8) contrast(.9) }
 .liquid canvas{ pointer-events:none }
-.hero__vignette{ position:absolute; inset:0; z-index:1; pointer-events:none; background:linear-gradient(to right, rgba(250,245,236,.82), rgba(250,245,236,.3) 50%, transparent 75%), linear-gradient(to bottom, rgba(250,245,236,.45), transparent 40%, rgba(250,245,236,.55)) }
+.hero__vignette{ position:absolute; inset:0; z-index:1; pointer-events:none; background:linear-gradient(to right, rgba(255,255,255,.7), rgba(255,255,255,.25) 50%, transparent 75%), linear-gradient(to bottom, rgba(255,255,255,.35), transparent, rgba(255,255,255,.45)) }
 .hero__wm{ pointer-events:none; position:absolute; inset-inline:0; bottom:7rem; z-index:1; text-align:center; user-select:none; -webkit-user-select:none; font-weight:700; line-height:1;
   font-size:var(--text-watermark); color:rgba(255,255,255,.4); white-space:nowrap; --o:.4; --ty:20px; --d:300ms; --dur:1.1s }
 .hero__grid{ position:relative; z-index:20; display:flex; flex-direction:column; gap:2rem; padding-top:7rem; padding-bottom:5rem }
@@ -247,6 +247,15 @@ html.lenis, html.lenis body{ height:auto }
 .globe-note{ position:relative; display:flex; align-items:center; gap:.75rem; font-size:.875rem; color:rgba(17,17,17,.7); --ty:12px }
 .globe-note .i{ font-size:1.5rem; color:#111 }
 .globe-note span{ max-width:14rem }
+.about__media{ display:flex; flex-direction:column; align-items:flex-start; gap:1.25rem }
+.about__card{ position:relative; width:100%; overflow:hidden; border-radius:2rem; aspect-ratio:4/3; background:#eae2d3 }
+.about__card img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; transition:transform 1.2s var(--snap) }
+.about__pill{ position:absolute; top:1rem; right:1rem; border-radius:9999px; background:linear-gradient(to bottom right,#d6b36f,#8d6b2b); color:#fff; padding:.375rem .875rem; font-size:.75rem; font-weight:500 }
+.about__note{ position:absolute; left:1rem; bottom:1rem; right:1rem; max-width:22rem; display:flex; align-items:center; gap:.75rem; border-radius:1.25rem;
+  background:rgba(255,255,255,.88); backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px); padding:.75rem 1rem .75rem .75rem;
+  font-size:.875rem; line-height:1.4; color:rgba(17,17,17,.75); box-shadow:0 12px 30px -14px rgba(0,0,0,.35) }
+.about__icon{ width:2.25rem; height:2.25rem; flex:none; display:grid; place-items:center; border-radius:9999px; background:#0a0a0a; color:#d6b36f; font-size:1.125rem }
+@media (hover:hover) and (pointer:fine){ .about__card:hover img{ transform:scale(1.04) } }
 .about__stmt{ display:flex; flex-direction:column; gap:2.5rem }
 .about__h2{ font-size:1.5rem; font-weight:500; line-height:1.35; letter-spacing:-.01em }
 @media (min-width:640px){ .about__h2{ font-size:1.875rem } }
@@ -260,17 +269,17 @@ html.lenis, html.lenis body{ height:auto }
 
 /* ---------- CreateBand ---------- */
 .band{ background:#fff }
-.band ul{ display:flex; flex-direction:column; gap:.75rem; padding-block:2.5rem }
-@media (min-width:640px){ .band ul{ flex-direction:row; gap:1rem } }
-.band li{ flex:1; --ty:28px }
-.tile{ display:grid; place-items:center; height:6rem; border-radius:9999px; font-size:1.875rem; font-weight:500; transition:transform .4s var(--spring) }
-@media (min-width:640px){ .tile{ height:10rem; font-size:2.25rem } }
+.band ul{ display:flex; flex-wrap:wrap; justify-content:center; align-items:center; gap:.625rem; padding-block:2.5rem }
+.band li{ flex:none; --ty:20px }
+.tile{ display:grid; place-items:center; height:3.5rem; padding-inline:1.75rem; border-radius:9999px; font-size:1.125rem; font-weight:500; transition:transform .4s var(--spring) }
+@media (min-width:640px){ .tile{ height:4.5rem; padding-inline:2.5rem; font-size:1.5rem } }
 .tile--light{ background:#f5f0e6; color:#111 }
 .tile--accent{ background:linear-gradient(to bottom right,#d6b36f,#8d6b2b); color:#fff }
 .tile--dark{ background:#0a0a0a; color:#fff }
-.tile--dark .i{ font-size:2.25rem }
-@media (min-width:640px){ .tile--dark .i{ font-size:3rem } }
-.tile--ghost{ background:rgba(245,240,230,.6); color:rgba(17,17,17,.35) }
+.tile--dark{ width:3.5rem; padding-inline:0 }
+.tile--dark .i{ font-size:1.375rem }
+@media (min-width:640px){ .tile--dark{ width:4.5rem } .tile--dark .i{ font-size:1.75rem } }
+.tile--ghost{ background:rgba(245,240,230,.6); color:rgba(17,17,17,.45) }
 
 /* ---------- Portfolio ---------- */
 .works{ background:#fff }
@@ -516,7 +525,7 @@ html.lenis, html.lenis body{ height:auto }
   .pill:hover .arr-ur{ transform:translate(2px,-2px) }
   .partners li:hover > span{ transform:translateY(-2px); opacity:1 }
   .socials a:hover .i{ transform:scale(1.18) }
-  .tile:hover{ transform:scale(1.03) }
+  .tile:hover{ transform:scale(1.06) }
   .pcard:hover article{ transform:translateY(-8px) scale(1.012) }
   .pcard:hover .pcard__badge{ transform:rotate(45deg) scale(1.08) }
   .srv a:hover .srow{ background:rgba(245,240,230,1); padding-left:2rem; padding-right:1.25rem }
@@ -662,10 +671,16 @@ html.lenis, html.lenis body{ height:auto }
   <!-- About -->
   <section class="about" id="about">
     <div class="shell about__in">
-      <div class="globe-block">
-        <svg class="i globe-bg" aria-hidden="true"><use href="#i-globe"/></svg>
+      <div class="about__media">
         <span class="eyebrow">Sobre mkstays</span>
-        <div class="globe-note rv" data-rv><svg class="i"><use href="#i-globe"/></svg><span>Equipo 100% remoto: trabajamos contigo esté donde esté tu propiedad.</span></div>
+        <div class="about__card rv" data-rv style="--ty:24px;--sc:.98">
+          <img src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1200&q=75" alt="Salón luminoso de un alojamiento turístico" loading="lazy" />
+          <span class="about__pill">100% online</span>
+          <div class="about__note">
+            <span class="about__icon"><svg class="i"><use href="#i-globe"/></svg></span>
+            <span>Equipo 100% remoto: trabajamos contigo esté donde esté tu propiedad.</span>
+          </div>
+        </div>
       </div>
       <div class="about__stmt">
         <h2 class="about__h2" data-split="words">Ayudamos a anfitriones y gestores a llenar su calendario con <span class="muted">anuncios optimizados, webs de reserva directa y reels que convierten — todo en remoto.</span></h2>
@@ -1203,7 +1218,7 @@ tickClock(); setInterval(tickClock, 1000);
     if (!img.complete || !img.naturalWidth) return;
     const s = Math.max(W / img.naturalWidth, H / img.naturalHeight);
     const w = img.naturalWidth * s, h = img.naturalHeight * s;
-    cctx.filter = 'saturate(1.3) contrast(1.06) brightness(1.04)';
+    cctx.filter = 'saturate(1.12) contrast(1.04)';
     cctx.drawImage(img, (W - w) / 2, (H - h) / 2, w, h);
     cctx.filter = 'none';
   }
