@@ -8,7 +8,7 @@
 <meta name="theme-color" content="#0a0a0a" />
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@700&family=Onest:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="preload" as="image" href="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=2400&q=80">
 <style>
 :root{
@@ -202,6 +202,13 @@ html.lenis, html.lenis body{ height:auto }
 .status .mid{ display:none }
 @media (min-width:640px){ .status .mid{ display:inline } }
 .status .scroll{ display:inline-flex; gap:.5rem }
+
+/* MK Stays logo */
+.brand > span.mklogo{ flex-direction:column; gap:0; line-height:1; color:#111 }
+.mklogo__roof{ width:1.6rem; height:auto; color:#b8913f; margin-bottom:.2rem }
+.mklogo__mk{ font-family:'Cormorant Garamond',Georgia,serif; font-weight:700; font-size:2rem; line-height:.78; letter-spacing:-.01em }
+.mklogo__rule{ width:.85rem; height:1px; background:#b8913f; margin:.35rem 0 .3rem }
+.mklogo__stays{ font-size:.5rem; font-weight:500; letter-spacing:.55em; margin-right:-.55em }
 
 /* Platform badges */
 .platforms{ display:flex; flex-wrap:wrap; align-items:center; gap:.625rem }
@@ -552,7 +559,12 @@ html.lenis, html.lenis body{ height:auto }
 <!-- Header -->
 <header class="header rv" data-gate>
   <div class="shell header__in">
-    <button class="brand" data-nav="home" aria-label="mkstays — inicio"><span><svg class="i"><use href="#i-logo"/></svg>mkstays</span></button>
+    <button class="brand" data-nav="home" aria-label="MK Stays — inicio"><span class="mklogo" aria-hidden="true">
+      <svg class="mklogo__roof" viewBox="0 0 244 92"><path d="M3 89 122 3l119 86" fill="none" stroke="currentColor" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/><path d="M48 90 122 25l74 65" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span class="mklogo__mk">MK</span>
+      <span class="mklogo__rule"></span>
+      <span class="mklogo__stays">STAYS</span>
+    </span></button>
     <nav class="nav" aria-label="Principal">
       <ul>
         <li><button data-nav="home" aria-current="page"><span>Inicio</span></button></li>
