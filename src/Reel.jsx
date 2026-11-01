@@ -1,4 +1,5 @@
 import React from 'react';
+import { ART, Host } from './Art.jsx';
 import {
   AbsoluteFill, Sequence, useCurrentFrame, useVideoConfig, interpolate, spring,
   staticFile, delayRender, continueRender, Easing,
@@ -18,8 +19,8 @@ const len = (s) => (Array.isArray(s) ? s.join(' ') : String(s || '')).replace(/<
 export function sceneFrames(sc) {
   const read = (chars) => Math.round(Math.min(7.5, Math.max(2.6, 1.2 + chars / 15)) * FPS);
   switch (sc.type) {
-    case 'hook': return read(len(sc.text) + len(sc.sub) * 0.6);
-    case 'point': return read(len(sc.title) + len(sc.body) + len(sc.action));
+    case 'hook': return read(len(sc.text) + len(sc.sub) * 0.6) + (sc.art ? 15 : 0);
+    case 'point': return read(len(sc.title) + len(sc.body) + len(sc.action)) + (sc.art ? 20 : 0);
     case 'list': return read(len(sc.title) + len(sc.items) * 1.1) + 10;
     case 'quote': return read(len(sc.text) + len(sc.by));
     case 'cta': return Math.round(4.2 * FPS);
@@ -91,6 +92,7 @@ const Wipe = () => {
 
 // ---------- escenas ----------
 const Hook = ({ sc, i, n }) => {
+  if (sc.art && ART[sc.art]) return <HookArt sc={sc} i={i} n={n} />;
   const f = useCurrentFrame(); const { fps } = useVideoConfig();
   const lines = sc.text || [];
   const corner = useIn(0);
@@ -117,7 +119,53 @@ const Hook = ({ sc, i, n }) => {
   );
 };
 
+// Gancho ilustrado: escena animada arriba, titular abajo
+const HookArt = ({ sc, i, n }) => {
+  const f = useCurrentFrame(); const { fps } = useVideoConfig();
+  const lines = sc.text || [];
+  const A = ART[sc.art];
+  const sz = Math.min(170, Math.floor(1950 / Math.max(...lines.map((l) => len(l)), 6)));
+  return (
+    <Frame index={i} count={n} dark label={sc.label || 'Historia real'}>
+      <div style={{ height: 640, marginTop: -40, marginBottom: 20 }}><A /></div>
+      <div style={{ display: 'flex', flexDirection: 'column' }}>
+        {lines.map((l, k) => {
+          const p = spring({ frame: f - 4 - k * 7, fps, config: { damping: 11, stiffness: 170, mass: 0.6 } });
+          return (
+            <div key={k} style={{ fontSize: sz, lineHeight: 0.9, fontWeight: 900, fontStretch: '62%', textTransform: 'uppercase',
+              transform: `translateY(${(1 - p) * 60}px)`, opacity: Math.min(1, p * 1.4) }}><Rich s={l} /></div>
+          );
+        })}
+        {sc.sub ? <Words text={sc.sub} start={8 + lines.length * 7} style={{ marginTop: 36, fontSize: 46, lineHeight: 1.3, color: SOFT, fontWeight: 500 }} /> : null}
+      </div>
+    </Frame>
+  );
+};
+
+// Capítulo ilustrado: escena con personajes arriba, texto corto abajo
+const PointArt = ({ sc, i, n, num }) => {
+  const A = ART[sc.art];
+  const box = useIn(30 + len(sc.title) / 3 + len(sc.body) / 4);
+  return (
+    <Frame index={i} count={n} dark={false} hideBrand label={`Capítulo ${String(num).padStart(2, '0')}`}>
+      <div style={{ height: 700, marginTop: -30 }}><A /></div>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 26, marginTop: 10 }}>
+        <Words text={sc.title} start={10} style={{ fontSize: 96, lineHeight: 0.92, fontWeight: 900, fontStretch: '62%', textTransform: 'uppercase' }} />
+        {sc.body ? <Words text={sc.body} start={22} step={2} style={{ fontSize: 44, lineHeight: 1.3, color: '#2B2B29', fontWeight: 500 }} /> : null}
+        {sc.action ? (
+          <div style={{ background: INK, color: CREAM, padding: '22px 34px', display: 'flex', gap: 22, alignItems: 'center',
+            transform: `translateY(${(1 - box) * 60}px)`, opacity: box }}>
+            <span style={{ fontSize: 30, fontWeight: 800, fontStretch: '80%', letterSpacing: '0.08em', textTransform: 'uppercase', color: RED, flex: 'none' }}>Haz esto</span>
+            <span style={{ fontSize: 42, lineHeight: 1.2, fontWeight: 700 }}>{sc.action}</span>
+          </div>
+        ) : null}
+      </div>
+    </Frame>
+  );
+};
+
 const Point = ({ sc, i, n, num }) => {
+  if (sc.art && ART[sc.art]) return <PointArt sc={sc} i={i} n={n} num={num} />;
   const f = useCurrentFrame();
   const big = useIn(0, { damping: 18, stiffness: 90 });
   const box = useIn(24 + len(sc.title) / 3 + len(sc.body) / 4);

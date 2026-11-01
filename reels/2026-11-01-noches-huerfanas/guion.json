@@ -1,0 +1,7 @@
+{"serie":"Reel 02","scenes":[
+ {"type":"hook","art":"noche","label":"Historia de anfitriona","text":["Esta noche","vacía es","<r>culpa tuya</r>"],"sub":"Le pasa a muchos anfitriones sin darse cuenta"},
+ {"type":"point","art":"calendario","title":"Laura tenía casi todo lleno","body":"Una reserva hasta el miércoles y otra desde el jueves. La noche del miércoles quedó suelta.","action":"Busca huecos de 1 a 3 noches"},
+ {"type":"point","art":"bloqueo","title":"Y nadie podía reservarla","body":"Su estancia mínima era de 2 noches. Ese hueco de 1 noche no lo podía reservar nadie: una noche huérfana.","action":"Revisa tu estancia mínima en esos huecos"},
+ {"type":"point","art":"solucion","title":"Así llenó el hueco","body":"Bajó la estancia mínima a 1 noche solo en esa fecha y le puso entre un 10% y un 20% de descuento.","action":"O usa precios dinámicos que lo hagan solos"},
+ {"type":"cta","word":"AUDITORÍA","text":"y te digo cuántas noches huérfanas tienes"}
+]}
