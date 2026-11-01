@@ -2,7 +2,7 @@ import React from 'react';
 import { ART, Host } from './Art.jsx';
 import {
   AbsoluteFill, Sequence, useCurrentFrame, useVideoConfig, interpolate, spring,
-  staticFile, delayRender, continueRender, Easing,
+  staticFile, delayRender, continueRender, Easing, Audio,
 } from 'remotion';
 
 export const FPS = 30;
@@ -16,7 +16,12 @@ face.load().then((f) => { document.fonts.add(f); continueRender(handle); }).catc
 
 // ---------- duración de cada escena según su texto ----------
 const len = (s) => (Array.isArray(s) ? s.join(' ') : String(s || '')).replace(/<\/?r>/g, '').length;
+export const VOZ_DELAY = 8; // la voz entra tras la cortinilla
 export function sceneFrames(sc) {
+  const base = sceneFramesTexto(sc);
+  return sc.audioSec ? Math.max(base, Math.ceil(sc.audioSec * FPS) + VOZ_DELAY + 14) : base;
+}
+function sceneFramesTexto(sc) {
   const read = (chars) => Math.round(Math.min(7.5, Math.max(2.6, 1.2 + chars / 15)) * FPS);
   switch (sc.type) {
     case 'hook': return read(len(sc.text) + len(sc.sub) * 0.6) + (sc.art ? 15 : 0);
@@ -267,6 +272,7 @@ export const Reel = (props) => {
         return (
           <Sequence key={i} from={start} durationInFrames={d}>
             <C sc={sc} i={i} n={scenes.length} num={k} />
+            {sc.audio ? <Sequence from={i > 0 ? VOZ_DELAY : 4}><Audio src={staticFile(sc.audio)} /></Sequence> : null}
             {i > 0 ? <Wipe /> : null}
           </Sequence>
         );

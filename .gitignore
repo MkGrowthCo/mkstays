@@ -1,2 +1,5 @@
 node_modules
 out
+.tts
+public/_voz
+__pycache__
