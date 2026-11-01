@@ -734,11 +734,152 @@ const ArtElegir = () => {
   );
 };
 
+
+// Gancho: el contrato dice 1 año pero el sello lo convierte en 5
+const ArtContrato = () => {
+  const f = useCurrentFrame();
+  const doc = useSp(0, { damping: 14, stiffness: 160 });
+  const st = useSp(26, { damping: 9, stiffness: 260, mass: 0.7 });
+  const hit = f >= 26;
+  const shake = f > 26 && f < 36 ? Math.sin(f * 3) * (36 - f) * 1.5 : 0;
+  const host = useSp(8);
+  const strike = interpolate(f, [16, 24], [0, 1], clamp);
+  return (
+    <svg viewBox="0 0 888 700" width="100%" height="100%">
+      <g transform={`translate(${470 + shake},${30 + (1 - doc) * 500}) rotate(${3 * doc})`}>
+        <rect x={0} y={0} width={380} height={620} rx={22} fill="#FFFFFF" stroke={SOFT} strokeWidth={6} />
+        <text x={190} y={74} textAnchor="middle" fontFamily={FONT} fontWeight={900} fontSize={36} fill={INK}>CONTRATO</text>
+        <text x={190} y={112} textAnchor="middle" fontFamily={FONT} fontWeight={700} fontSize={24} fill={MID}>de alquiler de vivienda</text>
+        {[0, 1, 2, 3].map((k) => <rect key={k} x={36} y={150 + k * 34} width={308 - (k % 2) * 70} height={14} rx={7} fill={SOFT} />)}
+        <text x={36} y={330} fontFamily={FONT} fontWeight={800} fontSize={30} fill={INK}>Duración:</text>
+        <text x={190} y={330} fontFamily={FONT} fontWeight={900} fontSize={44} fill={INK}>1 año</text>
+        <path d={`M186,316 L${186 + 120 * strike},316`} stroke={RED} strokeWidth={8} strokeLinecap="round" />
+        {[0, 1].map((k) => <rect key={k} x={36} y={380 + k * 34} width={300 - k * 90} height={14} rx={7} fill={SOFT} />)}
+        <path d="M60,540 q30,-40 60,0 t60,0 t60,-10" stroke={INK} strokeWidth={5} fill="none" strokeLinecap="round" />
+        <g transform={`translate(190,460) rotate(-10) scale(${hit ? 2.4 - 1.4 * st : 0})`} opacity={hit ? 1 : 0}>
+          <rect x={-130} y={-54} width={260} height={108} rx={16} fill="#FFFFFF" stroke={RED} strokeWidth={11} />
+          <text y={23} textAnchor="middle" fontFamily={FONT} fontWeight={900} fontSize={66} fill={RED}>5 AÑOS</text>
+        </g>
+      </g>
+      <g transform={`translate(${(1 - host) * -300},0)`}>
+        <Host x={230} y={400} s={1} mood={hit ? 'wow' : 'ok'} look={hit ? 14 : 6} />
+      </g>
+      {hit ? [0, 1, 2].map((k) => (
+        <path key={k} d={`M${330 + k * 10},${300 - k * 40} l${40 + k * 10},${-30 + k * 20}`} stroke={RED} strokeWidth={10} strokeLinecap="round"
+          opacity={interpolate(f, [26, 32, 46], [0, 1, 0], clamp)} />
+      )) : null}
+    </svg>
+  );
+};
+
+// Capítulo: la prórroga año a año hasta 5
+const ArtProrroga = () => {
+  const f = useCurrentFrame();
+  const law = useSp(0, { damping: 14, stiffness: 160 });
+  return (
+    <svg viewBox="0 0 888 700" width="100%" height="100%">
+      <g transform={`translate(444,${70 + (1 - law) * -200})`} opacity={law}>
+        <rect x={-260} y={-50} width={520} height={96} rx={48} fill={INK} />
+        <text y={14} textAnchor="middle" fontFamily={FONT} fontWeight={900} fontSize={38} fill={CREAM}>LAU · artículo 9</text>
+      </g>
+      {[0, 1, 2, 3, 4].map((k) => {
+        const p = spring({ frame: f - 10 - k * 9, fps: 30, config: { damping: 9, stiffness: 220 } });
+        const x = 64 + k * 156;
+        return (
+          <g key={k} transform={`translate(${x + 66},330) scale(${p})`}>
+            <rect x={-66} y={-110} width={132} height={220} rx={20} fill={k === 0 ? INK : RED} stroke={INK} strokeWidth={5} />
+            <text y={-40} textAnchor="middle" fontFamily={FONT} fontWeight={800} fontSize={28} fill={CREAM}>AÑO</text>
+            <text y={50} textAnchor="middle" fontFamily={FONT} fontWeight={900} fontSize={96} fill={CREAM}>{k + 1}</text>
+            {k > 0 ? <text y={150} textAnchor="middle" fontFamily={FONT} fontWeight={900} fontSize={30} fill={RED}>+1</text> : <text y={150} textAnchor="middle" fontFamily={FONT} fontWeight={800} fontSize={26} fill={INK}>firmado</text>}
+          </g>
+        );
+      })}
+      <Host x={150} y={560} s={0.42} mood="wow" look={12} />
+      <g transform={`translate(560,600) scale(${spring({ frame: f - 56, fps: 30, config: { damping: 9, stiffness: 220 } })}) rotate(-3)`}>
+        <rect x={-250} y={-42} width={500} height={78} rx={16} fill="#F2B632" stroke={INK} strokeWidth={4} />
+        <text y={10} textAnchor="middle" fontFamily={FONT} fontWeight={900} fontSize={34} fill={INK}>Lo decide el inquilino</text>
+      </g>
+    </svg>
+  );
+};
+
+// Capítulo: contador de desahucios por alquiler en 2025
+const ArtImpago = () => {
+  const f = useCurrentFrame();
+  const v = Math.round(interpolate(f, [6, 46], [0, 18317], { ...clamp, easing: Easing.out(Easing.cubic) }));
+  const tag = useSp(50, { damping: 9, stiffness: 220 });
+  const MONTHS = ['E', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D'];
+  return (
+    <svg viewBox="0 0 888 700" width="100%" height="100%">
+      <text x={444} y={140} textAnchor="middle" fontFamily={FONT} fontWeight={900} fontSize={150} fill={RED}>{String(v).replace(/\B(?=(\d{3})+(?!\d))/g, '.')}</text>
+      <text x={444} y={196} textAnchor="middle" fontFamily={FONT} fontWeight={800} fontSize={32} fill={INK}>DESAHUCIOS POR ALQUILER EN 2025</text>
+      {MONTHS.map((m, k) => {
+        const on = interpolate(f, [10 + k * 3, 14 + k * 3], [0, 1], clamp);
+        const x = 60 + (k % 6) * 130, y = 240 + Math.floor(k / 6) * 130;
+        return (
+          <g key={k} transform={`translate(${x},${y})`}>
+            <rect width={112} height={112} rx={18} fill={on > 0.5 ? RED : '#FFFFFF'} stroke={INK} strokeWidth={4} />
+            <text x={56} y={50} textAnchor="middle" fontFamily={FONT} fontWeight={900} fontSize={36} fill={on > 0.5 ? CREAM : INK}>{m}</text>
+            <text x={56} y={92} textAnchor="middle" fontFamily={FONT} fontWeight={900} fontSize={30} fill={on > 0.5 ? CREAM : MID}>€</text>
+          </g>
+        );
+      })}
+      <g transform={`translate(260,610) scale(${tag}) rotate(-4)`}>
+        <rect x={-200} y={-40} width={400} height={74} rx={16} fill={INK} />
+        <text y={10} textAnchor="middle" fontFamily={FONT} fontWeight={900} fontSize={36} fill={CREAM}>Unos 50 al día</text>
+      </g>
+      <g transform={`translate(640,610) scale(${tag}) rotate(3)`}>
+        <rect x={-130} y={-40} width={260} height={74} rx={16} fill="#F2B632" stroke={INK} strokeWidth={4} />
+        <text y={10} textAnchor="middle" fontFamily={FONT} fontWeight={900} fontSize={34} fill={INK}>Fuente: CGPJ</text>
+      </g>
+    </svg>
+  );
+};
+
+// Capítulo: Laura decide su calendario (reservas, familia) con licencia
+const ArtLlaves = () => {
+  const f = useCurrentFrame();
+  const cal = useSp(0, { damping: 14, stiffness: 160 });
+  const lic = useSp(44, { damping: 8, stiffness: 240 });
+  const fam = [17, 18, 19, 20, 21, 22, 23];
+  const res = [2, 3, 4, 7, 8, 9, 10, 11, 13, 14, 24, 25, 26, 27];
+  return (
+    <svg viewBox="0 0 888 700" width="100%" height="100%">
+      <g transform={`translate(330,${40 + (1 - cal) * 400})`} opacity={cal}>
+        <rect width={520} height={470} rx={24} fill="#FFFFFF" stroke={INK} strokeWidth={6} />
+        <rect width={520} height={70} rx={24} fill={INK} /><rect y={40} width={520} height={30} fill={INK} />
+        <text x={260} y={48} textAnchor="middle" fontFamily={FONT} fontWeight={900} fontSize={32} fill={CREAM}>AGOSTO</text>
+        {Array.from({ length: 28 }).map((_, k) => {
+          const d = k + 1;
+          const isF = fam.includes(d), isR = res.includes(d);
+          const on = interpolate(f, [8 + k * 1.1, 12 + k * 1.1], [0, 1], clamp);
+          const fill = on < 0.5 ? '#EEEDE8' : isF ? BLUE : isR ? INK : '#EEEDE8';
+          return <rect key={k} x={24 + (k % 7) * 70} y={92 + Math.floor(k / 7) * 70} width={58} height={58} rx={10} fill={fill} />;
+        })}
+        <rect x={24} y={392} width={28} height={28} rx={6} fill={INK} />
+        <text x={62} y={416} fontFamily={FONT} fontWeight={800} fontSize={26} fill={INK}>Reservas</text>
+        <rect x={250} y={392} width={28} height={28} rx={6} fill={BLUE} />
+        <text x={288} y={416} fontFamily={FONT} fontWeight={800} fontSize={26} fill={INK}>Mi familia</text>
+      </g>
+      <Host x={160} y={360} s={0.9} mood="ok" look={12} />
+      <g transform={`translate(590,600) scale(${lic}) rotate(-3)`}>
+        <rect x={-230} y={-42} width={460} height={80} rx={16} fill={RED} />
+        <text y={12} textAnchor="middle" fontFamily={FONT} fontWeight={900} fontSize={38} fill={CREAM}>Con licencia turística</text>
+      </g>
+    </svg>
+  );
+};
+
 export const ART = { calendario: ArtCalendario, bloqueo: ArtBloqueo, solucion: ArtSolucion, noche: ArtNoche, doble: ArtDoble, multa: ArtMulta, ranking: ArtRanking, sync: ArtSync, portada: ArtPortada, mirada: ArtMirada, orden: ArtOrden, flash: ArtFlash,
-  retirada: ArtRetirada, decreto: ArtDecreto, contador: ArtContador, elegir: ArtElegir };
+  retirada: ArtRetirada, decreto: ArtDecreto, contador: ArtContador, elegir: ArtElegir,
+  contrato: ArtContrato, prorroga: ArtProrroga, impago: ArtImpago, llaves: ArtLlaves };
 
 // Efectos de sonido sincronizados con cada ilustración: [frame, efecto, volumen]
 export const ART_SFX = {
+  contrato: [[18, 'whoosh', 0.3], [26, 'impact', 0.9]],
+  prorroga: [[10, 'pop', 0.4], [19, 'pop', 0.4], [28, 'pop', 0.4], [37, 'pop', 0.4], [46, 'pop', 0.4], [56, 'ding', 0.45]],
+  impago: [[4, 'riser', 0.35], [46, 'impact', 0.6], [50, 'pop', 0.45]],
+  llaves: [[8, 'whoosh', 0.3], [44, 'cash', 0.45]],
   retirada: [[24, 'impact', 0.9]],
   decreto: [[20, 'pop', 0.5], ...Array.from({ length: 8 }, (_, k) => [28 + k * 4, 'click', 0.2]), [60, 'ding', 0.45]],
   contador: [[4, 'riser', 0.35], [46, 'impact', 0.6], [50, 'pop', 0.45]],

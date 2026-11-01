@@ -1,0 +1,47 @@
+{
+ "serie": "Reel 05",
+ "ritmo": "rapido",
+ "sfx": true,
+ "narrador": "st-h2",
+ "velocidad": 1.15,
+ "scenes": [
+  {
+   "type": "hook",
+   "art": "contrato",
+   "label": "Historia de anfitriona",
+   "text": ["Firmas 1 año", "y te atas", "<r>5 años</r>"],
+   "sub": "Lo que nadie te cuenta del alquiler de larga duración",
+   "voz": "Firmas un año, y te atas cinco. Lo que nadie te cuenta del alquiler de larga duración."
+  },
+  {
+   "type": "point",
+   "art": "prorroga",
+   "title": "La ley lo alarga a 5 años",
+   "body": "Si eres particular y alquilas como vivienda, el inquilino puede prorrogar año a año hasta 5 años.",
+   "action": "Antes de firmar, piensa si la vas a usar",
+   "voz": "Si eres particular y alquilas como vivienda, el inquilino puede prorrogar año a año, hasta cinco años. Lo dice la ley."
+  },
+  {
+   "type": "point",
+   "art": "impago",
+   "title": "¿Y si deja de pagar?",
+   "body": "En 2025 hubo 18.317 desahucios por alquiler en España, según el CGPJ. Unos 50 al día.",
+   "action": "Pide siempre garantías",
+   "voz": "¿Y si deja de pagar? En dos mil veinticinco hubo dieciocho mil trescientos diecisiete desahucios por alquiler en España. Unos cincuenta al día."
+  },
+  {
+   "type": "point",
+   "art": "llaves",
+   "title": "Laura eligió otra vía",
+   "body": "Con licencia turística, ella pone fechas y precio, y se guarda las semanas de su familia.",
+   "action": "Mira si tu zona da licencias",
+   "voz": "Laura eligió otra vía. Con licencia turística, ella pone las fechas y el precio. Y se guarda las semanas para su familia."
+  },
+  {
+   "type": "cta",
+   "word": "AUDITORÍA",
+   "text": "y te calculo gratis qué precio por noche ponerle",
+   "voz": "¿Dudas entre larga duración o turístico? Comenta auditoría, y te calculo gratis el precio por noche de tu casa."
+  }
+ ]
+}
