@@ -743,5 +743,9 @@ export const ART_SFX = {
   decreto: [[20, 'pop', 0.5], ...Array.from({ length: 8 }, (_, k) => [28 + k * 4, 'click', 0.2]), [60, 'ding', 0.45]],
   contador: [[4, 'riser', 0.35], [46, 'impact', 0.6], [50, 'pop', 0.45]],
   elegir: [[12, 'impact', 0.55], [20, 'pop', 0.4], [28, 'pop', 0.4], [42, 'cash', 0.45]],
-  multa: [[30, 'cash', 0.4]], sync: [[50, 'pop', 0.45]], solucion: [[42, 'cash', 0.4]], bloqueo: [[46, 'impact', 0.5]],
+  doble: [[36, 'impact', 0.85]],
+  multa: [[14, 'pop', 0.4], [40, 'impact', 0.7], [44, 'cash', 0.4]],
+  ranking: [[20, 'riser', 0.3], [46, 'impact', 0.5]],
+  sync: [[4, 'pop', 0.4], [30, 'whoosh', 0.35], [50, 'impact', 0.55]],
+  solucion: [[30, 'pop', 0.4], [42, 'cash', 0.4]], bloqueo: [[30, 'pop', 0.4], [46, 'impact', 0.5]],
 };
