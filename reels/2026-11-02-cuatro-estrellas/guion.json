@@ -1,0 +1,47 @@
+{
+ "serie": "Reel 09",
+ "ritmo": "rapido",
+ "sfx": true,
+ "narrador": "st-h2",
+ "velocidad": 1.15,
+ "scenes": [
+  {
+   "type": "hook",
+   "art": "estrellas",
+   "label": "Historia de anfitriona",
+   "text": ["Un 4 de 5", "en Airbnb", "<r>es suspenso</r>"],
+   "sub": "Parece buena nota. Para tu anuncio, no lo es",
+   "voz": "Un cuatro sobre cinco, en Érbiembí, es un suspenso. Parece buena nota. Para tu anuncio, no lo es."
+  },
+  {
+   "type": "point",
+   "art": "balanza",
+   "title": "Laura sacó un 4",
+   "body": "Para que su media vuelva a 4,9, necesita nueve reseñas de 5 detrás. Solo para compensar una.",
+   "action": "Busca tus reseñas de 4 o menos",
+   "voz": "A Laura le pusieron un cuatro. Para volver a una media de cuatro coma nueve, necesita nueve reseñas de cinco detrás. Solo para compensar una."
+  },
+  {
+   "type": "point",
+   "art": "insignia",
+   "title": "Lo que Airbnb premia",
+   "body": "Superanfitrión: media de 4,8. Favorito de los huéspedes: más de 4,9. Por debajo, pierdes la insignia.",
+   "action": "Mira tu nota en cada categoría",
+   "voz": "Superanfitrión pide un cuatro coma ocho. Favorito de los huéspedes, más de cuatro coma nueve. Por debajo, pierdes la insignia."
+  },
+  {
+   "type": "point",
+   "art": "aviso",
+   "title": "Así lo arregló Laura",
+   "body": "El segundo día escribe: «¿Todo bien? ¿Os falta algo?». Arregla el fallo antes de que llegue la reseña.",
+   "action": "Pregunta antes, no después",
+   "voz": "Así lo arregló Laura. El segundo día escribe: ¿todo bien? ¿Os falta algo? Y arregla el fallo antes de que llegue la reseña."
+  },
+  {
+   "type": "cta",
+   "word": "AUDITORÍA",
+   "text": "y te hago gratis una auditoría de precios",
+   "voz": "¿Quieres más reservas? Comenta auditoría, y te hago gratis una auditoría de precios."
+  }
+ ]
+}

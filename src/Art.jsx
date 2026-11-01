@@ -1304,7 +1304,179 @@ const ArtAjuste = () => {
   );
 };
 
-export const ART = { pago: ArtPago, reparto: ArtReparto, ivacomision: ArtIvaComision, ajuste: ArtAjuste, calendario: ArtCalendario, bloqueo: ArtBloqueo, solucion: ArtSolucion, noche: ArtNoche, doble: ArtDoble, multa: ArtMulta, ranking: ArtRanking, sync: ArtSync, portada: ArtPortada, mirada: ArtMirada, orden: ArtOrden, flash: ArtFlash,
+// ---------- gestión: reseñas (un 4 sobre 5 es suspenso) ----------
+const Star = ({ x, y, s = 1, on = true }) => (
+  <path transform={`translate(${x},${y}) scale(${s})`} d="M0,-34 L10,-10 L34,-10 L14,6 L22,32 L0,16 L-22,32 L-14,6 L-34,-10 L-10,-10 Z"
+    fill={on ? '#F2B632' : '#E4E2DC'} stroke={INK} strokeWidth={4} />
+);
+// Gancho: llega una reseña de 4 estrellas y le cae el sello SUSPENSO
+const ArtEstrellas = () => {
+  const f = useCurrentFrame();
+  const phone = useSp(0, { damping: 14, stiffness: 160 });
+  const st = useSp(26, { damping: 9, stiffness: 260, mass: 0.7 });
+  const hit = f >= 26;
+  const shake = f > 26 && f < 36 ? Math.sin(f * 3) * (36 - f) * 1.6 : 0;
+  const host = useSp(8);
+  return (
+    <svg viewBox="0 0 888 700" width="100%" height="100%">
+      <g transform={`translate(${470 + shake},${20 + (1 - phone) * 500})`}>
+        <rect x={0} y={0} width={370} height={660} rx={48} fill={INK} stroke="#3A3A37" strokeWidth={6} />
+        <rect x={20} y={40} width={330} height={580} rx={30} fill={CREAM} />
+        <rect x={135} y={14} width={100} height={12} rx={6} fill="#3A3A37" />
+        <text x={44} y={100} fontFamily={FONT} fontWeight={900} fontSize={32} fill={INK}>Nueva reseña</text>
+        <circle cx={80} cy={170} r={36} fill={BLUE} />
+        <rect x={130} y={150} width={160} height={16} rx={8} fill={INK} />
+        <rect x={130} y={178} width={110} height={12} rx={6} fill={SOFT} />
+        {[0, 1, 2, 3, 4].map((k) => {
+          const p = spring({ frame: f - 6 - k * 3, fps: 30, config: { damping: 10, stiffness: 220 } });
+          return <g key={k} transform={`translate(${78 + k * 54},270) scale(${p})`}><Star x={0} y={0} s={0.72} on={k < 4} /></g>;
+        })}
+        <text x={185} y={400} textAnchor="middle" fontFamily={FONT} fontWeight={900} fontSize={120} fill={INK}>4,0</text>
+        <rect x={44} y={450} width={280} height={14} rx={7} fill={SOFT} />
+        <rect x={44} y={478} width={220} height={14} rx={7} fill={SOFT} />
+        <text x={44} y={540} fontFamily={FONT} fontWeight={700} fontSize={26} fill={MID}>«Todo bien, pero...»</text>
+        <g transform={`translate(185,500) rotate(-8) scale(${hit ? 2.4 - 1.4 * st : 0})`} opacity={hit ? 1 : 0}>
+          <rect x={-135} y={-46} width={270} height={92} rx={14} fill={CREAM} stroke={RED} strokeWidth={10} />
+          <text y={17} textAnchor="middle" fontFamily={FONT} fontWeight={900} fontSize={48} fill={RED} letterSpacing="2">SUSPENSO</text>
+        </g>
+      </g>
+      <g transform={`translate(${(1 - host) * -300},0)`}>
+        <Host x={220} y={400} s={1} mood={hit ? 'sad' : 'ok'} look={hit ? 14 : 6} />
+      </g>
+    </svg>
+  );
+};
+
+// Capítulo: la cuenta. Un 4 en un plato, nueve 5 en el otro para volver a 4,9
+const ArtBalanza = () => {
+  const f = useCurrentFrame();
+  const n = Math.min(9, Math.max(0, Math.floor((f - 10) / 5)));
+  const tilt = interpolate(n, [0, 9], [-14, 0], clamp);
+  const base = useSp(0);
+  const tag = useSp(60, { damping: 8, stiffness: 220 });
+  return (
+    <svg viewBox="0 0 888 700" width="100%" height="100%">
+      <g opacity={base}>
+        <path d="M444,250 L400,560 L488,560 Z" fill={INK} />
+        <rect x={340} y={556} width={208} height={24} rx={12} fill={INK} />
+        <g transform={`rotate(${tilt},444,250)`}>
+          <rect x={104} y={242} width={680} height={16} rx={8} fill={INK} />
+          <circle cx={444} cy={250} r={20} fill={RED} />
+          <g transform="translate(184,258)">
+            <path d="M0,0 L-70,120 M0,0 L70,120" stroke={INK} strokeWidth={5} />
+            <rect x={-100} y={116} width={200} height={20} rx={10} fill={INK} />
+            <g transform={`rotate(${-tilt},0,80)`}>
+              <rect x={-62} y={30} width={124} height={84} rx={14} fill="#FFFFFF" stroke={INK} strokeWidth={5} />
+              <Star x={-24} y={72} s={0.6} />
+              <text x={30} y={88} textAnchor="middle" fontFamily={FONT} fontWeight={900} fontSize={46} fill={RED}>4</text>
+            </g>
+          </g>
+          <g transform="translate(704,258)">
+            <path d="M0,0 L-80,120 M0,0 L80,120" stroke={INK} strokeWidth={5} />
+            <rect x={-120} y={116} width={240} height={20} rx={10} fill={INK} />
+            {Array.from({ length: n }).map((_, k) => (
+              <g key={k} transform={`translate(${-96 + (k % 3) * 66},${68 - Math.floor(k / 3) * 46})`}>
+                <rect width={60} height={42} rx={8} fill="#F2B632" stroke={INK} strokeWidth={4} />
+                <text x={30} y={33} textAnchor="middle" fontFamily={FONT} fontWeight={900} fontSize={30} fill={INK}>5</text>
+              </g>
+            ))}
+          </g>
+        </g>
+      </g>
+      <text x={704} y={130} textAnchor="middle" fontFamily={FONT} fontWeight={900} fontSize={120} fill={n >= 9 ? RED : INK}>×{n}</text>
+      <g transform={`translate(444,620) scale(${tag}) rotate(-2)`}>
+        <rect x={-260} y={-44} width={520} height={84} rx={18} fill={RED} />
+        <text y={14} textAnchor="middle" fontFamily={FONT} fontWeight={900} fontSize={42} fill={CREAM}>media: vuelves a 4,9</text>
+      </g>
+      <Host x={120} y={80} s={0.36} mood={n >= 9 ? 'wow' : 'sad'} look={12} />
+    </svg>
+  );
+};
+
+// Capítulo: las dos notas que premia Airbnb (4,8 y más de 4,9)
+const ArtInsignia = () => {
+  const f = useCurrentFrame();
+  const bar = useSp(0);
+  const m1 = useSp(16, { damping: 9, stiffness: 200 });
+  const m2 = useSp(30, { damping: 9, stiffness: 200 });
+  const dot = interpolate(f, [40, 62], [4.95, 4.85], { ...clamp, easing: Easing.inOut(Easing.cubic) });
+  const X = (v) => 80 + (v - 4.5) / 0.5 * 728;
+  const lost = dot < 4.9;
+  return (
+    <svg viewBox="0 0 888 700" width="100%" height="100%">
+      <g transform={`translate(444,${150}) scale(${m2})`}>
+        <path d="M-150,-70 C-150,-120 150,-120 150,-70 L150,40 C150,90 -150,90 -150,40 Z" fill={lost ? '#E4E2DC' : '#FFFFFF'} stroke={INK} strokeWidth={6} />
+        <path d="M-190,10 q-30,-40 0,-80 M190,10 q30,-40 0,-80" stroke={lost ? MID : '#F2B632'} strokeWidth={12} fill="none" strokeLinecap="round" />
+        <text y={-26} textAnchor="middle" fontFamily={FONT} fontWeight={900} fontSize={38} fill={lost ? MID : INK}>Favorito de los</text>
+        <text y={26} textAnchor="middle" fontFamily={FONT} fontWeight={900} fontSize={38} fill={lost ? MID : INK}>huéspedes</text>
+        {lost ? <path d="M-170,-90 L170,70" stroke={RED} strokeWidth={14} strokeLinecap="round" /> : null}
+      </g>
+      <g opacity={bar}>
+        <rect x={80} y={380} width={728} height={30} rx={15} fill="#E4E2DC" stroke={INK} strokeWidth={4} />
+        <rect x={X(4.8)} y={380} width={X(5) - X(4.8)} height={30} rx={0} fill="#F2B632" opacity={m1} />
+        <rect x={X(4.9)} y={380} width={X(5) - X(4.9)} height={30} rx={0} fill={RED} opacity={m2} />
+        {[4.5, 4.6, 4.7, 4.8, 4.9, 5].map((v) => (
+          <text key={v} x={X(v)} y={460} textAnchor="middle" fontFamily={FONT} fontWeight={800} fontSize={30} fill={v >= 4.8 ? INK : MID}>{String(v.toFixed(1)).replace('.', ',')}</text>
+        ))}
+      </g>
+      <g transform={`translate(${X(4.8)},540) scale(${m1})`}>
+        <rect x={-150} y={-36} width={300} height={68} rx={16} fill="#F2B632" stroke={INK} strokeWidth={4} />
+        <text y={12} textAnchor="middle" fontFamily={FONT} fontWeight={900} fontSize={32} fill={INK}>Superanfitrión</text>
+      </g>
+      <g transform={`translate(${X(4.9) + 30},${620}) scale(${m2})`}>
+        <rect x={-150} y={-36} width={300} height={68} rx={16} fill={RED} />
+        <text y={12} textAnchor="middle" fontFamily={FONT} fontWeight={900} fontSize={32} fill={CREAM}>Favorito: +4,9</text>
+      </g>
+      <g transform={`translate(${X(dot)},360)`} opacity={bar}>
+        <path d="M0,0 L-22,-40 L22,-40 Z" fill={INK} />
+        <circle cy={-62} r={30} fill={RED} stroke={INK} strokeWidth={4} />
+      </g>
+      <Host x={110} y={140} s={0.4} mood={lost ? 'sad' : 'ok'} look={12} />
+    </svg>
+  );
+};
+
+// Capítulo: la solución. Laura pregunta el día 2 y arregla el fallo antes de la reseña
+const ArtAviso = () => {
+  const f = useCurrentFrame();
+  const phone = useSp(0, { damping: 14, stiffness: 160 });
+  const b1 = useSp(10, { damping: 11, stiffness: 200 });
+  const b2 = useSp(26, { damping: 11, stiffness: 200 });
+  const b3 = useSp(40, { damping: 11, stiffness: 200 });
+  const stars = Math.min(5, Math.max(0, Math.floor((f - 52) / 3)));
+  const host = useSp(4);
+  return (
+    <svg viewBox="0 0 888 700" width="100%" height="100%">
+      <g transform={`translate(400,${20 + (1 - phone) * 500})`}>
+        <rect x={0} y={0} width={440} height={660} rx={48} fill={INK} stroke="#3A3A37" strokeWidth={6} />
+        <rect x={20} y={40} width={400} height={580} rx={30} fill={CREAM} />
+        <text x={220} y={92} textAnchor="middle" fontFamily={FONT} fontWeight={800} fontSize={26} fill={MID}>Día 2 de la estancia</text>
+        <g transform={`translate(${40 + (1 - b1) * 200},120)`} opacity={b1}>
+          <rect width={330} height={92} rx={22} fill={RED} />
+          <text x={22} y={40} fontFamily={FONT} fontWeight={800} fontSize={27} fill={CREAM}>¿Todo bien?</text>
+          <text x={22} y={74} fontFamily={FONT} fontWeight={800} fontSize={27} fill={CREAM}>¿Os falta algo?</text>
+        </g>
+        <g transform={`translate(${70 - (1 - b2) * 200},236)`} opacity={b2}>
+          <rect width={330} height={92} rx={22} fill="#FFFFFF" stroke={INK} strokeWidth={4} />
+          <text x={22} y={40} fontFamily={FONT} fontWeight={800} fontSize={27} fill={INK}>La ducha sale</text>
+          <text x={22} y={74} fontFamily={FONT} fontWeight={800} fontSize={27} fill={INK}>fría a ratos</text>
+        </g>
+        <g transform={`translate(${40 + (1 - b3) * 200},352)`} opacity={b3}>
+          <rect width={330} height={58} rx={22} fill={RED} />
+          <text x={22} y={39} fontFamily={FONT} fontWeight={800} fontSize={27} fill={CREAM}>Hoy mismo lo arreglo</text>
+        </g>
+        {[0, 1, 2, 3, 4].map((k) => (
+          <g key={k} transform={`translate(${92 + k * 64},500) scale(${k < stars ? 1 : 0.0001})`}><Star x={0} y={0} s={0.85} /></g>
+        ))}
+      </g>
+      <g transform={`translate(${(1 - host) * -300},0)`}>
+        <Host x={200} y={400} s={1} mood={stars >= 5 ? 'wow' : 'ok'} look={14} />
+      </g>
+    </svg>
+  );
+};
+
+export const ART = { estrellas: ArtEstrellas, balanza: ArtBalanza, insignia: ArtInsignia, aviso: ArtAviso, pago: ArtPago, reparto: ArtReparto, ivacomision: ArtIvaComision, ajuste: ArtAjuste, calendario: ArtCalendario, bloqueo: ArtBloqueo, solucion: ArtSolucion, noche: ArtNoche, doble: ArtDoble, multa: ArtMulta, ranking: ArtRanking, sync: ArtSync, portada: ArtPortada, mirada: ArtMirada, orden: ArtOrden, flash: ArtFlash,
   retirada: ArtRetirada, decreto: ArtDecreto, contador: ArtContador, elegir: ArtElegir,
   contrato: ArtContrato, prorroga: ArtProrroga, impago: ArtImpago, llaves: ArtLlaves,
   fuga: ArtFuga, recibos: ArtRecibos, catastro: ArtCatastro, llenar: ArtLlenar,
@@ -1312,6 +1484,10 @@ export const ART = { pago: ArtPago, reparto: ArtReparto, ivacomision: ArtIvaComi
 
 // Efectos de sonido sincronizados con cada ilustración: [frame, efecto, volumen]
 export const ART_SFX = {
+  estrellas: [[6, 'pop', 0.3], [9, 'pop', 0.3], [12, 'pop', 0.3], [15, 'pop', 0.3], [26, 'impact', 0.9]],
+  balanza: [[2, 'whoosh', 0.3], ...Array.from({ length: 9 }, (_, k) => [15 + k * 5, 'click', 0.25]), [55, 'ding', 0.45], [60, 'pop', 0.45]],
+  insignia: [[16, 'pop', 0.4], [30, 'pop', 0.45], [40, 'riser', 0.3], [60, 'impact', 0.55]],
+  aviso: [[10, 'pop', 0.4], [26, 'pop', 0.4], [40, 'pop', 0.4], ...Array.from({ length: 5 }, (_, k) => [52 + k * 3, 'click', 0.2]), [68, 'ding', 0.45]],
   pago: [[4, 'whoosh', 0.3], ...Array.from({ length: 7 }, (_, k) => [18 + k * 4, 'cash', 0.2]), [46, 'impact', 0.7]],
   reparto: [[2, 'pop', 0.4], [22, 'whoosh', 0.35], [30, 'impact', 0.55], [48, 'pop', 0.45]],
   ivacomision: [[12, 'pop', 0.45], [20, 'riser', 0.3], [50, 'impact', 0.55], [52, 'pop', 0.4]],
