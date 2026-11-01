@@ -583,4 +583,165 @@ const ArtFlash = () => {
   );
 };
 
-export const ART = { calendario: ArtCalendario, bloqueo: ArtBloqueo, solucion: ArtSolucion, noche: ArtNoche, doble: ArtDoble, multa: ArtMulta, ranking: ArtRanking, sync: ArtSync, portada: ArtPortada, mirada: ArtMirada, orden: ArtOrden, flash: ArtFlash };
+// ---------- normativa: alquiler de temporada (RDL 29/2026) ----------
+// Gancho: el anuncio de Laura recibe el sello de RETIRADO
+const ArtRetirada = () => {
+  const f = useCurrentFrame();
+  const phone = useSp(0, { damping: 14, stiffness: 160 });
+  const st = useSp(24, { damping: 9, stiffness: 260, mass: 0.7 });
+  const hit = f >= 24;
+  const shake = f > 24 && f < 34 ? Math.sin(f * 3) * (34 - f) * 1.6 : 0;
+  const host = useSp(8);
+  return (
+    <svg viewBox="0 0 888 700" width="100%" height="100%">
+      <g transform={`translate(${480 + shake},${20 + (1 - phone) * 500})`}>
+        <rect x={0} y={0} width={360} height={660} rx={48} fill={INK} stroke="#3A3A37" strokeWidth={6} />
+        <rect x={20} y={40} width={320} height={580} rx={30} fill={CREAM} />
+        <rect x={130} y={14} width={100} height={12} rx={6} fill="#3A3A37" />
+        <g opacity={hit ? 0.45 : 1}>
+          <rect x={40} y={64} width={280} height={200} rx={20} fill={SOFT} />
+          <path d="M120,200 L180,140 L240,200 Z" fill={INK} /><rect x={140} y={196} width={80} height={50} fill={CREAM} />
+          <text x={40} y={310} fontFamily={FONT} fontWeight={900} fontSize={34} fill={INK}>Piso de Laura</text>
+          <text x={40} y={352} fontFamily={FONT} fontWeight={700} fontSize={26} fill={MID}>Alquiler de temporada</text>
+          <rect x={40} y={378} width={170} height={48} rx={24} fill={INK} />
+          <text x={125} y={411} textAnchor="middle" fontFamily={FONT} fontWeight={800} fontSize={24} fill={CREAM}>7 noches</text>
+          <rect x={40} y={450} width={280} height={14} rx={7} fill={SOFT} />
+          <rect x={40} y={478} width={200} height={14} rx={7} fill={SOFT} />
+          <rect x={40} y={530} width={280} height={64} rx={18} fill={RED} />
+          <text x={180} y={572} textAnchor="middle" fontFamily={FONT} fontWeight={900} fontSize={28} fill={CREAM}>Reservar</text>
+        </g>
+        <g transform={`translate(180,330) rotate(-14) scale(${hit ? 2.4 - 1.4 * st : 0})`} opacity={hit ? 1 : 0}>
+          <rect x={-170} y={-58} width={340} height={116} rx={14} fill="none" stroke={RED} strokeWidth={12} />
+          <text y={22} textAnchor="middle" fontFamily={FONT} fontWeight={900} fontSize={66} fill={RED} letterSpacing="2">RETIRADO</text>
+        </g>
+      </g>
+      <g transform={`translate(${(1 - host) * -300},0)`}>
+        <Host x={230} y={400} s={1} mood={hit ? 'wow' : 'ok'} look={hit ? 14 : 6} />
+      </g>
+      {hit ? [0, 1, 2].map((k) => (
+        <path key={k} d={`M${330 + k * 10},${300 - k * 40} l${40 + k * 10},${-30 + k * 20}`} stroke={RED} strokeWidth={10} strokeLinecap="round"
+          opacity={interpolate(f, [24, 30, 44], [0, 1, 0], clamp)} />
+      )) : null}
+    </svg>
+  );
+};
+
+// Capítulo: la nueva regla. Documento oficial y cuenta hasta 31 días
+const ArtDecreto = () => {
+  const f = useCurrentFrame();
+  const doc = useSp(0, { damping: 15, stiffness: 150 });
+  const badge = useSp(20, { damping: 8, stiffness: 220 });
+  const n = Math.round(interpolate(f, [28, 58], [0, 31], clamp));
+  const ok = useSp(60, { damping: 9, stiffness: 220 });
+  return (
+    <svg viewBox="0 0 888 700" width="100%" height="100%">
+      <g transform={`translate(40,${30 + (1 - doc) * 400}) rotate(${-3 * doc})`} opacity={doc}>
+        <rect width={360} height={470} rx={18} fill="#FFFFFF" stroke={INK} strokeWidth={6} />
+        <rect width={360} height={80} rx={18} fill={INK} /><rect y={50} width={360} height={30} fill={INK} />
+        <text x={180} y={54} textAnchor="middle" fontFamily={FONT} fontWeight={900} fontSize={34} fill={CREAM}>BOE</text>
+        <text x={30} y={130} fontFamily={FONT} fontWeight={900} fontSize={30} fill={INK}>Real Decreto-ley</text>
+        <text x={30} y={172} fontFamily={FONT} fontWeight={900} fontSize={44} fill={RED}>29/2026</text>
+        {[0, 1, 2, 3, 4, 5].map((k) => <rect key={k} x={30} y={210 + k * 38} width={300 - (k % 3) * 50} height={14} rx={7} fill={SOFT} />)}
+        <text x={30} y={448} fontFamily={FONT} fontWeight={700} fontSize={24} fill={MID}>En vigor: 8 de octubre</text>
+      </g>
+      <g transform={`translate(640,150) scale(${badge}) rotate(6)`}>
+        <circle r={130} fill={RED} />
+        <text y={-10} textAnchor="middle" fontFamily={FONT} fontWeight={900} fontSize={30} fill={INK}>TEMPORADA</text>
+        <text y={60} textAnchor="middle" fontFamily={FONT} fontWeight={900} fontSize={84} fill={CREAM}>+31</text>
+        <text y={98} textAnchor="middle" fontFamily={FONT} fontWeight={900} fontSize={28} fill={INK}>DÍAS</text>
+      </g>
+      <g transform="translate(450,330)">
+        {Array.from({ length: 31 }).map((_, k) => (
+          <rect key={k} x={(k % 8) * 50} y={Math.floor(k / 8) * 50} width={40} height={40} rx={8} fill={k < n ? INK : '#E4E2DC'} />
+        ))}
+        <text x={0} y={262} fontFamily={FONT} fontWeight={900} fontSize={60} fill={INK}>{n} <tspan fill={RED}>días</tspan></text>
+      </g>
+      <g transform={`translate(800,560) scale(${ok})`}>
+        <circle r={44} fill={INK} />
+        <path d="M-20,0 l14,16 l26,-30" stroke={CREAM} strokeWidth={10} fill="none" strokeLinecap="round" />
+      </g>
+      <Host x={170} y={590} s={0.42} mood="wow" look={10} />
+    </svg>
+  );
+};
+
+// Capítulo: 8.318 anuncios se ponen en rojo
+const ArtContador = () => {
+  const f = useCurrentFrame();
+  const v = Math.round(interpolate(f, [6, 46], [0, 8318], { ...clamp, easing: Easing.out(Easing.cubic) }));
+  const tag = useSp(50, { damping: 9, stiffness: 220 });
+  const COLS = 10, ROWS = 4;
+  return (
+    <svg viewBox="0 0 888 700" width="100%" height="100%">
+      <text x={444} y={130} textAnchor="middle" fontFamily={FONT} fontWeight={900} fontSize={150} fill={RED}>{String(v).replace(/\B(?=(\d{3})+(?!\d))/g, '.')}</text>
+      <text x={444} y={186} textAnchor="middle" fontFamily={FONT} fontWeight={800} fontSize={34} fill={INK}>ANUNCIOS A RETIRAR</text>
+      {Array.from({ length: COLS * ROWS }).map((_, k) => {
+        const on = interpolate(f, [8 + k * 0.8, 12 + k * 0.8], [0, 1], clamp);
+        const x = 44 + (k % COLS) * 80, y = 220 + Math.floor(k / COLS) * 80;
+        return (
+          <g key={k} transform={`translate(${x},${y})`}>
+            <rect width={66} height={66} rx={12} fill={on > 0.5 ? RED : '#FFFFFF'} stroke={INK} strokeWidth={4} />
+            <path d="M14,40 L33,22 L52,40 Z" fill={INK} /><rect x={20} y={38} width={26} height={16} fill={on > 0.5 ? '#FFD9D1' : CREAM} />
+          </g>
+        );
+      })}
+      <g transform={`translate(250,600) scale(${tag}) rotate(-4)`}>
+        <rect x={-200} y={-40} width={400} height={74} rx={16} fill={INK} />
+        <text y={10} textAnchor="middle" fontFamily={FONT} fontWeight={900} fontSize={36} fill={CREAM}>Casi 8 de cada 10</text>
+      </g>
+      <g transform={`translate(620,600) scale(${tag}) rotate(3)`}>
+        <rect x={-150} y={-40} width={300} height={74} rx={16} fill="#F2B632" stroke={INK} strokeWidth={4} />
+        <text y={10} textAnchor="middle" fontFamily={FONT} fontWeight={900} fontSize={36} fill={INK}>en Madrid</text>
+      </g>
+    </svg>
+  );
+};
+
+// Capítulo: las dos opciones legales
+const ArtElegir = () => {
+  const f = useCurrentFrame();
+  const bad = useSp(2, { damping: 10, stiffness: 200 });
+  const x = useSp(12, { damping: 8, stiffness: 240 });
+  const a = useSp(20, { damping: 11, stiffness: 180 });
+  const b = useSp(28, { damping: 11, stiffness: 180 });
+  const ca = useSp(42, { damping: 8, stiffness: 240 });
+  const cb = useSp(48, { damping: 8, stiffness: 240 });
+  const look = interpolate(f, [20, 30, 36, 46], [0, -14, -14, 14], clamp);
+  const Card = ({ tx, p, c, title, l1, l2 }) => (
+    <g transform={`translate(${tx},170) scale(${p})`}>
+      <rect x={-200} y={0} width={400} height={300} rx={26} fill="#FFFFFF" stroke={INK} strokeWidth={6} />
+      <rect x={-200} y={0} width={400} height={76} rx={26} fill={INK} /><rect x={-200} y={46} width={400} height={30} fill={INK} />
+      <text y={52} textAnchor="middle" fontFamily={FONT} fontWeight={900} fontSize={38} fill={CREAM}>{title}</text>
+      <text y={150} textAnchor="middle" fontFamily={FONT} fontWeight={800} fontSize={34} fill={INK}>{l1}</text>
+      <text y={200} textAnchor="middle" fontFamily={FONT} fontWeight={700} fontSize={28} fill={MID}>{l2}</text>
+      <g transform={`translate(150,270) scale(${c})`}>
+        <circle r={40} fill={RED} />
+        <path d="M-18,0 l12,14 l24,-28" stroke={CREAM} strokeWidth={9} fill="none" strokeLinecap="round" />
+      </g>
+    </g>
+  );
+  return (
+    <svg viewBox="0 0 888 700" width="100%" height="100%">
+      <g transform={`translate(444,70) scale(${bad})`}>
+        <rect x={-300} y={-50} width={600} height={100} rx={50} fill={SOFT} />
+        <text y={14} textAnchor="middle" fontFamily={FONT} fontWeight={800} fontSize={38} fill={INK}>«Temporada» de 7 noches</text>
+        <path d={`M-280,0 L${-280 + 560 * x},0`} stroke={RED} strokeWidth={7} strokeLinecap="round" />
+      </g>
+      <Card tx={224} p={a} c={ca} title="TURÍSTICO" l1="Licencia de" l2="tu comunidad" />
+      <Card tx={664} p={b} c={cb} title="TEMPORADA" l1="+31 noches" l2="contrato y causa real" />
+      <Host x={444} y={560} s={0.5} mood="ok" look={look} />
+    </svg>
+  );
+};
+
+export const ART = { calendario: ArtCalendario, bloqueo: ArtBloqueo, solucion: ArtSolucion, noche: ArtNoche, doble: ArtDoble, multa: ArtMulta, ranking: ArtRanking, sync: ArtSync, portada: ArtPortada, mirada: ArtMirada, orden: ArtOrden, flash: ArtFlash,
+  retirada: ArtRetirada, decreto: ArtDecreto, contador: ArtContador, elegir: ArtElegir };
+
+// Efectos de sonido sincronizados con cada ilustración: [frame, efecto, volumen]
+export const ART_SFX = {
+  retirada: [[24, 'impact', 0.9]],
+  decreto: [[20, 'pop', 0.5], ...Array.from({ length: 8 }, (_, k) => [28 + k * 4, 'click', 0.2]), [60, 'ding', 0.45]],
+  contador: [[4, 'riser', 0.35], [46, 'impact', 0.6], [50, 'pop', 0.45]],
+  elegir: [[12, 'impact', 0.55], [20, 'pop', 0.4], [28, 'pop', 0.4], [42, 'cash', 0.45]],
+  multa: [[30, 'cash', 0.4]], sync: [[50, 'pop', 0.45]], solucion: [[42, 'cash', 0.4]], bloqueo: [[46, 'impact', 0.5]],
+};

@@ -27,7 +27,7 @@ await renderMedia({
   crf: 20, x264Preset: 'veryfast', pixelFormat: 'yuv420p', concurrency: 2,
   chromiumOptions: { gl: 'swangle' },
 });
-// Portada: el gancho a mitad de su animación de entrada
+// Portada: el gancho con las tres líneas ya en pantalla
 const cover = outPath.replace(/\.mp4$/, '-portada.jpg');
-await renderStill({ composition, serveUrl, output: cover, inputProps, frame: 40, imageFormat: 'jpeg', browserExecutable });
+await renderStill({ composition, serveUrl, output: cover, inputProps, frame: 66, imageFormat: 'jpeg', browserExecutable });
 console.log(JSON.stringify({ video: outPath, portada: cover, segundos: composition.durationInFrames / composition.fps }));

@@ -1,0 +1,51 @@
+{
+ "serie": "Reel 04",
+ "ritmo": "rapido",
+ "sfx": true,
+ "narrador": "st-h2",
+ "velocidad": 1.15,
+ "scenes": [
+  {
+   "type": "hook",
+   "art": "retirada",
+   "label": "Historia de anfitriona",
+   "text": [
+    "Tu anuncio",
+    "puede",
+    "<r>desaparecer</r>"
+   ],
+   "sub": "Consumo ya ha pedido retirar 8.318 anuncios de temporada",
+   "voz": "Tu anuncio puede desaparecer. Consumo ya ha pedido retirar ocho mil trescientos dieciocho anuncios de temporada."
+  },
+  {
+   "type": "point",
+   "art": "decreto",
+   "title": "Nueva regla desde el 8 de oct.",
+   "body": "Con el nuevo decreto, el alquiler de temporada debe durar más de 31 días y tener una causa real.",
+   "action": "Revisa cuánto duran tus reservas",
+   "voz": "Desde el ocho de octubre hay una regla nueva. Con el nuevo decreto, el alquiler de temporada debe durar más de treinta y un días, y tener una causa real."
+  },
+  {
+   "type": "point",
+   "art": "contador",
+   "title": "Laura no lo sabía",
+   "body": "Anunciaba temporada con reservas de una semana. Anuncios así son los que Consumo ha pedido retirar.",
+   "action": "Si es por días, no lo llames temporada",
+   "voz": "Laura no lo sabía. Anunciaba temporada, con reservas de una semana. Y anuncios así son los que Consumo ha pedido retirar. Casi ocho de cada diez, en Madrid."
+  },
+  {
+   "type": "point",
+   "art": "elegir",
+   "title": "Así lo arregló",
+   "body": "Eligió una vía: turístico con licencia de su comunidad, o temporada de más de 31 noches con contrato.",
+   "action": "Pon tu estancia mínima a juego",
+   "voz": "Así lo arregló. Eligió una vía: turístico, con la licencia de su comunidad. O temporada de más de treinta y una noches, con contrato."
+  },
+  {
+   "type": "cta",
+   "word": "AUDITORÍA",
+   "text": "y reviso gratis tu anuncio y tus precios",
+   "voz": "¿Tienes un alojamiento turístico? Comenta auditoría, y reviso gratis tu anuncio y tus precios."
+  }
+ ]
+}

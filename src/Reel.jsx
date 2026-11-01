@@ -1,5 +1,5 @@
 import React from 'react';
-import { ART, Host } from './Art.jsx';
+import { ART, ART_SFX, Host } from './Art.jsx';
 import {
   AbsoluteFill, Sequence, useCurrentFrame, useVideoConfig, interpolate, spring,
   staticFile, delayRender, continueRender, Easing, Audio,
@@ -100,12 +100,13 @@ const Wipe = ({ fast }) => {
   return <AbsoluteFill style={{ background: RED, transform: `translateX(${x}%)` }} />;
 };
 
-// Golpe de zoom al entrar en la escena (ritmo rápido)
+// Golpe de zoom al entrar en la escena (ritmo rápido). El temblor nunca deja ver el borde.
 const Punch = ({ children }) => {
-  const f = useCurrentFrame(); const { fps } = useVideoConfig();
-  const p = spring({ frame: f, fps, config: { damping: 12, stiffness: 220, mass: 0.6 } });
-  const shake = f < 8 ? Math.sin(f * 2.6) * (8 - f) * 1.2 : 0;
-  return <AbsoluteFill style={{ transform: `scale(${1.09 - 0.09 * p}) translateX(${shake}px)` }}>{children}</AbsoluteFill>;
+  const f = useCurrentFrame();
+  const sc = interpolate(f, [0, 10], [1.09, 1], { extrapolateRight: 'clamp', easing: Easing.out(Easing.cubic) });
+  const room = 500 * (sc - 1);
+  const sh = f < 10 ? Math.max(-room, Math.min(room, Math.sin(f * 2.4) * (10 - f) * 1.6)) : 0;
+  return <AbsoluteFill style={{ transform: `scale(${sc}) translate(${sh}px, ${-sh * 0.5}px)` }}>{children}</AbsoluteFill>;
 };
 
 // ---------- escenas ----------
@@ -254,7 +255,7 @@ const Cta = ({ sc, i, n }) => {
   const b = spring({ frame: f - 12, fps, config: { damping: 8, stiffness: 180, mass: 0.8 } });
   const pulse = 1 + Math.sin(f / 5) * 0.025 * Math.min(1, Math.max(0, (f - 30) / 10));
   const word = String(sc.word || 'AUDITORÍA');
-  const ws = Math.min(300, Math.floor(1700 / Math.max(5, word.length)));
+  const ws = Math.min(280, Math.floor(1500 / Math.max(5, word.length)));
   return (
     <AbsoluteFill style={{ background: RED, color: INK, fontFamily: FONT, padding: '150px 96px 170px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
       <div style={{ fontSize: 34, fontWeight: 700, fontStretch: '80%', letterSpacing: '0.08em', textTransform: 'uppercase' }}>¿Tienes un alojamiento turístico?</div>
@@ -272,11 +273,27 @@ const Cta = ({ sc, i, n }) => {
   );
 };
 
+// Efectos de sonido de cada escena: [frame, efecto, volumen]
+function sceneSfx(sc, i) {
+  const out = [];
+  if (i > 0) out.push([0, 'whoosh', 0.55]);
+  if (sc.type === 'hook') { out.push([0, 'impact', 0.7]); (sc.text || []).forEach((_, k) => out.push([4 + k * 7, 'pop', 0.45])); }
+  if (sc.type === 'point') {
+    (String(sc.title || '').split(' ')).forEach((_, k) => { if (k % 2 === 0) out.push([10 + k * 3, 'click', 0.25]); });
+    if (sc.action) out.push([Math.round((sc.art ? 30 : 24) + len(sc.title) / 3 + len(sc.body) / 4), 'pop', 0.5]);
+  }
+  if (sc.type === 'list') (sc.items || []).forEach((_, k) => out.push([26 + k * 12, 'pop', 0.45]));
+  if (sc.type === 'cta') { out.push([2, 'riser', 0.4], [12, 'impact', 0.75], [16, 'ding', 0.5]); }
+  if (sc.art && ART_SFX[sc.art]) ART_SFX[sc.art].forEach((x) => out.push(x));
+  return out;
+}
+
 export const Reel = (props) => {
   const scenes = props.scenes || [];
   let from = 0, num = 0;
   return (
     <AbsoluteFill style={{ background: INK }}>
+      {props.sfx && props.musica !== false ? <Audio src={staticFile('sfx/musica.wav')} loop volume={0.11} /> : null}
       {scenes.map((sc, i) => {
         const rapido = props.ritmo === 'rapido';
         const d = sceneFrames(sc, props.ritmo); const start = from; from += d;
@@ -287,6 +304,9 @@ export const Reel = (props) => {
           <Sequence key={i} from={start} durationInFrames={d}>
             {rapido ? <Punch><C sc={sc} i={i} n={scenes.length} num={k} /></Punch> : <C sc={sc} i={i} n={scenes.length} num={k} />}
             {sc.audio ? <Sequence from={rapido ? (i > 0 ? VOZ_DELAY_RAPIDO : 2) : (i > 0 ? VOZ_DELAY : 4)}><Audio src={staticFile(sc.audio)} /></Sequence> : null}
+            {props.sfx ? sceneSfx(sc, i).filter(([t]) => t < d).map(([t, name, vol], j) => (
+              <Sequence key={'s' + j} from={t} durationInFrames={Math.max(1, d - t)}><Audio src={staticFile(`sfx/${name}.wav`)} volume={vol} /></Sequence>
+            )) : null}
             {i > 0 ? <Wipe fast={rapido} /> : null}
           </Sequence>
         );

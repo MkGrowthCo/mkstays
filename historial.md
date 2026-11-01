@@ -11,3 +11,4 @@ Una línea por reel: id · tema · gancho · categoría · estado · lo que Mart
 - Voz cambiada a Supertonic 3 (st-h2, gratis y local) en los dos reels: Martín encontraba Piper demasiado robótica.
 
 - 2026-11-01-foto-portada · Marketing: la foto de portada y el orden de fotos (Management Science 2022 y 2023) · "Esta foto te quita reservas" · marketing · pendiente de revisión · Primer reel con "ritmo": "rapido" (sin silencios entre escenas, voz pegada a la cortinilla y golpe de zoom en cada escena) y sin tecnicismos, aplicando el feedback de Martín al reel de noches vacías
+- 2026-11-01-temporada-31-dias · Normativa: RDL 29/2026, temporada de más de 31 días y 8.318 anuncios que Consumo pidió retirar · "Tu anuncio puede desaparecer" · normativa · pendiente de revisión · Primer reel con "sfx": true (música, whoosh, pops, impacto del sello, ding) además de "ritmo": "rapido"; portada con el gancho completo; dato de actualidad (30 oct.) y sin jerga
