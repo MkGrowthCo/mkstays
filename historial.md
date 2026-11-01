@@ -10,3 +10,4 @@ Una línea por reel: id · tema · gancho · categoría · estado · lo que Mart
 
 - Voz cambiada a Supertonic 3 (st-h2, gratis y local) en los dos reels: Martín encontraba Piper demasiado robótica.
 
+- 2026-11-01-foto-portada · Marketing: la foto de portada y el orden de fotos (Management Science 2022 y 2023) · "Esta foto te quita reservas" · marketing · pendiente de revisión · Primer reel con "ritmo": "rapido" (sin silencios entre escenas, voz pegada a la cortinilla y golpe de zoom en cada escena) y sin tecnicismos, aplicando el feedback de Martín al reel de noches vacías

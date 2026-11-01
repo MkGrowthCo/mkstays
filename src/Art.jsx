@@ -383,4 +383,204 @@ const ArtSync = () => {
   );
 };
 
-export const ART = { calendario: ArtCalendario, bloqueo: ArtBloqueo, solucion: ArtSolucion, noche: ArtNoche, doble: ArtDoble, multa: ArtMulta, ranking: ArtRanking, sync: ArtSync };
+
+// ===== Reel 03 · foto de portada (marketing) =====
+// Miniaturas de foto: salón con sol, dormitorio, baño oscuro, terraza con mar
+const Foto = ({ x, y, w = 200, h = 150, kind = 'salon', dim = 0, stroke = INK }) => {
+  const k = w / 200;
+  const body = {
+    salon: <g>
+      <rect width={200} height={150} fill="#F4E3C8" />
+      <rect x={120} y={18} width={60} height={64} fill="#BFE3F2" stroke={CREAM} strokeWidth={5} />
+      <circle cx={150} cy={44} r={12} fill="#F2B632" />
+      <rect x={18} y={84} width={100} height={40} rx={12} fill={RED} />
+      <rect x={18} y={70} width={100} height={22} rx={10} fill="#D9442B" />
+      <rect x={0} y={124} width={200} height={26} fill="#C99B6B" />
+    </g>,
+    dormitorio: <g>
+      <rect width={200} height={150} fill="#E7E1D8" />
+      <rect x={30} y={70} width={140} height={50} rx={8} fill="#FFFFFF" stroke={MID} strokeWidth={3} />
+      <rect x={30} y={44} width={140} height={30} rx={8} fill={BLUE} />
+      <rect x={44} y={56} width={40} height={20} rx={6} fill={CREAM} /><rect x={116} y={56} width={40} height={20} rx={6} fill={CREAM} />
+      <rect x={0} y={120} width={200} height={30} fill="#B98B5E" />
+    </g>,
+    bano: <g>
+      <rect width={200} height={150} fill="#5B5A55" />
+      <rect x={70} y={60} width={56} height={60} rx={10} fill="#8C8A84" />
+      <rect x={66} y={34} width={64} height={30} rx={6} fill="#8C8A84" />
+      <rect x={150} y={20} width={30} height={40} fill="#45443F" />
+      <rect x={0} y={120} width={200} height={30} fill="#3F3E3A" />
+    </g>,
+    terraza: <g>
+      <rect width={200} height={150} fill="#9FD4EE" />
+      <circle cx={150} cy={36} r={18} fill="#F2B632" />
+      <rect x={0} y={80} width={200} height={34} fill="#2F7FB5" />
+      <rect x={0} y={114} width={200} height={36} fill="#E9D3A8" />
+      <path d="M30,114 L30,70 M18,78 Q30,60 46,74" stroke="#2E7D5B" strokeWidth={6} fill="none" />
+    </g>,
+  }[kind];
+  return (
+    <g transform={`translate(${x},${y}) scale(${k})`}>
+      <clipPath id={`c-${kind}-${Math.round(x)}-${Math.round(y)}`}><rect width={200} height={150} rx={14} /></clipPath>
+      <g clipPath={`url(#c-${kind}-${Math.round(x)}-${Math.round(y)})`}>
+        {body}
+        <rect width={200} height={150} fill="#000" opacity={dim} />
+      </g>
+      <rect width={200} height={150} rx={14} fill="none" stroke={stroke} strokeWidth={5 / k} />
+    </g>
+  );
+};
+
+// Gancho: el huésped hace scroll en el móvil y pasa de largo el anuncio con foto oscura
+const ArtPortada = () => {
+  const f = useCurrentFrame();
+  const phone = useSp(0, { damping: 13, stiffness: 130 });
+  const scroll = interpolate(f, [8, 30, 40, 64], [0, 300, 300, 640], { ...clamp, easing: Easing.inOut(Easing.cubic) });
+  const thumbY = interpolate(f % 28, [0, 14, 28], [120, -60, 120], clamp);
+  const x = useSp(30, { damping: 8, stiffness: 220 });
+  const cards = [['terraza', 0], ['salon', 0], ['bano', 0.35], ['dormitorio', 0], ['terraza', 0], ['salon', 0]];
+  return (
+    <svg viewBox="0 0 888 700" width="100%" height="100%">
+      <g transform={`translate(254,${30 + (1 - phone) * 600})`}>
+        <rect x={0} y={0} width={380} height={660} rx={54} fill="#1E1E1C" stroke={CREAM} strokeWidth={8} />
+        <clipPath id="pantalla"><rect x={20} y={40} width={340} height={600} rx={30} /></clipPath>
+        <g clipPath="url(#pantalla)">
+          <rect x={20} y={40} width={340} height={600} fill={CREAM} />
+          {cards.map(([k, d], i) => {
+            const y = 60 + i * 230 - scroll;
+            const mine = k === 'bano';
+            return (
+              <g key={i}>
+                <Foto x={40} y={y} w={300} h={225} kind={k} dim={d} stroke={mine ? RED : INK} />
+                <rect x={40} y={y + 196} width={mine ? 210 : 160} height={22} rx={8} fill={mine ? RED : INK} opacity={0.9} />
+                {mine ? <text x={50} y={y + 214} fontFamily={FONT} fontWeight={900} fontSize={20} fill={CREAM}>EL PISO DE LAURA</text> : null}
+              </g>
+            );
+          })}
+        </g>
+      </g>
+      {/* dedo que hace scroll */}
+      <g transform={`translate(600,${380 + thumbY})`} opacity={f < 70 ? 1 : 0}>
+        <rect x={-34} y={0} width={68} height={170} rx={34} fill={SKIN} stroke={INK} strokeWidth={6} />
+        <rect x={-20} y={14} width={40} height={36} rx={14} fill="#F5D2B5" />
+      </g>
+      {/* aviso: pasan de largo */}
+      <g transform={`translate(130,250) scale(${x}) rotate(-8)`} opacity={f > 30 ? 1 : 0}>
+        <rect x={-110} y={-48} width={220} height={96} rx={20} fill={RED} />
+        <text y={16} textAnchor="middle" fontFamily={FONT} fontWeight={900} fontSize={44} fill={CREAM}>¡SCROLL!</text>
+      </g>
+      <g transform={`translate(${(1 - useSp(16)) * -300},0)`}>
+        <Host x={110} y={500} s={0.55} mood={f > 40 ? 'sad' : 'ok'} look={8} />
+      </g>
+    </svg>
+  );
+};
+
+// Capítulo 1: la portada se lleva casi toda la atención del huésped
+const ArtMirada = () => {
+  const f = useCurrentFrame();
+  const card = useSp(0);
+  const big = useSp(10, { damping: 10, stiffness: 160 });
+  const ray = interpolate(f, [24, 40], [0, 1], clamp);
+  const guest = useSp(4);
+  const pulse = 1 + Math.sin(f / 6) * 0.02;
+  return (
+    <svg viewBox="0 0 888 700" width="100%" height="100%">
+      <g transform={`translate(${300 + (1 - card) * 600},20)`}>
+        <rect x={0} y={0} width={560} height={620} rx={30} fill="#FFFFFF" stroke={INK} strokeWidth={6} />
+        <g transform={`translate(280,217) scale(${big * pulse}) translate(-250,-187)`}>
+          <Foto x={0} y={0} w={500} h={375} kind="salon" stroke={RED} />
+        </g>
+        <g opacity={big}><rect x={30} y={30} width={170} height={52} rx={10} fill={RED} />
+        <text x={115} y={67} textAnchor="middle" fontFamily={FONT} fontWeight={900} fontSize={30} fill={CREAM}>PORTADA</text></g>
+        {['dormitorio', 'bano', 'terraza'].map((k, i) => (
+          <g key={k} opacity={0.35}><Foto x={30 + i * 172} y={430} w={156} h={117} kind={k} /></g>
+        ))}
+        <text x={30} y={598} fontFamily={FONT} fontWeight={700} fontSize={26} fill={MID}>el resto de fotos</text>
+      </g>
+      {/* mirada del huésped hacia la portada */}
+      <path d={`M190,250 L${190 + 160 * ray},${250 - 40 * ray}`} stroke={RED} strokeWidth={10} strokeDasharray="20 14" strokeLinecap="round" />
+      {ray > 0.95 ? <path d="M350,210 l-30,-6 l14,26 z" fill={RED} /> : null}
+      <g transform={`translate(0,${(1 - guest) * 300})`}>
+        <Guest x={150} y={330} s={0.8} walking={false} />
+      </g>
+    </svg>
+  );
+};
+
+// Capítulo 2: Laura cambia el orden: la foto buena sube a la primera posición y suben las reservas
+const ArtOrden = () => {
+  const f = useCurrentFrame();
+  const swap = interpolate(f, [22, 46], [0, 1], { ...clamp, easing: Easing.inOut(Easing.cubic) });
+  const lift = Math.sin(swap * Math.PI) * 70;
+  const badge = useSp(52, { damping: 8, stiffness: 200 });
+  const host = useSp(0);
+  const W = 190, X0 = 40, Y = 120;
+  const pos = (i) => X0 + i * (W + 16);
+  const bar = interpolate(f, [52, 76], [0, 1], { ...clamp, easing: Easing.out(Easing.cubic) });
+  return (
+    <svg viewBox="0 0 888 700" width="100%" height="100%">
+      <text x={40} y={70} fontFamily={FONT} fontWeight={800} fontSize={34} fill={INK}>ORDEN DE FOTOS</text>
+      {[0, 1, 2, 3].map((i) => <text key={i} x={pos(i) + W / 2} y={330} textAnchor="middle" fontFamily={FONT} fontWeight={900} fontSize={36} fill={i === 0 ? RED : MID}>{i + 1}</text>)}
+      <Foto x={pos(1)} y={Y} w={W} h={W * 0.75} kind="dormitorio" />
+      <Foto x={pos(2)} y={Y} w={W} h={W * 0.75} kind="terraza" />
+      {/* baño: de 1 a 4 */}
+      <g transform={`translate(${(pos(3) - pos(0)) * swap},${lift})`}><Foto x={pos(0)} y={Y} w={W} h={W * 0.75} kind="bano" /></g>
+      {/* salón: de 4 a 1 */}
+      <g transform={`translate(${(pos(0) - pos(3)) * swap},${-lift})`}><Foto x={pos(3)} y={Y} w={W} h={W * 0.75} kind="salon" stroke={swap > 0.5 ? RED : INK} /></g>
+      {/* gráfico de reservas */}
+      <g transform="translate(420,380)">
+        <rect x={0} y={0} width={420} height={280} rx={24} fill="#FFFFFF" stroke={INK} strokeWidth={6} />
+        <rect x={60} y={240 - 110} width={110} height={110} fill={SOFT} />
+        <rect x={240} y={240 - 110 - 70 * bar} width={110} height={110 + 70 * bar} fill={RED} />
+        <text x={115} y={268} textAnchor="middle" fontFamily={FONT} fontWeight={700} fontSize={22} fill={MID}>ANTES</text>
+        <text x={295} y={268} textAnchor="middle" fontFamily={FONT} fontWeight={700} fontSize={22} fill={MID}>DESPUÉS</text>
+        <g transform={`translate(295,${40}) scale(${badge})`}>
+          <rect x={-80} y={-34} width={160} height={64} rx={14} fill="#F2B632" stroke={INK} strokeWidth={5} />
+          <text y={12} textAnchor="middle" fontFamily={FONT} fontWeight={900} fontSize={40} fill={INK}>+11%</text>
+        </g>
+      </g>
+      <g transform={`translate(0,${(1 - host) * 300})`}>
+        <Host x={200} y={470} s={0.7} mood={f > 50 ? 'wow' : 'ok'} look={8} />
+      </g>
+    </svg>
+  );
+};
+
+// Capítulo 3: flash de cámara, la foto oscura se ilumina y sube la ocupación
+const ArtFlash = () => {
+  const f = useCurrentFrame();
+  const cam = useSp(0, { damping: 12, stiffness: 150 });
+  const flash = interpolate(f, [20, 23, 34], [0, 1, 0], clamp);
+  const lit = interpolate(f, [22, 34], [0.55, 0], clamp);
+  const meter = interpolate(f, [36, 62], [0, 1], { ...clamp, easing: Easing.out(Easing.cubic) });
+  const badge = useSp(58, { damping: 8, stiffness: 200 });
+  return (
+    <svg viewBox="0 0 888 700" width="100%" height="100%">
+      <g transform="translate(40,40)">
+        <Foto x={0} y={0} w={480} h={360} kind={f < 22 ? 'bano' : 'salon'} dim={f < 22 ? 0.3 : lit} stroke={f > 30 ? RED : INK} />
+      </g>
+      {/* cámara */}
+      <g transform={`translate(${700},${180 + (1 - cam) * 400}) rotate(-8)`}>
+        <rect x={-130} y={-80} width={260} height={170} rx={26} fill={INK} />
+        <rect x={-70} y={-110} width={90} height={40} rx={10} fill={INK} />
+        <circle cx={0} cy={6} r={58} fill="#3A3A37" stroke={CREAM} strokeWidth={8} />
+        <circle cx={0} cy={6} r={28} fill={BLUE} />
+        <rect x={70} y={-60} width={40} height={24} rx={6} fill={CREAM} opacity={0.3 + flash * 0.7} />
+      </g>
+      {/* ocupación */}
+      <g transform="translate(40,450)">
+        <text x={0} y={0} fontFamily={FONT} fontWeight={800} fontSize={32} fill={INK}>OCUPACIÓN</text>
+        <rect x={0} y={24} width={560} height={56} rx={28} fill={SOFT} />
+        <rect x={0} y={24} width={330 + 120 * meter} height={56} rx={28} fill={RED} />
+        <g transform={`translate(${690},52) scale(${badge})`}>
+          <rect x={-100} y={-38} width={200} height={72} rx={16} fill="#F2B632" stroke={INK} strokeWidth={5} />
+          <text y={14} textAnchor="middle" fontFamily={FONT} fontWeight={900} fontSize={40} fill={INK}>+8,98%</text>
+        </g>
+      </g>
+      <rect x={0} y={0} width={888} height={700} fill="#FFFFFF" opacity={flash * 0.85} />
+    </svg>
+  );
+};
+
+export const ART = { calendario: ArtCalendario, bloqueo: ArtBloqueo, solucion: ArtSolucion, noche: ArtNoche, doble: ArtDoble, multa: ArtMulta, ranking: ArtRanking, sync: ArtSync, portada: ArtPortada, mirada: ArtMirada, orden: ArtOrden, flash: ArtFlash };

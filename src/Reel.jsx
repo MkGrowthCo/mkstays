@@ -17,8 +17,12 @@ face.load().then((f) => { document.fonts.add(f); continueRender(handle); }).catc
 // ---------- duración de cada escena según su texto ----------
 const len = (s) => (Array.isArray(s) ? s.join(' ') : String(s || '')).replace(/<\/?r>/g, '').length;
 export const VOZ_DELAY = 8; // la voz entra tras la cortinilla
-export function sceneFrames(sc) {
+// Ritmo "rapido" (pedido de Martín: sin silencios y más dinámico): la escena dura lo que su voz
+// más un respiro mínimo, la voz entra casi a la vez que la cortinilla y cada escena entra con un golpe de zoom.
+export const VOZ_DELAY_RAPIDO = 3;
+export function sceneFrames(sc, ritmo) {
   const base = sceneFramesTexto(sc);
+  if (ritmo === 'rapido' && sc.audioSec) return Math.max(Math.round(2 * FPS), Math.ceil(sc.audioSec * FPS) + VOZ_DELAY_RAPIDO + 5);
   return sc.audioSec ? Math.max(base, Math.ceil(sc.audioSec * FPS) + VOZ_DELAY + 14) : base;
 }
 function sceneFramesTexto(sc) {
@@ -32,7 +36,7 @@ function sceneFramesTexto(sc) {
     default: return 3 * FPS;
   }
 }
-export const totalFrames = (p) => (p.scenes || []).reduce((a, s) => a + sceneFrames(s), 0) || 90;
+export const totalFrames = (p) => (p.scenes || []).reduce((a, s) => a + sceneFrames(s, p.ritmo), 0) || 90;
 
 // ---------- utilidades de animación ----------
 const useIn = (delay = 0, cfg = { damping: 14, stiffness: 140, mass: 0.7 }) => {
@@ -88,11 +92,20 @@ const Frame = ({ index, count, dark, label, children, hideBrand }) => {
 };
 
 // Cortinilla roja al entrar en cada escena
-const Wipe = () => {
+const Wipe = ({ fast }) => {
   const f = useCurrentFrame();
-  const x = interpolate(f, [0, 9], [0, 110], { extrapolateRight: 'clamp', easing: Easing.inOut(Easing.cubic) });
-  if (f > 10) return null;
+  const end = fast ? 6 : 9;
+  const x = interpolate(f, [0, end], [0, 110], { extrapolateRight: 'clamp', easing: Easing.inOut(Easing.cubic) });
+  if (f > end + 1) return null;
   return <AbsoluteFill style={{ background: RED, transform: `translateX(${x}%)` }} />;
+};
+
+// Golpe de zoom al entrar en la escena (ritmo rápido)
+const Punch = ({ children }) => {
+  const f = useCurrentFrame(); const { fps } = useVideoConfig();
+  const p = spring({ frame: f, fps, config: { damping: 12, stiffness: 220, mass: 0.6 } });
+  const shake = f < 8 ? Math.sin(f * 2.6) * (8 - f) * 1.2 : 0;
+  return <AbsoluteFill style={{ transform: `scale(${1.09 - 0.09 * p}) translateX(${shake}px)` }}>{children}</AbsoluteFill>;
 };
 
 // ---------- escenas ----------
@@ -265,15 +278,16 @@ export const Reel = (props) => {
   return (
     <AbsoluteFill style={{ background: INK }}>
       {scenes.map((sc, i) => {
-        const d = sceneFrames(sc); const start = from; from += d;
+        const rapido = props.ritmo === 'rapido';
+        const d = sceneFrames(sc, props.ritmo); const start = from; from += d;
         if (sc.type === 'point') num++;
         const C = { hook: Hook, point: Point, list: List, quote: Quote, cta: Cta }[sc.type] || Point;
         const k = num;
         return (
           <Sequence key={i} from={start} durationInFrames={d}>
-            <C sc={sc} i={i} n={scenes.length} num={k} />
-            {sc.audio ? <Sequence from={i > 0 ? VOZ_DELAY : 4}><Audio src={staticFile(sc.audio)} /></Sequence> : null}
-            {i > 0 ? <Wipe /> : null}
+            {rapido ? <Punch><C sc={sc} i={i} n={scenes.length} num={k} /></Punch> : <C sc={sc} i={i} n={scenes.length} num={k} />}
+            {sc.audio ? <Sequence from={rapido ? (i > 0 ? VOZ_DELAY_RAPIDO : 2) : (i > 0 ? VOZ_DELAY : 4)}><Audio src={staticFile(sc.audio)} /></Sequence> : null}
+            {i > 0 ? <Wipe fast={rapido} /> : null}
           </Sequence>
         );
       })}
