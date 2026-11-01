@@ -1,7 +1,51 @@
-{"serie": "Reel 02", "ritmo": "rapido", "scenes": [
- {"type": "hook", "art": "noche", "label": "Historia de anfitriona", "text": ["Esta noche", "vacía es", "<r>culpa tuya</r>"], "sub": "Y le pasa a muchos anfitriones sin saberlo", "voz": "Esta noche vacía es culpa tuya. Y le pasa a muchos anfitriones."},
- {"type": "point", "art": "calendario", "title": "Laura tenía casi todo lleno", "body": "Una reserva hasta el miércoles y otra desde el jueves. La noche del miércoles quedó suelta.", "action": "Busca huecos de 1 a 3 noches", "voz": "Laura lo tenía casi todo lleno. Pero la noche del miércoles se quedó suelta."},
- {"type": "point", "art": "bloqueo", "title": "Y nadie podía reservarla", "body": "Su estancia mínima era de 2 noches. Ese hueco de 1 noche se quedó vacío: cero euros.", "action": "Revisa tu estancia mínima en esos huecos", "voz": "¿Y por qué nadie la reservaba? Su estancia mínima era de dos noches. Hueco de una noche: cero euros."},
- {"type": "point", "art": "solucion", "title": "Así llenó el hueco", "body": "Bajó la estancia mínima a 1 noche solo en esa fecha y le puso entre un 10% y un 20% de descuento.", "action": "O usa precios dinámicos que lo hagan solos", "voz": "La solución: estancia mínima de una noche solo en esa fecha, y un descuento del diez al veinte por ciento. Hueco lleno."},
- {"type": "cta", "word": "AUDITORÍA", "text": "y te digo cuántas noches vacías tienes", "voz": "¿Tienes un alojamiento turístico? Comenta auditoría, y te digo gratis cuántas noches vacías tienes."}
-], "narrador": "st-h2", "velocidad": 1.15}
+{
+ "serie": "Reel 02",
+ "ritmo": "rapido",
+ "scenes": [
+  {
+   "type": "hook",
+   "art": "noche",
+   "label": "Historia de anfitriona",
+   "text": [
+    "Esta noche",
+    "vacía es",
+    "<r>culpa tuya</r>"
+   ],
+   "sub": "Y le pasa a muchos anfitriones sin saberlo",
+   "voz": "Esta noche vacía es culpa tuya. Y le pasa a muchos anfitriones."
+  },
+  {
+   "type": "point",
+   "art": "calendario",
+   "title": "Laura tenía casi todo lleno",
+   "body": "Una reserva hasta el miércoles y otra desde el jueves. La noche del miércoles quedó suelta.",
+   "action": "Busca huecos de 1 a 3 noches",
+   "voz": "Laura lo tenía casi todo lleno. Pero la noche del miércoles se quedó suelta."
+  },
+  {
+   "type": "point",
+   "art": "bloqueo",
+   "title": "Y nadie podía reservarla",
+   "body": "Su estancia mínima era de 2 noches. Ese hueco de 1 noche se quedó vacío: cero euros.",
+   "action": "Revisa tu estancia mínima en esos huecos",
+   "voz": "¿Y por qué nadie la reservaba? Su estancia mínima era de dos noches. Hueco de una noche: cero euros."
+  },
+  {
+   "type": "point",
+   "art": "solucion",
+   "title": "Así llenó el hueco",
+   "body": "Bajó la estancia mínima a 1 noche solo en esa fecha y le puso entre un 10% y un 20% de descuento.",
+   "action": "O usa precios dinámicos que lo hagan solos",
+   "voz": "La solución: estancia mínima de una noche solo en esa fecha, y un descuento del diez al veinte por ciento. Hueco lleno."
+  },
+  {
+   "type": "cta",
+   "word": "AUDITORÍA",
+   "text": "y te digo cuántas noches vacías tienes",
+   "voz": "¿Tienes un alojamiento turístico? Comenta auditoría, y te digo gratis cuántas noches vacías tienes."
+  }
+ ],
+ "narrador": "st-h2",
+ "velocidad": 1.15,
+ "sfx": true
+}

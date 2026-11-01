@@ -748,4 +748,5 @@ export const ART_SFX = {
   ranking: [[20, 'riser', 0.3], [46, 'impact', 0.5]],
   sync: [[4, 'pop', 0.4], [30, 'whoosh', 0.35], [50, 'impact', 0.55]],
   solucion: [[30, 'pop', 0.4], [42, 'cash', 0.4]], bloqueo: [[30, 'pop', 0.4], [46, 'impact', 0.5]],
+  noche: [[26, 'impact', 0.5]], calendario: [[48, 'pop', 0.5]],
 };
