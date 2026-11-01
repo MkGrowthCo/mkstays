@@ -1168,7 +1168,143 @@ const ArtIva = () => {
   );
 };
 
-export const ART = { calendario: ArtCalendario, bloqueo: ArtBloqueo, solucion: ArtSolucion, noche: ArtNoche, doble: ArtDoble, multa: ArtMulta, ranking: ArtRanking, sync: ArtSync, portada: ArtPortada, mirada: ArtMirada, orden: ArtOrden, flash: ArtFlash,
+// ---------- precios: la comisión única del 15,5 % de Airbnb ----------
+// Gancho: el pago de Laura baja de 100 € a 84,50 € y las monedas se van a "Airbnb"
+const ArtPago = () => {
+  const f = useCurrentFrame();
+  const card = useSp(0, { damping: 14, stiffness: 160 });
+  const host = useSp(8);
+  const amt = interpolate(f, [16, 46], [100, 84.5], { ...clamp, easing: Easing.out(Easing.cubic) });
+  const tag = useSp(46, { damping: 8, stiffness: 240 });
+  const txt = amt.toFixed(2).replace('.', ',').replace(',00', '');
+  return (
+    <svg viewBox="0 0 888 700" width="100%" height="100%">
+      <g transform={`translate(390,${60 + (1 - card) * 500}) rotate(${-2 * card})`}>
+        <rect width={440} height={330} rx={26} fill="#FFFFFF" stroke={INK} strokeWidth={6} />
+        <rect width={440} height={84} rx={26} fill={INK} /><rect y={54} width={440} height={30} fill={INK} />
+        <text x={220} y={56} textAnchor="middle" fontFamily={FONT} fontWeight={900} fontSize={34} fill={CREAM}>TU PAGO</text>
+        <text x={36} y={140} fontFamily={FONT} fontWeight={700} fontSize={28} fill={MID}>1 noche a 100 €</text>
+        <text x={404} y={262} textAnchor="end" fontFamily={FONT} fontWeight={900} fontSize={110} fill={f > 20 ? RED : INK}>{txt} €</text>
+      </g>
+      {Array.from({ length: 7 }).map((_, k) => {
+        const t = f - (18 + k * 4);
+        const o = interpolate(t, [0, 3, 22, 28], [0, 1, 1, 0], clamp);
+        const p = interpolate(t, [0, 26], [0, 1], { ...clamp, easing: Easing.in(Easing.quad) });
+        return <Coin key={k} x={610 + (k % 3 - 1) * 40 + p * 60} y={330 + p * 250} s={0.8} o={o} />;
+      })}
+      <g transform={`translate(680,610) scale(${tag}) rotate(-3)`}>
+        <rect x={-190} y={-50} width={380} height={96} rx={18} fill={RED} />
+        <text y={16} textAnchor="middle" fontFamily={FONT} fontWeight={900} fontSize={46} fill={CREAM}>-15,5 %</text>
+      </g>
+      <g transform={`translate(${(1 - host) * -300},0)`}>
+        <Host x={180} y={380} s={0.85} mood={f > 34 ? 'wow' : 'ok'} look={14} />
+      </g>
+    </svg>
+  );
+};
+
+// Capítulo: antes y ahora; la comisión pasa del huésped a la anfitriona
+const ArtReparto = () => {
+  const f = useCurrentFrame();
+  const a = useSp(0, { damping: 15, stiffness: 150 });
+  const b = useSp(22, { damping: 12, stiffness: 170 });
+  const st = useSp(48, { damping: 9, stiffness: 240 });
+  const Bar = ({ y, label, host, guest, p, hl }) => (
+    <g transform={`translate(60,${y})`} opacity={p}>
+      <text x={0} y={-16} fontFamily={FONT} fontWeight={900} fontSize={36} fill={INK}>{label}</text>
+      <rect x={0} y={0} width={500 * p} height={90} rx={16} fill="#E4E2DC" />
+      <rect x={0} y={0} width={Math.max(150, host * 500) * p} height={90} rx={16} fill={hl ? RED : INK} />
+      <text x={20} y={58} fontFamily={FONT} fontWeight={900} fontSize={34} fill={CREAM}>Tú {host === 1 ? '15,5 %' : '3 %'}</text>
+      {guest ? <text x={480} y={58} textAnchor="end" fontFamily={FONT} fontWeight={800} fontSize={30} fill={INK}>Huésped ~14 %</text> : null}
+    </g>
+  );
+  return (
+    <svg viewBox="0 0 888 700" width="100%" height="100%">
+      <Bar y={110} label="ANTES" host={0.19} guest p={a} />
+      <Bar y={330} label="AHORA" host={1} p={b} hl />
+      <g transform={`translate(640,560) scale(${st}) rotate(-4)`}>
+        <rect x={-200} y={-50} width={400} height={96} rx={18} fill="#F2B632" stroke={INK} strokeWidth={5} />
+        <text y={14} textAnchor="middle" fontFamily={FONT} fontWeight={900} fontSize={36} fill={INK}>+ limpieza y extras</text>
+      </g>
+      <Guest x={720} y={170} s={0.42} walking={false} />
+      <Host x={150} y={560} s={0.4} mood={f > 30 ? 'sad' : 'ok'} look={12} />
+    </svg>
+  );
+};
+
+// Capítulo: el IVA del 21 % sobre la comisión la lleva a casi el 19 %
+const ArtIvaComision = () => {
+  const f = useCurrentFrame();
+  const doc = useSp(0, { damping: 15, stiffness: 150 });
+  const pct = interpolate(f, [20, 50], [15.5, 18.76], { ...clamp, easing: Easing.out(Easing.cubic) });
+  const tag = useSp(52, { damping: 8, stiffness: 230 });
+  return (
+    <svg viewBox="0 0 888 700" width="100%" height="100%">
+      <g transform={`translate(40,${40 + (1 - doc) * 400}) rotate(${-3 * doc})`} opacity={doc}>
+        <rect width={380} height={400} rx={18} fill="#FFFFFF" stroke={INK} strokeWidth={6} />
+        <rect width={380} height={80} rx={18} fill={INK} /><rect y={50} width={380} height={30} fill={INK} />
+        <text x={190} y={54} textAnchor="middle" fontFamily={FONT} fontWeight={900} fontSize={34} fill={CREAM}>FACTURA AIRBNB</text>
+        <text x={30} y={150} fontFamily={FONT} fontWeight={800} fontSize={34} fill={MID}>Comisión</text>
+        <text x={350} y={150} textAnchor="end" fontFamily={FONT} fontWeight={900} fontSize={40} fill={INK}>15,5 %</text>
+        <text x={30} y={230} fontFamily={FONT} fontWeight={800} fontSize={34} fill={MID}>IVA</text>
+        <text x={350} y={230} textAnchor="end" fontFamily={FONT} fontWeight={900} fontSize={40} fill={RED} opacity={interpolate(f, [12, 18], [0, 1], clamp)}>+21 %</text>
+        <rect x={30} y={270} width={320} height={6} fill={INK} />
+        <text x={30} y={350} fontFamily={FONT} fontWeight={700} fontSize={28} fill={MID}>Si eres particular</text>
+      </g>
+      <g transform="translate(650,250)">
+        <circle r={160} fill={RED} />
+        <text y={-50} textAnchor="middle" fontFamily={FONT} fontWeight={900} fontSize={30} fill={INK}>PAGAS</text>
+        <text y={40} textAnchor="middle" fontFamily={FONT} fontWeight={900} fontSize={80} fill={CREAM}>{pct.toFixed(1).replace('.', ',')}%</text>
+        <text y={96} textAnchor="middle" fontFamily={FONT} fontWeight={900} fontSize={28} fill={INK}>DE CADA RESERVA</text>
+      </g>
+      <g transform={`translate(600,580) scale(${tag}) rotate(-3)`}>
+        <rect x={-230} y={-50} width={460} height={96} rx={18} fill="#F2B632" stroke={INK} strokeWidth={5} />
+        <text y={14} textAnchor="middle" fontFamily={FONT} fontWeight={900} fontSize={40} fill={INK}>casi 19 € de cada 100</text>
+      </g>
+      <Host x={150} y={560} s={0.42} mood={f > 50 ? 'wow' : 'ok'} look={12} />
+    </svg>
+  );
+};
+
+// Capítulo: Laura sube el precio solo en Airbnb; Booking y web se quedan igual
+const ArtAjuste = () => {
+  const f = useCurrentFrame();
+  const g = useSp(0, { damping: 15, stiffness: 150 });
+  const up = interpolate(f, [14, 40], [0, 1], { ...clamp, easing: Easing.out(Easing.cubic) });
+  const ok = useSp(48, { damping: 8, stiffness: 240 });
+  const rows = [['Airbnb', true], ['Booking', false], ['Tu web', false]];
+  return (
+    <svg viewBox="0 0 888 700" width="100%" height="100%">
+      <g transform={`translate(330,${40 + (1 - g) * 400})`}>
+        <rect width={500} height={420} rx={24} fill="#FFFFFF" stroke={INK} strokeWidth={6} />
+        <text x={250} y={62} textAnchor="middle" fontFamily={FONT} fontWeight={900} fontSize={34} fill={INK}>PRECIO POR NOCHE</text>
+        {rows.map(([n, a], k) => {
+          const v = a ? Math.round(100 + 15 * up) : 100;
+          return (
+            <g key={k} transform={`translate(30,${100 + k * 100})`}>
+              <rect width={440} height={80} rx={16} fill={a ? INK : '#E4E2DC'} />
+              <text x={24} y={52} fontFamily={FONT} fontWeight={900} fontSize={36} fill={a ? CREAM : INK}>{n}</text>
+              <text x={416} y={54} textAnchor="end" fontFamily={FONT} fontWeight={900} fontSize={44} fill={a ? '#F2B632' : INK}>{v} €</text>
+              {a ? <path d={`M250,${58 - 20 * up} l18,-22 l18,22`} stroke="#F2B632" strokeWidth={8} fill="none" strokeLinecap="round" strokeLinejoin="round" opacity={up} /> : null}
+            </g>
+          );
+        })}
+      </g>
+      <g transform={`translate(580,580) scale(${ok}) rotate(-2)`}>
+        <rect x={-260} y={-50} width={520} height={96} rx={18} fill={RED} />
+        <text y={14} textAnchor="middle" fontFamily={FONT} fontWeight={900} fontSize={40} fill={CREAM}>vuelve a cobrar 97 €</text>
+      </g>
+      {Array.from({ length: 5 }).map((_, k) => {
+        const t = f - (50 + k * 5);
+        const o = interpolate(t, [0, 4, 14, 18], [0, 1, 1, 0], clamp);
+        return <Coin key={k} x={200 + k * 18} y={300 - Math.max(0, t) * 6} s={0.7} o={o} />;
+      })}
+      <Host x={170} y={420} s={0.6} mood={f > 48 ? 'ok' : 'wow'} look={14} />
+    </svg>
+  );
+};
+
+export const ART = { pago: ArtPago, reparto: ArtReparto, ivacomision: ArtIvaComision, ajuste: ArtAjuste, calendario: ArtCalendario, bloqueo: ArtBloqueo, solucion: ArtSolucion, noche: ArtNoche, doble: ArtDoble, multa: ArtMulta, ranking: ArtRanking, sync: ArtSync, portada: ArtPortada, mirada: ArtMirada, orden: ArtOrden, flash: ArtFlash,
   retirada: ArtRetirada, decreto: ArtDecreto, contador: ArtContador, elegir: ArtElegir,
   contrato: ArtContrato, prorroga: ArtProrroga, impago: ArtImpago, llaves: ArtLlaves,
   fuga: ArtFuga, recibos: ArtRecibos, catastro: ArtCatastro, llenar: ArtLlenar,
@@ -1176,6 +1312,10 @@ export const ART = { calendario: ArtCalendario, bloqueo: ArtBloqueo, solucion: A
 
 // Efectos de sonido sincronizados con cada ilustración: [frame, efecto, volumen]
 export const ART_SFX = {
+  pago: [[4, 'whoosh', 0.3], ...Array.from({ length: 7 }, (_, k) => [18 + k * 4, 'cash', 0.2]), [46, 'impact', 0.7]],
+  reparto: [[2, 'pop', 0.4], [22, 'whoosh', 0.35], [30, 'impact', 0.55], [48, 'pop', 0.45]],
+  ivacomision: [[12, 'pop', 0.45], [20, 'riser', 0.3], [50, 'impact', 0.55], [52, 'pop', 0.4]],
+  ajuste: [[14, 'riser', 0.3], [40, 'ding', 0.45], [48, 'pop', 0.45], [50, 'cash', 0.4]],
   checklist: [[0, 'whoosh', 0.3], [10, 'pop', 0.4], [18, 'pop', 0.4], [26, 'pop', 0.4]],
   supremo: [[22, 'impact', 0.9], [44, 'whoosh', 0.3], [56, 'ding', 0.45]],
   vecinos: [[26, 'pop', 0.35], [34, 'pop', 0.35], [38, 'pop', 0.35], [52, 'impact', 0.55]],

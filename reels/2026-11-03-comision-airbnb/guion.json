@@ -1,0 +1,47 @@
+{
+ "serie": "Reel 08",
+ "ritmo": "rapido",
+ "sfx": true,
+ "narrador": "st-h2",
+ "velocidad": 1.15,
+ "scenes": [
+  {
+   "type": "hook",
+   "art": "pago",
+   "label": "Historia de anfitriona",
+   "text": ["Cobras 100 €", "y te llegan", "<r>84,50 €</r>"],
+   "sub": "Airbnb ya cobra toda su comisión al anfitrión: 15,5%",
+   "voz": "Cobras cien euros, y te llegan ochenta y cuatro con cincuenta. Érbiembí ya te cobra toda su comisión a ti."
+  },
+  {
+   "type": "point",
+   "art": "reparto",
+   "title": "Antes la pagaba el huésped",
+   "body": "Tú pagabas un 3% y el huésped el resto. Desde el 13 de octubre, Airbnb te cobra el 15,5% entero a ti.",
+   "action": "Mira tu último pago en Airbnb",
+   "voz": "Antes tú pagabas un tres por ciento, y el resto lo pagaba el huésped. Desde el trece de octubre, el quince y medio entero te lo cobra a ti. Limpieza incluida."
+  },
+  {
+   "type": "point",
+   "art": "ivacomision",
+   "title": "Y encima, con IVA",
+   "body": "Si eres particular, a esa comisión se le suma un 21% de IVA. Casi 19 € de cada 100 que cobras.",
+   "action": "Pregunta a tu gestor si lo deduces",
+   "voz": "Y encima, si eres particular, a esa comisión súmale un veintiuno por ciento de IVA. Casi diecinueve euros de cada cien."
+  },
+  {
+   "type": "point",
+   "art": "ajuste",
+   "title": "Así lo arregló Laura",
+   "body": "Subió su precio un 15% solo en Airbnb. El huésped ya no ve comisión aparte y ella vuelve a cobrar lo de antes.",
+   "action": "Sube Airbnb, no Booking ni tu web",
+   "voz": "Laura lo arregló así. Subió su precio un quince por ciento, solo en Érbiembí. El huésped ya no ve comisión aparte, y ella vuelve a cobrar lo de antes."
+  },
+  {
+   "type": "cta",
+   "word": "PRECIO",
+   "text": "y te digo gratis a cuánto poner tu noche",
+   "voz": "¿No sabes cuánto subir? Comenta precio, y te digo gratis a cuánto poner tu noche."
+  }
+ ]
+}
