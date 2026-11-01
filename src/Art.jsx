@@ -1016,13 +1016,170 @@ const ArtLlenar = () => {
   );
 };
 
+
+// ---------- normativa: ¿tu piso turístico es legal? (checklist 2025-2026) ----------
+// Gancho: Laura repasa una lista de 3 puntos; las casillas parpadean con "?"
+const ArtChecklist = () => {
+  const f = useCurrentFrame();
+  const board = useSp(0, { damping: 14, stiffness: 160 });
+  const host = useSp(8);
+  const items = ['Registro', 'Vecinos', 'IVA'];
+  return (
+    <svg viewBox="0 0 888 700" width="100%" height="100%">
+      <g transform={`translate(410,${40 + (1 - board) * 500}) rotate(${3 * board})`}>
+        <rect x={0} y={0} width={400} height={540} rx={26} fill="#FFFFFF" stroke={SOFT} strokeWidth={4} />
+        <rect x={130} y={-22} width={140} height={50} rx={14} fill={MID} />
+        <text x={200} y={90} textAnchor="middle" fontFamily={FONT} fontWeight={900} fontSize={32} fill={INK}>MI PISO TURÍSTICO</text>
+        {items.map((t, k) => {
+          const p = spring({ frame: f - 10 - k * 8, fps: 30, config: { damping: 9, stiffness: 220 } });
+          const blink = 0.5 + 0.5 * Math.abs(Math.sin((f - k * 5) / 5));
+          return (
+            <g key={k} transform={`translate(40,${150 + k * 120})`} opacity={p}>
+              <rect width={80} height={80} rx={16} fill="none" stroke={INK} strokeWidth={6} />
+              <text x={40} y={60} textAnchor="middle" fontFamily={FONT} fontWeight={900} fontSize={60} fill={RED} opacity={blink}>?</text>
+              <text x={110} y={56} fontFamily={FONT} fontWeight={900} fontSize={46} fill={INK}>{t}</text>
+            </g>
+          );
+        })}
+      </g>
+      <g transform={`translate(${(1 - host) * -300},0)`}>
+        <Host x={200} y={360} s={0.9} mood={f > 30 ? 'wow' : 'ok'} look={14} />
+      </g>
+    </svg>
+  );
+};
+
+// Capítulo: el Supremo anula el registro estatal; la licencia autonómica sigue
+const ArtSupremo = () => {
+  const f = useCurrentFrame();
+  const card = useSp(0, { damping: 15, stiffness: 150 });
+  const hammer = interpolate(f, [14, 22, 26], [-50, 8, 0], clamp);
+  const hit = f >= 22;
+  const st = useSp(22, { damping: 9, stiffness: 260, mass: 0.7 });
+  const lic = useSp(44, { damping: 10, stiffness: 200 });
+  const ok = useSp(56, { damping: 8, stiffness: 240 });
+  return (
+    <svg viewBox="0 0 888 700" width="100%" height="100%">
+      <g transform={`translate(40,${40 + (1 - card) * 400})`} opacity={card}>
+        <rect width={380} height={250} rx={20} fill="#FFFFFF" stroke={INK} strokeWidth={6} opacity={hit ? 0.55 : 1} />
+        <text x={30} y={70} fontFamily={FONT} fontWeight={800} fontSize={30} fill={MID}>Registro estatal</text>
+        <text x={30} y={140} fontFamily={FONT} fontWeight={900} fontSize={64} fill={INK} opacity={hit ? 0.55 : 1}>NRUA</text>
+        <rect x={30} y={170} width={300} height={14} rx={7} fill={SOFT} />
+        <g transform={`translate(190,150) rotate(-10) scale(${hit ? 2 - 1.15 * st : 0})`}>
+          <rect x={-160} y={-50} width={320} height={100} rx={14} fill="none" stroke={RED} strokeWidth={10} />
+          <text y={20} textAnchor="middle" fontFamily={FONT} fontWeight={900} fontSize={58} fill={RED}>ANULADO</text>
+        </g>
+      </g>
+      <g transform={`translate(700,90) rotate(${-40 + hammer * 0.8 + 40 * interpolate(f, [14, 22], [0, 1], clamp)})`}>
+        <rect x={-12} y={0} width={24} height={170} rx={10} fill="#8A5A34" />
+        <rect x={-70} y={160} width={140} height={64} rx={16} fill={INK} />
+      </g>
+      <rect x={470} y={330} width={180} height={30} rx={10} fill={INK} />
+      <text x={560} y={398} textAnchor="middle" fontFamily={FONT} fontWeight={900} fontSize={34} fill={INK}>SUPREMO</text>
+      <text x={560} y={432} textAnchor="middle" fontFamily={FONT} fontWeight={700} fontSize={26} fill={MID}>19 de mayo de 2026</text>
+      <g transform={`translate(${470 + (1 - lic) * 500},460)`} opacity={lic}>
+        <rect width={380} height={130} rx={20} fill="#FFFFFF" stroke={INK} strokeWidth={6} />
+        <rect width={24} height={130} rx={10} fill={RED} />
+        <text x={50} y={58} fontFamily={FONT} fontWeight={800} fontSize={28} fill={MID}>Sigue valiendo</text>
+        <text x={50} y={104} fontFamily={FONT} fontWeight={900} fontSize={38} fill={INK}>Tu licencia</text>
+        <g transform={`translate(330,64) scale(${ok})`}>
+          <circle r={36} fill={RED} />
+          <path d="M-16,0 l11,13 l22,-26" stroke={CREAM} strokeWidth={8} fill="none" strokeLinecap="round" />
+        </g>
+      </g>
+      <Host x={170} y={560} s={0.42} mood={hit ? 'wow' : 'ok'} look={12} />
+    </svg>
+  );
+};
+
+// Capítulo: junta de vecinos; 3 de cada 5 levantan la mano
+const ArtVecinos = () => {
+  const f = useCurrentFrame();
+  const bld = useSp(0, { damping: 15, stiffness: 150 });
+  const tag = useSp(52, { damping: 8, stiffness: 230 });
+  const yes = [true, false, true, true, false];
+  return (
+    <svg viewBox="0 0 888 700" width="100%" height="100%">
+      <g transform={`translate(40,${30 + (1 - bld) * 400})`}>
+        <rect width={240} height={420} rx={10} fill="#FFFFFF" stroke={INK} strokeWidth={6} />
+        {Array.from({ length: 8 }).map((_, k) => (
+          <rect key={k} x={30 + (k % 2) * 100} y={30 + Math.floor(k / 2) * 90} width={80} height={60} rx={6}
+            fill={k === 5 ? RED : SOFT} stroke={INK} strokeWidth={4} />
+        ))}
+        <rect x={90} y={370} width={60} height={50} fill={INK} />
+        <text x={120} y={470} textAnchor="middle" fontFamily={FONT} fontWeight={800} fontSize={28} fill={MID}>Tu edificio</text>
+      </g>
+      {yes.map((y, k) => {
+        const p = spring({ frame: f - 8 - k * 5, fps: 30, config: { damping: 12, stiffness: 180 } });
+        const hand = y ? interpolate(f, [26 + k * 4, 32 + k * 4], [0, 1], clamp) : 0;
+        const x = 360 + k * 100;
+        return (
+          <g key={k} transform={`translate(${x},${200 + (1 - p) * 300})`} opacity={p}>
+            <rect x={-34} y={40} width={68} height={110} rx={28} fill={y ? INK : MID} />
+            <circle cy={10} r={34} fill={SKIN} />
+            <rect x={22} y={40 - 80 * hand} width={18} height={70} rx={9} fill={y ? INK : MID} opacity={hand > 0 ? 1 : 0} />
+            <circle cx={31} cy={30 - 80 * hand} r={14} fill={SKIN} opacity={hand > 0 ? 1 : 0} />
+          </g>
+        );
+      })}
+      <text x={600} y={130} textAnchor="middle" fontFamily={FONT} fontWeight={900} fontSize={40} fill={INK}>JUNTA DE VECINOS</text>
+      <g transform={`translate(600,450) scale(${tag}) rotate(-3)`}>
+        <rect x={-220} y={-60} width={440} height={116} rx={22} fill={RED} />
+        <text y={14} textAnchor="middle" fontFamily={FONT} fontWeight={900} fontSize={66} fill={CREAM}>3 de cada 5</text>
+      </g>
+      <g transform={`translate(600,580) scale(${tag})`}>
+        <rect x={-210} y={-40} width={420} height={74} rx={16} fill={INK} />
+        <text y={10} textAnchor="middle" fontFamily={FONT} fontWeight={900} fontSize={34} fill={CREAM}>desde abril de 2025</text>
+      </g>
+    </svg>
+  );
+};
+
+// Capítulo: el IVA pasa del 0% al 10% el 1 de diciembre (pendiente de convalidar)
+const ArtIva = () => {
+  const f = useCurrentFrame();
+  const cal = useSp(0, { damping: 13, stiffness: 160 });
+  const pct = Math.round(interpolate(f, [18, 42], [0, 10], { ...clamp, easing: Easing.out(Easing.cubic) }));
+  const q = useSp(50, { damping: 8, stiffness: 230 });
+  return (
+    <svg viewBox="0 0 888 700" width="100%" height="100%">
+      <g transform={`translate(60,${50 + (1 - cal) * 400}) rotate(${-4 * cal})`}>
+        <rect width={300} height={320} rx={24} fill="#FFFFFF" stroke={INK} strokeWidth={6} />
+        <rect width={300} height={90} rx={24} fill={RED} /><rect y={60} width={300} height={30} fill={RED} />
+        <text x={150} y={64} textAnchor="middle" fontFamily={FONT} fontWeight={900} fontSize={44} fill={CREAM}>DICIEMBRE</text>
+        <text x={150} y={260} textAnchor="middle" fontFamily={FONT} fontWeight={900} fontSize={170} fill={INK}>1</text>
+      </g>
+      <g transform="translate(460,60)">
+        <rect width={380} height={420} rx={18} fill="#FFFFFF" stroke={INK} strokeWidth={6} />
+        <text x={30} y={66} fontFamily={FONT} fontWeight={900} fontSize={30} fill={INK}>FACTURA</text>
+        <rect x={30} y={96} width={320} height={14} rx={7} fill={SOFT} />
+        <rect x={30} y={126} width={240} height={14} rx={7} fill={SOFT} />
+        <text x={30} y={230} fontFamily={FONT} fontWeight={800} fontSize={40} fill={MID}>IVA</text>
+        <text x={350} y={250} textAnchor="end" fontFamily={FONT} fontWeight={900} fontSize={100} fill={pct > 0 ? RED : INK}>{pct}%</text>
+        <rect x={30} y={290} width={320} height={6} fill={INK} />
+        <text x={30} y={360} fontFamily={FONT} fontWeight={700} fontSize={28} fill={MID}>Hasta 30 noches</text>
+      </g>
+      <g transform={`translate(420,590) scale(${q}) rotate(-2)`}>
+        <rect x={-300} y={-48} width={600} height={92} rx={18} fill="#F2B632" stroke={INK} strokeWidth={5} />
+        <text y={14} textAnchor="middle" fontFamily={FONT} fontWeight={900} fontSize={38} fill={INK}>si el decreto se convalida</text>
+      </g>
+      <Host x={130} y={420} s={0.42} mood={f > 42 ? 'wow' : 'ok'} look={14} />
+    </svg>
+  );
+};
+
 export const ART = { calendario: ArtCalendario, bloqueo: ArtBloqueo, solucion: ArtSolucion, noche: ArtNoche, doble: ArtDoble, multa: ArtMulta, ranking: ArtRanking, sync: ArtSync, portada: ArtPortada, mirada: ArtMirada, orden: ArtOrden, flash: ArtFlash,
   retirada: ArtRetirada, decreto: ArtDecreto, contador: ArtContador, elegir: ArtElegir,
   contrato: ArtContrato, prorroga: ArtProrroga, impago: ArtImpago, llaves: ArtLlaves,
-  fuga: ArtFuga, recibos: ArtRecibos, catastro: ArtCatastro, llenar: ArtLlenar };
+  fuga: ArtFuga, recibos: ArtRecibos, catastro: ArtCatastro, llenar: ArtLlenar,
+  checklist: ArtChecklist, supremo: ArtSupremo, vecinos: ArtVecinos, iva: ArtIva };
 
 // Efectos de sonido sincronizados con cada ilustración: [frame, efecto, volumen]
 export const ART_SFX = {
+  checklist: [[0, 'whoosh', 0.3], [10, 'pop', 0.4], [18, 'pop', 0.4], [26, 'pop', 0.4]],
+  supremo: [[22, 'impact', 0.9], [44, 'whoosh', 0.3], [56, 'ding', 0.45]],
+  vecinos: [[26, 'pop', 0.35], [34, 'pop', 0.35], [38, 'pop', 0.35], [52, 'impact', 0.55]],
+  iva: [[18, 'riser', 0.3], [42, 'cash', 0.5], [50, 'pop', 0.45]],
   fuga: [[6, 'impact', 0.6], ...Array.from({ length: 9 }, (_, k) => [14 + k * 5, 'cash', 0.18])],
   recibos: [[6, 'pop', 0.4], [15, 'pop', 0.4], [24, 'pop', 0.4], [33, 'pop', 0.4], [46, 'impact', 0.55]],
   catastro: [[20, 'riser', 0.3], [52, 'impact', 0.55], [56, 'pop', 0.4]],

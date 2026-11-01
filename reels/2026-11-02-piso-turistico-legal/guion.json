@@ -1,0 +1,47 @@
+{
+ "serie": "Reel 07",
+ "ritmo": "rapido",
+ "sfx": true,
+ "narrador": "st-h2",
+ "velocidad": 1.15,
+ "scenes": [
+  {
+   "type": "hook",
+   "art": "checklist",
+   "label": "Normativa 2025-2026",
+   "text": ["¿Tu piso", "turístico", "<r>es legal?</r>"],
+   "sub": "3 cambios que ya te afectan, con el BOE en la mano",
+   "voz": "¿Tu piso turístico es legal? Tres cambios que ya te afectan. Con el BOE en la mano."
+  },
+  {
+   "type": "point",
+   "art": "supremo",
+   "title": "El registro estatal, anulado",
+   "body": "El Supremo anuló en mayo el registro único estatal. Lo que manda es la licencia de tu comunidad.",
+   "action": "Pon tu número autonómico en el anuncio",
+   "voz": "Uno. El Supremo anuló en mayo el registro único estatal. Lo que manda es la licencia de tu comunidad autónoma."
+  },
+  {
+   "type": "point",
+   "art": "vecinos",
+   "title": "Tus vecinos deciden",
+   "body": "Desde abril de 2025, un piso turístico nuevo en un edificio necesita el sí de 3 de cada 5 propietarios.",
+   "action": "Si empiezas ahora, pide votación en junta",
+   "voz": "Dos. Desde abril de dos mil veinticinco, un piso turístico nuevo en un edificio necesita el sí de tres de cada cinco propietarios."
+  },
+  {
+   "type": "point",
+   "art": "iva",
+   "title": "Diciembre: IVA del 10%",
+   "body": "El decreto 29/2026 pone IVA a estancias de hasta 30 noches desde el 1 de diciembre. Falta que se convalide.",
+   "action": "Calcula tu precio con y sin IVA",
+   "voz": "Tres. El decreto de octubre pone un diez por ciento de IVA a estancias de hasta treinta noches, desde el uno de diciembre. Si se convalida este mes."
+  },
+  {
+   "type": "cta",
+   "word": "AUDITORÍA",
+   "text": "y reviso gratis tu anuncio y tus precios",
+   "voz": "¿Tienes un piso turístico? Comenta auditoría, y reviso gratis tu anuncio y tus precios."
+  }
+ ]
+}
