@@ -1,0 +1,47 @@
+{
+ "serie": "Reel 11",
+ "ritmo": "rapido",
+ "sfx": true,
+ "narrador": "st-h2",
+ "velocidad": 1.15,
+ "scenes": [
+  {
+   "type": "hook",
+   "art": "buscador",
+   "label": "Historia de anfitriona",
+   "text": ["Airbnb", "decide", "<r>si te ven</r>"],
+   "sub": "Y su propia guía dice qué mira para ordenarte",
+   "voz": "Érbiembí decide si te ven. Y su propia guía dice qué mira para ordenarte."
+  },
+  {
+   "type": "point",
+   "art": "total",
+   "title": "1. El precio total",
+   "body": "Compara el total con tasas y descuentos, no solo la noche. La limpieza de Laura le subía el total.",
+   "action": "Compara tu total, no tu noche",
+   "voz": "Uno: el precio total. Érbiembí compara el total, no solo la noche. Y la limpieza de Laura le subía el total."
+  },
+  {
+   "type": "point",
+   "art": "rayo",
+   "title": "2. Fechas y respuesta",
+   "body": "Cuenta tu calendario abierto, si respondes rápido y si aceptas. La reserva inmediata te pone en su filtro.",
+   "action": "Activa la reserva inmediata",
+   "voz": "Dos: tus fechas, y lo rápido que respondes. Activa la reserva inmediata, y apareces en su filtro."
+  },
+  {
+   "type": "point",
+   "art": "corazones",
+   "title": "3. Cada clic cuenta",
+   "body": "Mira cuántos entran en tu anuncio, lo guardan en favoritos y reservan. La portada decide el clic.",
+   "action": "Pon tu mejor foto de portada",
+   "voz": "Tres: cada clic cuenta. Visitas, favoritos y reservas. Y el clic lo decide tu foto de portada."
+  },
+  {
+   "type": "cta",
+   "word": "AUDITORÍA",
+   "text": "y reviso gratis tu anuncio y tu precio total",
+   "voz": "¿Quieres saber por qué no te ven? Comenta auditoría, y reviso gratis tu anuncio."
+  }
+ ]
+}

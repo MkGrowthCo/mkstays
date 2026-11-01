@@ -1631,14 +1631,164 @@ const ArtTarifa = () => {
   );
 };
 
+// ---------- marketing: qué mira Airbnb para ordenarte en el buscador ----------
+const Corazon = ({ x, y, s = 1, o = 1, fill = RED }) => (
+  <g transform={`translate(${x},${y}) scale(${s})`} opacity={o}>
+    <path d="M0,30 C-50,-6 -34,-44 -12,-40 C-4,-38 0,-30 0,-24 C0,-30 4,-38 12,-40 C34,-44 50,-6 0,30 Z" fill={fill} stroke={INK} strokeWidth={4} strokeLinejoin="round" />
+  </g>
+);
+const Ficha = ({ y, w = 768, label, sub, red = false, k = 0 }) => (
+  <g transform={`translate(60,${y})`}>
+    <rect width={w} height={104} rx={20} fill={red ? RED : '#FFFFFF'} stroke={INK} strokeWidth={4} />
+    <rect x={14} y={12} width={110} height={80} rx={12} fill={red ? CREAM : SOFT} />
+    {label ? <text x={150} y={48} fontFamily={FONT} fontWeight={900} fontSize={34} fill={INK}>{label}</text>
+      : <rect x={150} y={30} width={300 - k * 40} height={18} rx={9} fill={INK} />}
+    {sub ? <text x={150} y={86} fontFamily={FONT} fontWeight={700} fontSize={26} fill={INK}>{sub}</text>
+      : <rect x={150} y={62} width={200} height={14} rx={7} fill={SOFT} />}
+  </g>
+);
+
+// Gancho: buscador de Airbnb; la lupa baja por la lista y el piso de Laura está abajo del todo
+const ArtBuscador = () => {
+  const f = useCurrentFrame();
+  const list = useSp(0, { damping: 15, stiffness: 150 });
+  const scroll = interpolate(f, [10, 40], [0, 1], { ...clamp, easing: Easing.inOut(Easing.cubic) });
+  const tag = useSp(42, { damping: 8, stiffness: 230 });
+  return (
+    <svg viewBox="0 0 888 700" width="100%" height="100%">
+      <rect x={60} y={10} width={768} height={56} rx={28} fill="#FFFFFF" stroke={INK} strokeWidth={5} />
+      <circle cx={104} cy={38} r={13} fill="none" stroke={INK} strokeWidth={5} />
+      <text x={136} y={50} fontFamily={FONT} fontWeight={700} fontSize={30} fill={MID}>Valencia · 3 noches</text>
+      <g opacity={list} transform={`translate(0,${(1 - list) * 300})`}>
+        {[0, 1, 2, 3].map((k) => <Ficha key={k} y={90 + k * 118} k={k} />)}
+        <Ficha y={90 + 4 * 118} red label="El piso de Laura" sub="Página 3" />
+      </g>
+      <g transform={`translate(${740},${130 + scroll * 470})`}>
+        <circle r={46} fill="none" stroke={INK} strokeWidth={10} />
+        <line x1={32} y1={32} x2={70} y2={70} stroke={INK} strokeWidth={14} strokeLinecap="round" />
+      </g>
+      <g transform={`translate(430,330) scale(${tag}) rotate(-4)`}>
+        <rect x={-230} y={-44} width={460} height={88} rx={18} fill={INK} stroke={CREAM} strokeWidth={4} />
+        <text y={14} textAnchor="middle" fontFamily={FONT} fontWeight={900} fontSize={40} fill={CREAM}>Nadie baja tanto</text>
+      </g>
+    </svg>
+  );
+};
+
+// Capítulo: el precio total. Noche + limpieza + tasas = el número que compara Airbnb
+const ArtTotal = () => {
+  const f = useCurrentFrame();
+  const rows = [['3 noches × 70 €', '210 €'], ['Limpieza', '90 €'], ['Tasas', '45 €']];
+  const tot = useSp(34, { damping: 9, stiffness: 220 });
+  const n = interpolate(f, [34, 52], [0, 345], { ...clamp, easing: Easing.out(Easing.cubic) });
+  return (
+    <svg viewBox="0 0 888 700" width="100%" height="100%">
+      <g transform="translate(300,30)">
+        <rect width={540} height={520} rx={24} fill="#FFFFFF" stroke={INK} strokeWidth={6} />
+        <text x={36} y={70} fontFamily={FONT} fontWeight={900} fontSize={38} fill={INK}>Lo que ve el huésped</text>
+        {rows.map(([a, b], k) => {
+          const p = spring({ frame: f - 6 - k * 8, fps: 30, config: { damping: 12, stiffness: 200 } });
+          const hot = k === 1;
+          return (
+            <g key={k} transform={`translate(${36 + (1 - p) * 300},${120 + k * 90})`} opacity={p}>
+              {hot ? <rect x={-14} y={-46} width={496} height={68} rx={14} fill="#FFE3DD" stroke={RED} strokeWidth={4} /> : null}
+              <text x={0} y={0} fontFamily={FONT} fontWeight={700} fontSize={34} fill={INK}>{a}</text>
+              <text x={468} y={0} textAnchor="end" fontFamily={FONT} fontWeight={900} fontSize={36} fill={hot ? RED : INK}>{b}</text>
+            </g>
+          );
+        })}
+        <line x1={36} x2={504} y1={386} y2={386} stroke={INK} strokeWidth={5} />
+        <g transform={`translate(36,${470})`} opacity={tot}>
+          <text fontFamily={FONT} fontWeight={900} fontSize={46} fill={INK}>TOTAL</text>
+          <text x={468} textAnchor="end" fontFamily={FONT} fontWeight={900} fontSize={64} fill={RED}>{Math.round(n)} €</text>
+        </g>
+      </g>
+      <g transform={`translate(570,630) scale(${useSp(52, { damping: 8, stiffness: 230 })}) rotate(-2)`}>
+        <rect x={-260} y={-40} width={520} height={78} rx={16} fill={INK} />
+        <text y={12} textAnchor="middle" fontFamily={FONT} fontWeight={900} fontSize={32} fill={CREAM}>Airbnb compara este número</text>
+      </g>
+      <Host x={140} y={380} s={0.7} mood={f > 40 ? 'wow' : 'ok'} look={14} />
+    </svg>
+  );
+};
+
+// Capítulo: reserva inmediata. El interruptor se enciende (rayo) y el calendario se abre
+const ArtRayo = () => {
+  const f = useCurrentFrame();
+  const on = interpolate(f, [14, 22], [0, 1], clamp);
+  const card = useSp(0, { damping: 14, stiffness: 160 });
+  return (
+    <svg viewBox="0 0 888 700" width="100%" height="100%">
+      <g transform={`translate(300,${40 + (1 - card) * 400})`} opacity={card}>
+        <rect width={540} height={170} rx={24} fill="#FFFFFF" stroke={INK} strokeWidth={6} />
+        <path d="M70,30 L36,96 L66,96 L50,146 L104,72 L72,72 L92,30 Z" fill={on > 0.5 ? '#F2B632' : SOFT} stroke={INK} strokeWidth={4} strokeLinejoin="round" />
+        <text x={130} y={78} fontFamily={FONT} fontWeight={900} fontSize={36} fill={INK}>Reserva</text>
+        <text x={130} y={120} fontFamily={FONT} fontWeight={900} fontSize={36} fill={INK}>inmediata</text>
+        <rect x={380} y={56} width={130} height={66} rx={33} fill={on > 0.5 ? RED : SOFT} stroke={INK} strokeWidth={4} />
+        <circle cx={413 + on * 64} cy={89} r={25} fill="#FFFFFF" stroke={INK} strokeWidth={4} />
+      </g>
+      <g transform="translate(300,250)">
+        <rect width={540} height={300} rx={24} fill="#FFFFFF" stroke={INK} strokeWidth={6} />
+        {Array.from({ length: 14 }).map((_, k) => {
+          const c = k % 7, r = Math.floor(k / 7);
+          const p = interpolate(f, [24 + k * 2, 30 + k * 2], [0, 1], clamp);
+          return (
+            <g key={k} transform={`translate(${30 + c * 70},${40 + r * 120})`}>
+              <rect width={60} height={100} rx={12} fill={p > 0.5 ? '#E4F3E8' : '#E4E2DC'} stroke={INK} strokeWidth={3} />
+              {p > 0.5 ? <path d="M16,52 L26,64 L46,38" stroke="#2E8B57" strokeWidth={7} fill="none" strokeLinecap="round" /> : <line x1={14} x2={46} y1={50} y2={50} stroke={MID} strokeWidth={6} />}
+            </g>
+          );
+        })}
+      </g>
+      <g transform={`translate(560,630) scale(${useSp(54, { damping: 8, stiffness: 230 })}) rotate(-2)`}>
+        <rect x={-290} y={-40} width={580} height={78} rx={16} fill={RED} />
+        <text y={12} textAnchor="middle" fontFamily={FONT} fontWeight={900} fontSize={32} fill={CREAM}>Más búsquedas te encuentran</text>
+      </g>
+      <Host x={140} y={380} s={0.7} mood={f > 22 ? 'wow' : 'ok'} look={14} />
+    </svg>
+  );
+};
+
+// Capítulo: corazones. Visitas y favoritos hacen subir el piso de Laura en la lista
+const ArtCorazones = () => {
+  const f = useCurrentFrame();
+  const rise = interpolate(f, [30, 58], [4, 0], { ...clamp, easing: Easing.inOut(Easing.cubic) });
+  const H = 118;
+  return (
+    <svg viewBox="0 0 888 700" width="100%" height="100%">
+      {[0, 1, 2, 3].map((k) => {
+        const slot = k + (rise < k + 1 ? 1 : 0) * Math.min(1, k + 1 - rise);
+        return <Ficha key={k} y={20 + slot * H} k={k} />;
+      })}
+      <g transform={`translate(0,${20 + rise * H - 20})`}>
+        <Ficha y={20} red label="El piso de Laura" sub={f > 50 ? 'Primera página' : 'Visitas y favoritos'} />
+      </g>
+      {Array.from({ length: 8 }).map((_, k) => {
+        const t = f - (4 + k * 4);
+        const o = interpolate(t, [0, 3, 18, 24], [0, 1, 1, 0], clamp);
+        return <Corazon key={k} x={720 + Math.sin(k * 1.7) * 80} y={20 + rise * H + 40 - Math.max(0, t) * 6} s={0.8} o={o} />;
+      })}
+      <g transform={`translate(560,650) scale(${useSp(56, { damping: 8, stiffness: 230 })}) rotate(-2)`}>
+        <rect x={-210} y={-40} width={420} height={78} rx={16} fill={INK} />
+        <text y={12} textAnchor="middle" fontFamily={FONT} fontWeight={900} fontSize={34} fill={CREAM}>Cada clic suma</text>
+      </g>
+    </svg>
+  );
+};
+
 export const ART = { mascotas: ArtMascotas, censo: ArtCenso, filtro: ArtFiltro, tarifa: ArtTarifa, estrellas: ArtEstrellas, balanza: ArtBalanza, insignia: ArtInsignia, aviso: ArtAviso, pago: ArtPago, reparto: ArtReparto, ivacomision: ArtIvaComision, ajuste: ArtAjuste, calendario: ArtCalendario, bloqueo: ArtBloqueo, solucion: ArtSolucion, noche: ArtNoche, doble: ArtDoble, multa: ArtMulta, ranking: ArtRanking, sync: ArtSync, portada: ArtPortada, mirada: ArtMirada, orden: ArtOrden, flash: ArtFlash,
   retirada: ArtRetirada, decreto: ArtDecreto, contador: ArtContador, elegir: ArtElegir,
   contrato: ArtContrato, prorroga: ArtProrroga, impago: ArtImpago, llaves: ArtLlaves,
   fuga: ArtFuga, recibos: ArtRecibos, catastro: ArtCatastro, llenar: ArtLlenar,
-  checklist: ArtChecklist, supremo: ArtSupremo, vecinos: ArtVecinos, iva: ArtIva };
+  checklist: ArtChecklist, supremo: ArtSupremo, vecinos: ArtVecinos, iva: ArtIva,
+  buscador: ArtBuscador, total: ArtTotal, rayo: ArtRayo, corazones: ArtCorazones };
 
 // Efectos de sonido sincronizados con cada ilustración: [frame, efecto, volumen]
 export const ART_SFX = {
+  buscador: [[10, 'whoosh', 0.35], [40, 'impact', 0.6], [44, 'pop', 0.45]],
+  total: [[6, 'pop', 0.35], [14, 'pop', 0.35], [22, 'pop', 0.35], [34, 'riser', 0.3], [52, 'cash', 0.45]],
+  rayo: [[16, 'impact', 0.55], [28, 'click', 0.2], [36, 'click', 0.2], [44, 'click', 0.2], [54, 'pop', 0.45]],
+  corazones: [[4, 'pop', 0.25], [12, 'pop', 0.25], [20, 'pop', 0.25], [28, 'pop', 0.25], [34, 'whoosh', 0.35], [56, 'ding', 0.5]],
   mascotas: [[4, 'riser', 0.3], [34, 'impact', 0.6], [36, 'pop', 0.5]],
   censo: [[8, 'whoosh', 0.3], [16, 'whoosh', 0.3], [46, 'impact', 0.55]],
   filtro: [[14, 'click', 0.5], [22, 'whoosh', 0.3], [26, 'pop', 0.45], [48, 'ding', 0.4]],
