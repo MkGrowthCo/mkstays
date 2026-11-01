@@ -1,0 +1,47 @@
+{
+ "serie": "Reel 10",
+ "ritmo": "rapido",
+ "sfx": true,
+ "narrador": "st-h2",
+ "velocidad": 1.15,
+ "scenes": [
+  {
+   "type": "hook",
+   "art": "mascotas",
+   "label": "Historia de anfitriona",
+   "text": ["Tu anuncio", "dice NO a", "<r>15 millones</r>"],
+   "sub": "Las mascotas que hay en España. Y sus dueños viajan",
+   "voz": "Tu anuncio le dice que no a quince millones. Las mascotas que hay en España. Y sus dueños, viajan."
+  },
+  {
+   "type": "point",
+   "art": "censo",
+   "title": "Laura ponía «no mascotas»",
+   "body": "En España hay más de 15 millones de mascotas: casi el doble que menores de edad. Y viajan con sus dueños.",
+   "action": "Mira cuántos anuncios de tu zona las admiten",
+   "voz": "Laura ponía: no se admiten mascotas. Pero en España ya hay más de quince millones. Casi el doble que niños."
+  },
+  {
+   "type": "point",
+   "art": "filtro",
+   "title": "Solo 1 de cada 4 dice sí",
+   "body": "Algo más del 27% de los anuncios de Airbnb admite mascotas. Con ese filtro puesto, compites con muchos menos.",
+   "action": "Activa «se admiten mascotas»",
+   "voz": "Y solo uno de cada cuatro anuncios de Érbiembí las admite. Con ese filtro puesto, compites con muchos menos."
+  },
+  {
+   "type": "point",
+   "art": "tarifa",
+   "title": "Así lo hizo rentable",
+   "body": "Añadió una tarifa por mascota para la limpieza extra y normas claras: cuántas, dónde y si pueden quedarse solas.",
+   "action": "Añade una tarifa por mascota",
+   "voz": "Así lo hizo rentable. Una tarifa por mascota para la limpieza extra. Y normas claras: cuántas, dónde, y si pueden quedarse solas."
+  },
+  {
+   "type": "cta",
+   "word": "AUDITORÍA",
+   "text": "y te hago gratis una auditoría de precios",
+   "voz": "¿Quieres saber cuánto cobrar por mascota? Comenta auditoría, y te hago gratis una auditoría de precios."
+  }
+ ]
+}

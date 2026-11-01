@@ -1476,7 +1476,162 @@ const ArtAviso = () => {
   );
 };
 
-export const ART = { estrellas: ArtEstrellas, balanza: ArtBalanza, insignia: ArtInsignia, aviso: ArtAviso, pago: ArtPago, reparto: ArtReparto, ivacomision: ArtIvaComision, ajuste: ArtAjuste, calendario: ArtCalendario, bloqueo: ArtBloqueo, solucion: ArtSolucion, noche: ArtNoche, doble: ArtDoble, multa: ArtMulta, ranking: ArtRanking, sync: ArtSync, portada: ArtPortada, mirada: ArtMirada, orden: ArtOrden, flash: ArtFlash,
+// ---------- marketing: admitir mascotas ----------
+const Dog = ({ x, y, s = 1, color = '#C98B4F' }) => {
+  const f = useCurrentFrame();
+  const wag = Math.sin(f / 2.5) * 22;
+  return (
+    <g transform={`translate(${x},${y}) scale(${s})`}>
+      <g transform={`rotate(${wag},62,-10)`}><path d="M62,-10 Q96,-40 92,-70" stroke={INK} strokeWidth={10} fill="none" strokeLinecap="round" /></g>
+      <rect x={-70} y={-30} width={140} height={64} rx={30} fill={color} stroke={INK} strokeWidth={6} />
+      {[-52, -22, 22, 50].map((lx, k) => <rect key={k} x={lx - 7} y={22} width={14} height={40} rx={6} fill={INK} />)}
+      <circle cx={-80} cy={-46} r={38} fill={color} stroke={INK} strokeWidth={6} />
+      <ellipse cx={-104} cy={-62} rx={14} ry={26} fill={INK} transform="rotate(20,-104,-62)" />
+      <circle cx={-90} cy={-52} r={6} fill={INK} />
+      <ellipse cx={-116} cy={-38} rx={10} ry={8} fill={INK} />
+    </g>
+  );
+};
+const Pata = ({ x, y, s = 1, fill = INK, o = 1 }) => (
+  <g transform={`translate(${x},${y}) scale(${s})`} opacity={o} fill={fill}>
+    <ellipse cx={0} cy={14} rx={22} ry={18} />
+    <circle cx={-24} cy={-10} r={9} /><circle cx={-8} cy={-22} r={9} /><circle cx={10} cy={-22} r={9} /><circle cx={26} cy={-10} r={9} />
+  </g>
+);
+
+// Gancho: contador hasta 15 millones, huellas por todas partes y cartel NO en la puerta
+const ArtMascotas = () => {
+  const f = useCurrentFrame();
+  const n = interpolate(f, [4, 34], [0, 15.1], { ...clamp, easing: Easing.out(Easing.cubic) });
+  const no = useSp(36, { damping: 8, stiffness: 260 });
+  const dog = useSp(8, { damping: 14, stiffness: 120 });
+  return (
+    <svg viewBox="0 0 888 700" width="100%" height="100%">
+      {Array.from({ length: 10 }).map((_, k) => {
+        const o = interpolate(f, [4 + k * 3, 8 + k * 3], [0, 0.35], clamp);
+        return <Pata key={k} x={80 + (k % 5) * 180} y={60 + Math.floor(k / 5) * 520 + (k % 2) * 30} s={0.8} fill={SOFT} o={o} />;
+      })}
+      <text x={444} y={250} textAnchor="middle" fontFamily={FONT} fontWeight={900} fontSize={190} fill={CREAM}>{n.toFixed(1).replace('.', ',')}</text>
+      <text x={444} y={320} textAnchor="middle" fontFamily={FONT} fontWeight={800} fontSize={44} fill={'#F2B632'}>MILLONES DE MASCOTAS</text>
+      <g transform={`translate(${-200 + dog * 420},540)`}><Dog x={0} y={0} s={0.9} /></g>
+      <g transform="translate(660,470)">
+        <rect x={-90} y={-60} width={180} height={230} rx={8} fill={SOFT} stroke={CREAM} strokeWidth={6} />
+        <circle cx={60} cy={60} r={9} fill={INK} />
+        <g transform={`scale(${no}) rotate(-8)`}>
+          <circle r={74} fill="#FFFFFF" stroke={RED} strokeWidth={14} />
+          <text y={22} textAnchor="middle" fontFamily={FONT} fontWeight={900} fontSize={64} fill={RED}>NO</text>
+        </g>
+      </g>
+    </svg>
+  );
+};
+
+// Capítulo: barras mascotas vs niños; Laura con su cartel de "no mascotas"
+const ArtCenso = () => {
+  const f = useCurrentFrame();
+  const a = interpolate(f, [8, 34], [0, 1], { ...clamp, easing: Easing.out(Easing.cubic) });
+  const b = interpolate(f, [16, 40], [0, 1], { ...clamp, easing: Easing.out(Easing.cubic) });
+  const tag = useSp(46, { damping: 8, stiffness: 230 });
+  const W = 560;
+  return (
+    <svg viewBox="0 0 888 700" width="100%" height="100%">
+      <g transform="translate(260,90)">
+        <text x={0} y={0} fontFamily={FONT} fontWeight={800} fontSize={32} fill={MID}>Mascotas en España</text>
+        <rect x={0} y={20} width={W * a} height={90} rx={14} fill={RED} />
+        <text x={W * a - 20} y={82} textAnchor="end" fontFamily={FONT} fontWeight={900} fontSize={52} fill={CREAM} opacity={a > 0.5 ? 1 : 0}>15,1 M</text>
+        <text x={0} y={180} fontFamily={FONT} fontWeight={800} fontSize={32} fill={MID}>Niños (menores)</text>
+        <rect x={0} y={200} width={W * (8.5 / 15.1) * b} height={90} rx={14} fill={INK} />
+        <text x={W * (8.5 / 15.1) * b - 20} y={262} textAnchor="end" fontFamily={FONT} fontWeight={900} fontSize={52} fill={CREAM} opacity={b > 0.5 ? 1 : 0}>8,5 M</text>
+      </g>
+      <Host x={130} y={250} s={0.55} mood={f > 40 ? 'wow' : 'ok'} look={14} />
+      <g transform="translate(130,470) rotate(-4)">
+        <rect x={-125} y={-40} width={250} height={80} rx={10} fill="#FFFFFF" stroke={INK} strokeWidth={5} />
+        <text y={11} textAnchor="middle" fontFamily={FONT} fontWeight={900} fontSize={27} fill={RED}>NO MASCOTAS</text>
+      </g>
+      <Dog x={700} y={600} s={0.8} color="#8C8A84" />
+      <g transform={`translate(560,450) scale(${tag}) rotate(-3)`}>
+        <rect x={-200} y={-44} width={400} height={84} rx={18} fill="#F2B632" stroke={INK} strokeWidth={5} />
+        <text y={14} textAnchor="middle" fontFamily={FONT} fontWeight={900} fontSize={38} fill={INK}>casi el doble</text>
+      </g>
+    </svg>
+  );
+};
+
+// Capítulo: el filtro "se admiten mascotas" deja 1 de cada 4 anuncios
+const ArtFiltro = () => {
+  const f = useCurrentFrame();
+  const on = interpolate(f, [14, 22], [0, 1], clamp);
+  const pct = Math.round(interpolate(f, [26, 48], [0, 27], { ...clamp, easing: Easing.out(Easing.cubic) }));
+  return (
+    <svg viewBox="0 0 888 700" width="100%" height="100%">
+      <g transform="translate(60,40)">
+        <rect width={768} height={110} rx={55} fill="#FFFFFF" stroke={INK} strokeWidth={6} />
+        <Pata x={70} y={56} s={0.8} />
+        <text x={130} y={70} fontFamily={FONT} fontWeight={900} fontSize={38} fill={INK}>Se admiten mascotas</text>
+        <rect x={600} y={28} width={130} height={56} rx={28} fill={on > 0.5 ? RED : SOFT} />
+        <circle cx={628 + on * 74} cy={56} r={22} fill="#FFFFFF" stroke={INK} strokeWidth={4} />
+      </g>
+      {[0, 1, 2, 3].map((k) => {
+        const keep = k === 1;
+        const fade = keep ? 1 : interpolate(f, [22, 30], [1, 0.18], clamp);
+        const pop = keep ? 1 + 0.08 * spring({ frame: f - 26, fps: 30, config: { damping: 8, stiffness: 220 } }) : 1;
+        return (
+          <g key={k} transform={`translate(${60 + k * 196 + 88},${300}) scale(${pop})`} opacity={fade}>
+            <rect x={-88} y={-90} width={176} height={210} rx={18} fill="#FFFFFF" stroke={keep ? RED : INK} strokeWidth={keep ? 8 : 5} />
+            <rect x={-70} y={-72} width={140} height={100} rx={10} fill={keep ? '#FFE29A' : SOFT} />
+            <rect x={-70} y={44} width={120} height={14} rx={7} fill={SOFT} />
+            <rect x={-70} y={72} width={90} height={14} rx={7} fill={SOFT} />
+            {keep ? <Pata x={0} y={-22} s={0.7} fill={RED} /> : null}
+          </g>
+        );
+      })}
+      <g transform="translate(444,560)">
+        <text textAnchor="middle" y={40} fontFamily={FONT} fontWeight={900} fontSize={120} fill={INK}>{pct}%</text>
+        <text textAnchor="middle" y={100} fontFamily={FONT} fontWeight={800} fontSize={30} fill={MID}>DE LOS ANUNCIOS LAS ADMITE</text>
+      </g>
+    </svg>
+  );
+};
+
+// Capítulo: tarifa por mascota + normas claras; entra el perro y suena la caja
+const ArtTarifa = () => {
+  const f = useCurrentFrame();
+  const card = useSp(0, { damping: 14, stiffness: 160 });
+  const rules = ['¿Cuántas?', '¿Dónde pueden estar?', '¿Pueden quedarse solas?'];
+  const dog = useSp(40, { damping: 14, stiffness: 110 });
+  return (
+    <svg viewBox="0 0 888 700" width="100%" height="100%">
+      <g transform={`translate(400,${40 + (1 - card) * 500})`}>
+        <rect width={470} height={430} rx={22} fill="#FFFFFF" stroke={INK} strokeWidth={6} />
+        <text x={30} y={66} fontFamily={FONT} fontWeight={900} fontSize={32} fill={INK}>TU ANUNCIO</text>
+        <g transform="translate(30,96)">
+          <rect width={410} height={80} rx={14} fill={INK} />
+          <Pata x={40} y={40} s={0.55} fill="#F2B632" />
+          <text x={80} y={52} fontFamily={FONT} fontWeight={900} fontSize={32} fill={CREAM}>Tarifa por mascota</text>
+        </g>
+        {rules.map((r, k) => {
+          const p = spring({ frame: f - 12 - k * 8, fps: 30, config: { damping: 11, stiffness: 200 } });
+          return (
+            <g key={k} transform={`translate(${30 + (1 - p) * 300},${220 + k * 66})`} opacity={p}>
+              <rect width={34} height={34} rx={8} fill={RED} />
+              <path d="M7,17 L15,25 L28,9" stroke={CREAM} strokeWidth={5} fill="none" strokeLinecap="round" strokeLinejoin="round" />
+              <text x={50} y={28} fontFamily={FONT} fontWeight={800} fontSize={27} fill={INK}>{r}</text>
+            </g>
+          );
+        })}
+      </g>
+      <Host x={160} y={300} s={0.55} mood="ok" look={14} />
+      <g transform={`translate(${-250 + dog * 520},590)`}><Dog x={0} y={0} s={0.8} /></g>
+      {Array.from({ length: 4 }).map((_, k) => {
+        const t = f - (48 + k * 4);
+        const o = interpolate(t, [0, 4, 14, 18], [0, 1, 1, 0], clamp);
+        return <Coin key={k} x={620 + k * 50} y={520 - Math.max(0, t) * 5} s={0.7} o={o} />;
+      })}
+    </svg>
+  );
+};
+
+export const ART = { mascotas: ArtMascotas, censo: ArtCenso, filtro: ArtFiltro, tarifa: ArtTarifa, estrellas: ArtEstrellas, balanza: ArtBalanza, insignia: ArtInsignia, aviso: ArtAviso, pago: ArtPago, reparto: ArtReparto, ivacomision: ArtIvaComision, ajuste: ArtAjuste, calendario: ArtCalendario, bloqueo: ArtBloqueo, solucion: ArtSolucion, noche: ArtNoche, doble: ArtDoble, multa: ArtMulta, ranking: ArtRanking, sync: ArtSync, portada: ArtPortada, mirada: ArtMirada, orden: ArtOrden, flash: ArtFlash,
   retirada: ArtRetirada, decreto: ArtDecreto, contador: ArtContador, elegir: ArtElegir,
   contrato: ArtContrato, prorroga: ArtProrroga, impago: ArtImpago, llaves: ArtLlaves,
   fuga: ArtFuga, recibos: ArtRecibos, catastro: ArtCatastro, llenar: ArtLlenar,
@@ -1484,6 +1639,10 @@ export const ART = { estrellas: ArtEstrellas, balanza: ArtBalanza, insignia: Art
 
 // Efectos de sonido sincronizados con cada ilustración: [frame, efecto, volumen]
 export const ART_SFX = {
+  mascotas: [[4, 'riser', 0.3], [34, 'impact', 0.6], [36, 'pop', 0.5]],
+  censo: [[8, 'whoosh', 0.3], [16, 'whoosh', 0.3], [46, 'impact', 0.55]],
+  filtro: [[14, 'click', 0.5], [22, 'whoosh', 0.3], [26, 'pop', 0.45], [48, 'ding', 0.4]],
+  tarifa: [[12, 'pop', 0.4], [20, 'pop', 0.4], [28, 'pop', 0.4], [48, 'cash', 0.45]],
   estrellas: [[6, 'pop', 0.3], [9, 'pop', 0.3], [12, 'pop', 0.3], [15, 'pop', 0.3], [26, 'impact', 0.9]],
   balanza: [[2, 'whoosh', 0.3], ...Array.from({ length: 9 }, (_, k) => [15 + k * 5, 'click', 0.25]), [55, 'ding', 0.45], [60, 'pop', 0.45]],
   insignia: [[16, 'pop', 0.4], [30, 'pop', 0.45], [40, 'riser', 0.3], [60, 'impact', 0.55]],
