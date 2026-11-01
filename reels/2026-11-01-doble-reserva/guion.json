@@ -1,7 +1,7 @@
 {"serie":"Reel 01","scenes":[
- {"type":"hook","text":["Una doble","reserva","<r>te sale cara</r>"],"sub":"Y Airbnb no perdona aunque el fallo sea del calendario"},
- {"type":"point","title":"Te cobran una penalización","body":"Si cancelas por una doble reserva, Airbnb cobra entre el 10% y el 50% de la reserva según la antelación.","action":"Revisa hoy tus calendarios sincronizados"},
- {"type":"point","title":"Y pierdes visibilidad","body":"La cancelación cuenta contra tu estatus de Superanfitrión y tu anuncio puede bajar en las búsquedas.","action":"No dependas solo de iCal: usa conexión directa"},
- {"type":"list","title":"Evítalo así","items":["Channel manager con API","Bloquea tus estancias propias","Vigila las reservas de última hora"]},
+ {"type":"hook","art":"doble","label":"Historia de anfitriona","text":["Una doble","reserva","<r>te sale cara</r>"],"sub":"Y Airbnb no perdona aunque falle el calendario"},
+ {"type":"point","art":"multa","title":"A Laura le cobraron","body":"Si cancelas por una doble reserva, Airbnb cobra entre el 10% y el 50% de la reserva según la antelación.","action":"Revisa hoy tus calendarios sincronizados"},
+ {"type":"point","art":"ranking","title":"Y su anuncio cayó","body":"La cancelación cuenta contra el estatus de Superanfitrión y el anuncio puede bajar en las búsquedas.","action":"No dependas solo de iCal"},
+ {"type":"point","art":"sync","title":"Así lo evita ahora","body":"Channel manager con conexión directa, bloquea sus estancias propias y vigila las reservas de última hora.","action":"Conecta todas tus plataformas a una"},
  {"type":"cta","word":"AUDITORÍA","text":"y reviso gratis tus precios y tu calendario"}
 ]}

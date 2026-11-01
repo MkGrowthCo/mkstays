@@ -240,4 +240,147 @@ const ArtNoche = () => {
   );
 };
 
-export const ART = { calendario: ArtCalendario, bloqueo: ArtBloqueo, solucion: ArtSolucion, noche: ArtNoche };
+
+// ===== Reel 01 · doble reserva =====
+// Gancho: dos huéspedes llegan a la vez a la misma puerta
+const ArtDoble = () => {
+  const f = useCurrentFrame();
+  const house = useSp(0, { damping: 14, stiffness: 120 });
+  const l = interpolate(f, [4, 34], [-120, 210], { ...clamp, easing: Easing.out(Easing.quad) });
+  const r = interpolate(f, [4, 34], [1010, 690], { ...clamp, easing: Easing.out(Easing.quad) });
+  const bang = useSp(36, { damping: 7, stiffness: 220 });
+  const walking = f < 34;
+  return (
+    <svg viewBox="0 0 888 700" width="100%" height="100%">
+      <g transform={`translate(254,${120 + (1 - house) * 500})`}>
+        <path d="M-20,170 L190,20 L400,170 Z" fill={RED} />
+        <rect x={10} y={160} width={360} height={330} fill="#2A2A28" stroke={CREAM} strokeWidth={6} />
+        <rect x={140} y={320} width={100} height={170} fill="#F2B632" />
+        <rect x={50} y={210} width={80} height={70} fill="#F2B632" />
+        <rect x={250} y={210} width={80} height={70} fill="#F2B632" />
+      </g>
+      <Guest x={l} y={380} s={0.8} walking={walking} color={BLUE} />
+      <g transform={`translate(${r},380) scale(-1,1)`}><Guest x={0} y={0} s={0.8} walking={walking} color="#2E7D5B" /></g>
+      <g transform={`translate(444,300) scale(${bang})`} opacity={f > 36 ? 1 : 0}>
+        <path d="M0,-90 L22,-30 L84,-44 L40,4 L80,56 L18,36 L0,96 L-18,36 L-80,56 L-40,4 L-84,-44 L-22,-30 Z" fill={CREAM} stroke={RED} strokeWidth={8} />
+        <text y={26} textAnchor="middle" fontFamily={FONT} fontWeight={900} fontSize={84} fill={RED}>!!</text>
+      </g>
+    </svg>
+  );
+};
+
+// Capítulo: la penalización. Un recibo cae y el dinero se va de la hucha de Laura
+const ArtMulta = () => {
+  const f = useCurrentFrame();
+  const host = useSp(0);
+  const ticket = useSp(14, { damping: 10, stiffness: 120 });
+  const stamp = useSp(40, { damping: 7, stiffness: 220 });
+  return (
+    <svg viewBox="0 0 888 700" width="100%" height="100%">
+      <g transform={`translate(560,${-420 + ticket * 440}) rotate(${(1 - ticket) * 12 + 4})`}>
+        <path d="M-170,0 L170,0 L170,440 L145,420 L120,440 L95,420 L70,440 L45,420 L20,440 L-5,420 L-30,440 L-55,420 L-80,440 L-105,420 L-130,440 L-150,420 L-170,440 Z" fill="#FFFFFF" stroke={INK} strokeWidth={6} />
+        <text x={0} y={70} textAnchor="middle" fontFamily={FONT} fontWeight={900} fontSize={34} fill={INK}>PENALIZACIÓN</text>
+        <rect x={-130} y={100} width={260} height={10} fill={SOFT} /><rect x={-130} y={130} width={190} height={10} fill={SOFT} />
+        <text x={0} y={250} textAnchor="middle" fontFamily={FONT} fontWeight={900} fontSize={76} fill={RED}>10–50%</text>
+        <text x={0} y={310} textAnchor="middle" fontFamily={FONT} fontWeight={700} fontSize={30} fill={MID}>DE LA RESERVA</text>
+        <g transform={`translate(60,370) rotate(-14) scale(${stamp})`} opacity={f > 40 ? 1 : 0}>
+          <rect x={-120} y={-40} width={240} height={74} rx={10} fill="none" stroke={RED} strokeWidth={8} />
+          <text y={18} textAnchor="middle" fontFamily={FONT} fontWeight={900} fontSize={42} fill={RED}>A PAGAR</text>
+        </g>
+      </g>
+      {[0, 1, 2, 3].map((k) => {
+        const p = interpolate(f, [30 + k * 8, 56 + k * 8], [0, 1], clamp);
+        return <Coin key={k} x={200 + p * (330 + k * 20)} y={420 - Math.sin(p * Math.PI) * 220 - p * 40} s={0.7} o={p > 0 && p < 0.97 ? 1 : 0} />;
+      })}
+      <g transform={`translate(0,${(1 - host) * 300})`}>
+        <Host x={170} y={430} s={0.85} mood={f > 30 ? 'sad' : 'wow'} look={8} />
+      </g>
+    </svg>
+  );
+};
+
+// Capítulo: pierdes visibilidad. El anuncio de Laura baja en la lista y pierde la estrella
+const ArtRanking = () => {
+  const f = useCurrentFrame();
+  const drop = interpolate(f, [26, 58], [0, 3], { ...clamp, easing: Easing.inOut(Easing.cubic) });
+  const starFall = interpolate(f, [20, 46], [0, 1], { ...clamp, easing: Easing.in(Easing.quad) });
+  const list = useSp(0);
+  const H = 132, Y0 = 70;
+  const others = [0, 1, 2];
+  return (
+    <svg viewBox="0 0 888 700" width="100%" height="100%">
+      <rect x={60} y={10} width={768} height={44} rx={22} fill="#FFFFFF" stroke={INK} strokeWidth={5} />
+      <circle cx={100} cy={32} r={12} fill="none" stroke={INK} strokeWidth={5} />
+      <text x={130} y={44} fontFamily={FONT} fontWeight={700} fontSize={28} fill={MID}>Alojamientos en tu zona</text>
+      {others.map((k) => {
+        const slot = k + 1 - Math.min(1, Math.max(0, drop - k));
+        return (
+          <g key={k} transform={`translate(${60 + (1 - list) * 400},${Y0 + slot * H + 10})`} opacity={list}>
+            <rect width={768} height={H - 20} rx={20} fill="#FFFFFF" stroke={INK} strokeWidth={4} />
+            <rect x={16} y={14} width={120} height={H - 48} rx={12} fill={SOFT} />
+            <rect x={160} y={30} width={300 - k * 40} height={18} rx={9} fill={INK} />
+            <rect x={160} y={64} width={200} height={14} rx={7} fill={SOFT} />
+          </g>
+        );
+      })}
+      <g transform={`translate(60,${Y0 + drop * H + 10})`}>
+        <rect width={768} height={H - 20} rx={20} fill={RED} stroke={INK} strokeWidth={4} />
+        <g transform="translate(76,58)"><path d="M-40,0 L0,-34 L40,0 Z" fill={INK} /><rect x={-30} y={-2} width={60} height={40} fill={CREAM} /></g>
+        <text x={160} y={52} fontFamily={FONT} fontWeight={900} fontSize={36} fill={INK}>El piso de Laura</text>
+        <text x={160} y={88} fontFamily={FONT} fontWeight={700} fontSize={26} fill={INK}>1 cancelación</text>
+        <g transform={`translate(${700},${56 + starFall * 520}) rotate(${starFall * 160})`} opacity={1 - Math.max(0, starFall - 0.8) * 5}>
+          <path d="M0,-34 L10,-10 L34,-10 L14,6 L22,32 L0,16 L-22,32 L-14,6 L-34,-10 L-10,-10 Z" fill="#F2B632" stroke={INK} strokeWidth={4} />
+        </g>
+      </g>
+      <g opacity={drop > 2.9 ? 1 : 0}>
+        <path d={`M30,${Y0 + 50} L30,${Y0 + 3 * H + 40}`} stroke={RED} strokeWidth={8} />
+        <path d={`M14,${Y0 + 3 * H + 20} L30,${Y0 + 3 * H + 46} L46,${Y0 + 3 * H + 20}`} stroke={RED} strokeWidth={8} fill="none" />
+      </g>
+    </svg>
+  );
+};
+
+// Capítulo: la solución. Un channel manager conecta las plataformas y bloquea a la vez
+const ArtSync = () => {
+  const f = useCurrentFrame();
+  const hub = useSp(4, { damping: 11, stiffness: 160 });
+  const line = interpolate(f, [12, 30], [0, 1], clamp);
+  const dot = interpolate(f, [30, 50], [0, 1], { ...clamp, easing: Easing.inOut(Easing.cubic) });
+  const lockP = useSp(50, { damping: 9, stiffness: 200 });
+  const host = useSp(56);
+  const Plat = ({ x, name }) => (
+    <g transform={`translate(${x},40)`}>
+      <rect width={300} height={230} rx={24} fill="#FFFFFF" stroke={INK} strokeWidth={6} />
+      <rect width={300} height={54} rx={24} fill={INK} /><rect y={30} width={300} height={24} fill={INK} />
+      <text x={150} y={40} textAnchor="middle" fontFamily={FONT} fontWeight={800} fontSize={28} fill={CREAM}>{name}</text>
+      {[0, 1, 2, 3].map((k) => <rect key={k} x={20 + k * 68} y={80} width={56} height={120} rx={10} fill="#F6F5F2" />)}
+      <g transform={`translate(150,140) scale(${lockP})`}>
+        <rect x={-110} y={-50} width={220} height={100} rx={14} fill={RED} />
+        <text y={12} textAnchor="middle" fontFamily={FONT} fontWeight={900} fontSize={34} fill={CREAM}>OCUPADO</text>
+      </g>
+    </g>
+  );
+  return (
+    <svg viewBox="0 0 888 700" width="100%" height="100%">
+      <Plat x={40} name="Plataforma A" />
+      <Plat x={548} name="Plataforma B" />
+      <path d={`M190,270 L190,${270 + 130 * line}`} stroke={INK} strokeWidth={8} />
+      <path d={`M698,270 L698,${270 + 130 * line}`} stroke={INK} strokeWidth={8} />
+      <path d={`M190,400 L${190 + 254 * line},400 M698,400 L${698 - 254 * line},400`} stroke={INK} strokeWidth={8} />
+      <g transform={`translate(444,400) scale(${hub})`}>
+        <rect x={-150} y={-56} width={300} height={112} rx={56} fill={INK} />
+        <text y={-6} textAnchor="middle" fontFamily={FONT} fontWeight={900} fontSize={34} fill={CREAM}>CHANNEL</text>
+        <text y={32} textAnchor="middle" fontFamily={FONT} fontWeight={900} fontSize={34} fill={RED}>MANAGER</text>
+      </g>
+      {dot > 0 && dot < 1 ? <>
+        <circle cx={444 - 254 * dot} cy={400} r={14} fill={RED} />
+        <circle cx={444 + 254 * dot} cy={400} r={14} fill={RED} />
+      </> : null}
+      <g transform={`translate(0,${(1 - host) * 300})`}>
+        <Host x={444} y={560} s={0.55} mood="ok" />
+      </g>
+    </svg>
+  );
+};
+
+export const ART = { calendario: ArtCalendario, bloqueo: ArtBloqueo, solucion: ArtSolucion, noche: ArtNoche, doble: ArtDoble, multa: ArtMulta, ranking: ArtRanking, sync: ArtSync };
