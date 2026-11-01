@@ -199,7 +199,7 @@ const ArtSolucion = () => {
       </Calendar>
       {[0, 1, 2].map((k) => {
         const p = interpolate(f, [60 + k * 6, 80 + k * 6], [0, 1], clamp);
-        return <Coin key={k} x={560 + k * 90} y={640 - p * 120} s={0.6 + 0.4 * p} o={p > 0 ? 1 - Math.max(0, p - 0.85) * 4 : 0} />;
+        return <Coin key={k} x={560 + k * 90} y={640 - p * 120} s={0.6 + 0.4 * p} o={p > 0 ? Math.max(0, 1 - Math.max(0, p - 0.85) * 7) : 0} />;
       })}
       <g transform={`translate(0,${(1 - host) * 260})`}>
         <Host x={220} y={560} s={0.6} mood="ok" />

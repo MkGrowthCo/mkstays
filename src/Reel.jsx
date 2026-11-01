@@ -19,10 +19,10 @@ const len = (s) => (Array.isArray(s) ? s.join(' ') : String(s || '')).replace(/<
 export const VOZ_DELAY = 8; // la voz entra tras la cortinilla
 // Ritmo "rapido" (pedido de Martín: sin silencios y más dinámico): la escena dura lo que su voz
 // más un respiro mínimo, la voz entra casi a la vez que la cortinilla y cada escena entra con un golpe de zoom.
-export const VOZ_DELAY_RAPIDO = 3;
+export const VOZ_DELAY_RAPIDO = 2;
 export function sceneFrames(sc, ritmo) {
   const base = sceneFramesTexto(sc);
-  if (ritmo === 'rapido' && sc.audioSec) return Math.max(Math.round(2 * FPS), Math.ceil(sc.audioSec * FPS) + VOZ_DELAY_RAPIDO + 5);
+  if (ritmo === 'rapido' && sc.audioSec) return Math.max(Math.round(2 * FPS), Math.ceil(sc.audioSec * FPS) + VOZ_DELAY_RAPIDO + 2);
   return sc.audioSec ? Math.max(base, Math.ceil(sc.audioSec * FPS) + VOZ_DELAY + 14) : base;
 }
 function sceneFramesTexto(sc) {
