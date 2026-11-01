@@ -1,5 +1,6 @@
 # Genera la voz en off de cada escena con TTS local y gratuito (sin API ni tokens).
-# Por defecto Piper con la voz castellana "davefx" (elegida por Martín). También: "sharvard-h", "sharvard-m" (Piper) y las de Kokoro (em_alex, ef_dora, em_santa).
+# Por defecto Supertonic 3 con la voz "st-h2" (elegida por Martín por sonar más humana).
+# También: st-h1, st-h3, st-m1, st-m2 (Supertonic), davefx, sharvard-h, sharvard-m (Piper) y em_alex, ef_dora, em_santa (Kokoro).
 # Uso: python3 voces.py guion.json carpeta_salida
 # Lee "voz" de cada escena (texto a locutar), "narrador" y "velocidad" del guion.
 # Escribe voz-<n>.wav y voces.json con la duración de cada audio.
@@ -41,7 +42,37 @@ def piper_voz(nombre):
         urllib.request.urlretrieve(CFG_URL + nombre + '.onnx.json', onnx + '.json')
     return PiperVoice.load(onnx)
 
+ST_DIR = 'sherpa-onnx-supertonic-3-tts-int8-2026-05-11'
+ST_URL = 'https://github.com/k2-fsa/sherpa-onnx/releases/download/tts-models/' + ST_DIR + '.tar.bz2'
+SUPERTONIC = {'st-h1': 6, 'st-h2': 7, 'st-h3': 9, 'st-m1': 0, 'st-m2': 3}
+
+def supertonic():
+    import sherpa_onnx, tarfile
+    d = os.path.join(MODELOS, ST_DIR)
+    if not os.path.exists(os.path.join(d, 'voice.bin')):
+        os.makedirs(MODELOS, exist_ok=True)
+        tb = os.path.join(MODELOS, 'st.tar.bz2')
+        print('Descargando Supertonic 3', file=sys.stderr); urllib.request.urlretrieve(ST_URL, tb)
+        with tarfile.open(tb) as t: t.extractall(MODELOS)
+        os.remove(tb)
+    j = lambda f: os.path.join(d, f)
+    c = sherpa_onnx.OfflineTtsConfig(model=sherpa_onnx.OfflineTtsModelConfig(
+        supertonic=sherpa_onnx.OfflineTtsSupertonicModelConfig(
+            duration_predictor=j('duration_predictor.int8.onnx'), text_encoder=j('text_encoder.int8.onnx'),
+            vector_estimator=j('vector_estimator.int8.onnx'), vocoder=j('vocoder.int8.onnx'), tts_json=j('tts.json'),
+            unicode_indexer=j('unicode_indexer.bin'), voice_style=j('voice.bin')),
+        num_threads=4, provider='cpu'))
+    return sherpa_onnx.OfflineTts(c)
+
 def sintetizador(voz, vel):
+    if voz in SUPERTONIC:
+        import sherpa_onnx
+        tts = supertonic()
+        def f(t):
+            g = sherpa_onnx.GenerationConfig(); g.sid = SUPERTONIC[voz]; g.num_steps = 16; g.speed = vel; g.extra['lang'] = 'es'
+            a = tts.generate(t, g)
+            return np.array(a.samples, dtype=np.float32), a.sample_rate
+        return f
     if voz in PIPER:
         from piper import SynthesisConfig
         modelo, spk = PIPER[voz]
@@ -58,8 +89,8 @@ def sintetizador(voz, vel):
 
 def main(guion_path, out_dir):
     g = json.load(open(guion_path, encoding='utf8'))
-    voz = g.get('narrador', 'davefx')
-    vel = float(g.get('velocidad', 1.05))
+    voz = g.get('narrador', 'st-h2')
+    vel = float(g.get('velocidad', 1.1))
     synth = sintetizador(voz, vel)
     os.makedirs(out_dir, exist_ok=True)
     res = []

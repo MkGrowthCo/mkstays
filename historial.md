@@ -8,3 +8,5 @@ Una línea por reel: id · tema · gancho · categoría · estado · lo que Mart
 - Voz en off añadida (Kokoro TTS local, narrador em_alex) a 2026-11-01-noches-huerfanas (intento 2) y 2026-11-01-doble-reserva (intento 3). Pedido de Martín: voces con un programa sin tokens.
 - Voz cambiada a Piper davefx (castellano, local y gratis) en los dos reels, elegida por Martín: quería algo más humano y más español que Kokoro.
 
+- Voz cambiada a Supertonic 3 (st-h2, gratis y local) en los dos reels: Martín encontraba Piper demasiado robótica.
+
