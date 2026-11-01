@@ -870,12 +870,163 @@ const ArtLlaves = () => {
   );
 };
 
+// ---------- por qué alquilar: el piso vacío también cuesta ----------
+// Casita de playa reutilizable
+const Casa = ({ x, y, s = 1, closed = true, lit = 0 }) => (
+  <g transform={`translate(${x},${y}) scale(${s})`}>
+    <rect x={-170} y={-10} width={340} height={230} rx={10} fill="#FFFFFF" stroke={INK} strokeWidth={6} />
+    <path d="M-200,0 L0,-150 L200,0 Z" fill={RED} stroke={INK} strokeWidth={6} strokeLinejoin="round" />
+    <rect x={-130} y={40} width={90} height={80} rx={6} fill={closed ? SOFT : '#FFE29A'} stroke={INK} strokeWidth={5} />
+    <rect x={40} y={40} width={90} height={80} rx={6} fill={closed ? SOFT : '#FFE29A'} stroke={INK} strokeWidth={5} />
+    {closed ? [0, 1, 2, 3].map((k) => <line key={k} x1={-130} x2={-40} y1={54 + k * 18} y2={54 + k * 18} stroke={MID} strokeWidth={5} />) : null}
+    {closed ? [0, 1, 2, 3].map((k) => <line key={k} x1={40} x2={130} y1={54 + k * 18} y2={54 + k * 18} stroke={MID} strokeWidth={5} />) : null}
+    <rect x={-35} y={110} width={70} height={110} rx={6} fill={INK} />
+    <rect x={-170} y={-10} width={340} height={230} rx={10} fill="#FFE29A" opacity={lit * 0.25} />
+    {closed ? <g transform="translate(0,150)">
+      <rect x={-22} y={0} width={44} height={36} rx={6} fill="#F2B632" stroke={INK} strokeWidth={4} />
+      <path d="M-13,0 v-12 a13,13 0 0 1 26,0 v12" fill="none" stroke={INK} strokeWidth={5} />
+    </g> : null}
+  </g>
+);
+
+// Gancho: casa cerrada con candado y las monedas se le escapan por el tejado
+const ArtFuga = () => {
+  const f = useCurrentFrame();
+  const casa = useSp(0, { damping: 14, stiffness: 160 });
+  const host = useSp(10);
+  return (
+    <svg viewBox="0 0 888 700" width="100%" height="100%">
+      <g transform={`translate(0,${(1 - casa) * 400})`}>
+        <Casa x={560} y={400} s={1} closed />
+        <text x={560} y={668} textAnchor="middle" fontFamily={FONT} fontWeight={800} fontSize={30} fill={SOFT}>CERRADO 10 MESES</text>
+      </g>
+      {Array.from({ length: 9 }).map((_, k) => {
+        const t0 = 14 + k * 5;
+        const t = Math.max(0, f - t0);
+        const o = interpolate(t, [0, 4, 34, 44], [0, 1, 1, 0], clamp);
+        const x = 560 + Math.sin(k * 2.1) * 60 + t * (k % 2 ? 4.5 : -3.2);
+        const y = 250 - t * 7 + t * t * 0.06;
+        return <Coin key={k} x={x} y={y} s={0.9} o={o} />;
+      })}
+      <g transform={`translate(${(1 - host) * -300},0)`}>
+        <Host x={160} y={360} s={0.9} mood={f > 30 ? 'wow' : 'ok'} look={f > 20 ? 14 : 0} />
+      </g>
+    </svg>
+  );
+};
+
+// Capítulo: los recibos que llegan aunque no vaya nadie
+const ArtRecibos = () => {
+  const f = useCurrentFrame();
+  const items = [['IBI', '#FFFFFF'], ['COMUNIDAD', '#FFFFFF'], ['SEGURO', '#FFFFFF'], ['LUZ Y AGUA', '#FFFFFF']];
+  const sad = f > 46;
+  return (
+    <svg viewBox="0 0 888 700" width="100%" height="100%">
+      <Casa x={230} y={330} s={0.72} closed />
+      {items.map(([t], k) => {
+        const p = spring({ frame: f - 6 - k * 9, fps: 30, config: { damping: 11, stiffness: 190 } });
+        return (
+          <g key={k} transform={`translate(${470 + (1 - p) * 500},${70 + k * 118}) rotate(${(k % 2 ? 3 : -3) * p})`} opacity={p}>
+            <rect width={360} height={98} rx={16} fill="#FFFFFF" stroke={INK} strokeWidth={5} />
+            <rect width={24} height={98} rx={10} fill={RED} />
+            <text x={50} y={62} fontFamily={FONT} fontWeight={900} fontSize={34} fill={INK}>{t}</text>
+            <text x={340} y={64} textAnchor="end" fontFamily={FONT} fontWeight={900} fontSize={44} fill={RED}>€</text>
+          </g>
+        );
+      })}
+      <Host x={170} y={560} s={0.45} mood={sad ? 'sad' : 'ok'} look={10} />
+      <g transform={`translate(560,${600 + (1 - useSp(46, { damping: 9, stiffness: 220 })) * 200})`}>
+        <rect x={-100} y={-44} width={330} height={80} rx={18} fill={INK} />
+        <text x={65} y={10} textAnchor="middle" fontFamily={FONT} fontWeight={900} fontSize={36} fill={CREAM}>0 huéspedes</text>
+      </g>
+    </svg>
+  );
+};
+
+// Capítulo: Hacienda suma un % del valor catastral como renta
+const ArtCatastro = () => {
+  const f = useCurrentFrame();
+  const doc = useSp(0, { damping: 15, stiffness: 150 });
+  const pct = interpolate(f, [22, 52], [0, 2], { ...clamp, easing: Easing.out(Easing.cubic) });
+  const tag = useSp(54, { damping: 8, stiffness: 230 });
+  return (
+    <svg viewBox="0 0 888 700" width="100%" height="100%">
+      <g transform={`translate(40,${40 + (1 - doc) * 400}) rotate(${-3 * doc})`} opacity={doc}>
+        <rect width={380} height={440} rx={18} fill="#FFFFFF" stroke={INK} strokeWidth={6} />
+        <rect width={380} height={80} rx={18} fill={INK} /><rect y={50} width={380} height={30} fill={INK} />
+        <text x={190} y={54} textAnchor="middle" fontFamily={FONT} fontWeight={900} fontSize={34} fill={CREAM}>RECIBO IBI</text>
+        <text x={30} y={140} fontFamily={FONT} fontWeight={700} fontSize={28} fill={MID}>Valor catastral</text>
+        <text x={30} y={200} fontFamily={FONT} fontWeight={900} fontSize={58} fill={INK}>100.000 €</text>
+        {[0, 1, 2, 3].map((k) => <rect key={k} x={30} y={250 + k * 40} width={320 - (k % 2) * 80} height={14} rx={7} fill={SOFT} />)}
+      </g>
+      <g transform="translate(650,230)">
+        <circle r={150} fill={RED} />
+        <text y={-40} textAnchor="middle" fontFamily={FONT} fontWeight={900} fontSize={30} fill={INK}>HASTA EL</text>
+        <text y={50} textAnchor="middle" fontFamily={FONT} fontWeight={900} fontSize={84} fill={CREAM}>{pct.toFixed(1).replace('.', ',')}%</text>
+        <text y={100} textAnchor="middle" fontFamily={FONT} fontWeight={900} fontSize={28} fill={INK}>COMO RENTA</text>
+      </g>
+      <path d="M430,240 C480,220 470,230 500,232" stroke={INK} strokeWidth={8} fill="none" strokeLinecap="round" />
+      <path d="M492,214 L512,234 L488,250" stroke={INK} strokeWidth={8} fill="none" strokeLinecap="round" strokeLinejoin="round" />
+      <g transform={`translate(560,560) scale(${tag}) rotate(-3)`}>
+        <rect x={-230} y={-50} width={460} height={96} rx={18} fill="#F2B632" stroke={INK} strokeWidth={5} />
+        <text y={14} textAnchor="middle" fontFamily={FONT} fontWeight={900} fontSize={40} fill={INK}>sin ganar ni 1 €</text>
+      </g>
+      <Host x={150} y={560} s={0.42} mood={f > 54 ? 'wow' : 'ok'} look={12} />
+    </svg>
+  );
+};
+
+// Capítulo: la casa se abre, el calendario se llena y entran monedas
+const ArtLlenar = () => {
+  const f = useCurrentFrame();
+  const open = f > 14;
+  const lit = interpolate(f, [14, 24], [0, 1], clamp);
+  const g = useSp(6);
+  const weeks = ['JUN', 'JUL', 'AGO', 'SEP'];
+  return (
+    <svg viewBox="0 0 888 700" width="100%" height="100%">
+      <Casa x={230} y={300} s={0.72} closed={!open} lit={lit} />
+      <g transform={`translate(${-200 + g * 560},430)`}><Guest x={0} y={0} s={0.5} walking={g < 0.98} /></g>
+      <g transform="translate(470,60)">
+        <rect width={380} height={400} rx={22} fill="#FFFFFF" stroke={INK} strokeWidth={6} />
+        <text x={190} y={56} textAnchor="middle" fontFamily={FONT} fontWeight={900} fontSize={34} fill={INK}>TEMPORADA ALTA</text>
+        {weeks.map((w, k) => {
+          const p = interpolate(f, [18 + k * 8, 30 + k * 8], [0, 1], { ...clamp, easing: Easing.out(Easing.cubic) });
+          return (
+            <g key={k} transform={`translate(24,${90 + k * 76})`}>
+              <text x={0} y={42} fontFamily={FONT} fontWeight={800} fontSize={30} fill={MID}>{w}</text>
+              <rect x={86} y={8} width={246} height={50} rx={12} fill="#E4E2DC" />
+              <rect x={86} y={8} width={246 * p} height={50} rx={12} fill={INK} />
+              <text x={316} y={44} textAnchor="end" fontFamily={FONT} fontWeight={900} fontSize={28} fill={CREAM} opacity={p > 0.9 ? 1 : 0}>RESERVADO</text>
+            </g>
+          );
+        })}
+      </g>
+      {Array.from({ length: 6 }).map((_, k) => {
+        const t = f - (30 + k * 6);
+        const o = interpolate(t, [0, 4, 16, 20], [0, 1, 1, 0], clamp);
+        return <Coin key={k} x={660 - t * 10} y={520 + Math.sin(k) * 30 - Math.max(0, t) * 2} s={0.8} o={o} />;
+      })}
+      <g transform={`translate(660,610) scale(${useSp(56, { damping: 8, stiffness: 230 })})`}>
+        <rect x={-200} y={-44} width={400} height={84} rx={18} fill={RED} />
+        <text y={14} textAnchor="middle" fontFamily={FONT} fontWeight={900} fontSize={38} fill={CREAM}>Ahora suma</text>
+      </g>
+      <Host x={110} y={560} s={0.42} mood="ok" look={12} />
+    </svg>
+  );
+};
+
 export const ART = { calendario: ArtCalendario, bloqueo: ArtBloqueo, solucion: ArtSolucion, noche: ArtNoche, doble: ArtDoble, multa: ArtMulta, ranking: ArtRanking, sync: ArtSync, portada: ArtPortada, mirada: ArtMirada, orden: ArtOrden, flash: ArtFlash,
   retirada: ArtRetirada, decreto: ArtDecreto, contador: ArtContador, elegir: ArtElegir,
-  contrato: ArtContrato, prorroga: ArtProrroga, impago: ArtImpago, llaves: ArtLlaves };
+  contrato: ArtContrato, prorroga: ArtProrroga, impago: ArtImpago, llaves: ArtLlaves,
+  fuga: ArtFuga, recibos: ArtRecibos, catastro: ArtCatastro, llenar: ArtLlenar };
 
 // Efectos de sonido sincronizados con cada ilustración: [frame, efecto, volumen]
 export const ART_SFX = {
+  fuga: [[6, 'impact', 0.6], ...Array.from({ length: 9 }, (_, k) => [14 + k * 5, 'cash', 0.18])],
+  recibos: [[6, 'pop', 0.4], [15, 'pop', 0.4], [24, 'pop', 0.4], [33, 'pop', 0.4], [46, 'impact', 0.55]],
+  catastro: [[20, 'riser', 0.3], [52, 'impact', 0.55], [56, 'pop', 0.4]],
+  llenar: [[14, 'ding', 0.45], [30, 'cash', 0.4], [42, 'cash', 0.35], [56, 'pop', 0.45]],
   contrato: [[18, 'whoosh', 0.3], [26, 'impact', 0.9]],
   prorroga: [[10, 'pop', 0.4], [19, 'pop', 0.4], [28, 'pop', 0.4], [37, 'pop', 0.4], [46, 'pop', 0.4], [56, 'ding', 0.45]],
   impago: [[4, 'riser', 0.35], [46, 'impact', 0.6], [50, 'pop', 0.45]],

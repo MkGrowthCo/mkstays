@@ -1,0 +1,47 @@
+{
+ "serie": "Reel 06",
+ "ritmo": "rapido",
+ "sfx": true,
+ "narrador": "st-h2",
+ "velocidad": 1.15,
+ "scenes": [
+  {
+   "type": "hook",
+   "art": "fuga",
+   "label": "Historia de anfitriona",
+   "text": ["Tu piso", "vacío", "<r>te cobra</r>"],
+   "sub": "IBI, comunidad y hasta Hacienda, aunque no entre nadie",
+   "voz": "Tu piso vacío te cobra. IBI, comunidad, y hasta Hacienda. Aunque no entre nadie."
+  },
+  {
+   "type": "point",
+   "art": "recibos",
+   "title": "Laura lo tenía cerrado",
+   "body": "Su piso de playa, diez meses al año sin nadie. Y los recibos seguían llegando.",
+   "action": "Suma lo que te cuesta al año",
+   "voz": "Laura tenía su piso de playa cerrado diez meses al año. Sin nadie dentro. Y los recibos, seguían llegando."
+  },
+  {
+   "type": "point",
+   "art": "catastro",
+   "title": "Hacienda también cuenta",
+   "body": "Si no lo alquilas, te suma como renta hasta el 2% de su valor catastral. Sin ganar ni un euro.",
+   "action": "Busca el valor catastral en tu IBI",
+   "voz": "Y Hacienda también cuenta. Si no lo alquilas, te suma como renta hasta el dos por ciento de su valor catastral. Sin ganar ni un euro."
+  },
+  {
+   "type": "point",
+   "art": "llenar",
+   "title": "Así le dio la vuelta",
+   "body": "Hasta julio llegaron 58,1 millones de turistas. Laura sacó licencia y alquiló sus mejores semanas.",
+   "action": "Empieza por tus semanas de verano",
+   "voz": "Así le dio la vuelta. Hasta julio llegaron cincuenta y ocho millones de turistas. Laura sacó su licencia, y alquiló sus mejores semanas. Ahora el piso suma."
+  },
+  {
+   "type": "cta",
+   "word": "AUDITORÍA",
+   "text": "y te digo gratis cuánto podría ganar tu piso",
+   "voz": "¿Tienes un piso vacío? Comenta auditoría, y te digo gratis cuánto podría ganar."
+  }
+ ]
+}
