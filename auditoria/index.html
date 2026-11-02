@@ -1,0 +1,457 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Auditoría de precios gratis para tu alojamiento | MK Stays</title>
+<meta name="description" content="Te revisamos gratis los precios de tu alquiler vacacional: precio por noche, estancia mínima, fines de semana y noches sueltas. Sin compromiso." />
+<meta name="theme-color" content="#0B0B0B" />
+<meta property="og:title" content="Auditoría de precios gratis | MK Stays" />
+<meta property="og:description" content="Descubre cuánto dinero se te escapa en el calendario de tu alojamiento. Revisión gratis y sin compromiso." />
+<meta property="og:type" content="website" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230B0B0B'/%3E%3Cpath d='M14 29 32 16l18 13' fill='none' stroke='%23FF3B1F' stroke-width='3.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3Ctext x='32' y='51' text-anchor='middle' font-family='Arial,sans-serif' font-weight='800' font-size='22' fill='%23F4EFE6'%3EMK%3C/text%3E%3C/svg%3E" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#0B0B0B; --ink-2:#1A1A1A; --cream:#F4EFE6; --cream-2:#E9E1D3; --line:#D9CFBE;
+  --red:#FF3B1F; --red-dark:#D92E14; --muted:#5E5850; --white:#FFFFFF;
+  --radius:18px; --radius-sm:12px; --max:1120px;
+}
+*{ box-sizing:border-box; margin:0; padding:0 }
+html{ scroll-behavior:smooth; -webkit-text-size-adjust:100% }
+body{ font-family:'Archivo',system-ui,sans-serif; background:var(--cream); color:var(--ink); line-height:1.55; font-size:17px; -webkit-font-smoothing:antialiased }
+img{ max-width:100%; display:block }
+a{ color:inherit }
+:focus-visible{ outline:3px solid var(--red); outline-offset:3px }
+.wrap{ max-width:var(--max); margin:0 auto; padding:0 20px }
+.sr-only{ position:absolute !important; left:-9999px; width:1px !important; height:1px !important; padding:0 !important; border:0 !important; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap }
+.legal a{ overflow-wrap:anywhere }
+[hidden]{ display:none !important }
+
+/* Header */
+.top{ background:var(--ink); color:var(--cream) }
+.top .wrap{ display:flex; align-items:center; justify-content:space-between; height:64px }
+.logo{ display:flex; align-items:center; gap:10px; font-weight:800; letter-spacing:-.02em; font-size:19px; text-decoration:none }
+.logo svg{ width:30px; height:30px }
+.logo b{ color:var(--red) }
+.top a.link{ font-size:14px; font-weight:600; text-decoration:none; opacity:.8 }
+.top a.link:hover{ opacity:1 }
+
+/* Buttons */
+.btn{ display:inline-flex; align-items:center; justify-content:center; gap:10px; background:var(--red); color:var(--white); font:inherit; font-weight:700; font-size:16px;
+  padding:16px 26px; border-radius:999px; border:0; cursor:pointer; text-decoration:none; transition:background .2s, transform .2s }
+.btn:hover{ background:var(--red-dark); transform:translateY(-1px) }
+.btn[disabled]{ opacity:.6; cursor:wait; transform:none }
+.btn--ghost{ background:transparent; color:inherit; border:1.5px solid currentColor }
+.btn--ghost:hover{ background:rgba(255,255,255,.08) }
+
+/* Hero */
+.hero{ background:var(--ink); color:var(--cream); padding:56px 0 72px; position:relative; overflow:hidden }
+.hero .wrap{ display:grid; gap:40px }
+.tag{ display:inline-flex; align-items:center; gap:8px; font-size:13px; font-weight:700; text-transform:uppercase; letter-spacing:.08em; color:var(--red) }
+.tag::before{ content:""; width:8px; height:8px; border-radius:50%; background:var(--red) }
+h1{ font-size:clamp(38px,7vw,72px); line-height:.98; letter-spacing:-.035em; font-weight:900; margin:16px 0 20px; max-width:15ch }
+h1 em{ font-style:normal; color:var(--red) }
+.lead{ font-size:clamp(17px,2.2vw,20px); color:rgba(244,239,230,.78); max-width:52ch }
+.hero__cta{ display:flex; flex-wrap:wrap; gap:12px; margin-top:28px }
+.hero__note{ margin-top:16px; font-size:14px; color:rgba(244,239,230,.6) }
+.ticket{ background:var(--cream); color:var(--ink); border-radius:var(--radius); padding:24px; align-self:start; box-shadow:0 20px 50px rgba(0,0,0,.35) }
+.ticket h2{ font-size:15px; text-transform:uppercase; letter-spacing:.08em; font-weight:800; margin-bottom:14px }
+.ticket ul{ list-style:none; display:grid; gap:10px }
+.ticket li{ display:flex; gap:12px; align-items:flex-start; padding-bottom:10px; border-bottom:1px dashed var(--line); font-size:15.5px }
+.ticket li:last-child{ border-bottom:0; padding-bottom:0 }
+.ticket li span{ flex:none; width:22px; height:22px; border-radius:50%; background:var(--red); color:#fff; display:grid; place-items:center; font-size:13px; font-weight:800; margin-top:2px }
+@media (min-width:900px){ .hero{ padding:88px 0 104px } .hero .wrap{ grid-template-columns:1.35fr 1fr; align-items:center } }
+
+/* Sections */
+section{ padding:72px 0 }
+.kicker{ font-size:13px; font-weight:800; text-transform:uppercase; letter-spacing:.1em; color:var(--red); margin-bottom:10px }
+h2.title{ font-size:clamp(28px,4.5vw,44px); line-height:1.05; letter-spacing:-.03em; font-weight:900; max-width:22ch; margin-bottom:36px }
+
+.grid{ display:grid; gap:16px }
+@media (min-width:700px){ .grid--2{ grid-template-columns:1fr 1fr } .grid--3{ grid-template-columns:repeat(3,1fr) } }
+.card{ background:var(--white); border:1px solid var(--line); border-radius:var(--radius); padding:26px }
+.card h3{ font-size:20px; letter-spacing:-.015em; font-weight:800; margin-bottom:8px }
+.card p{ color:var(--muted); font-size:16px }
+.card .ico{ width:44px; height:44px; border-radius:12px; background:var(--ink); color:var(--red); display:grid; place-items:center; margin-bottom:16px }
+.card .ico svg{ width:22px; height:22px }
+
+.steps{ background:var(--ink); color:var(--cream) }
+.steps .card{ background:var(--ink-2); border-color:#2B2B2B }
+.steps .card p{ color:rgba(244,239,230,.7) }
+.num{ font-size:56px; font-weight:900; line-height:1; color:var(--red); letter-spacing:-.04em; margin-bottom:14px }
+
+/* FAQ */
+.faq{ display:grid; gap:10px; max-width:820px }
+details{ background:var(--white); border:1px solid var(--line); border-radius:var(--radius-sm); padding:0 22px }
+summary{ cursor:pointer; list-style:none; padding:20px 0; font-weight:700; font-size:17px; display:flex; justify-content:space-between; gap:16px }
+summary::-webkit-details-marker{ display:none }
+summary::after{ content:"+"; color:var(--red); font-size:24px; line-height:1; font-weight:600; transition:transform .2s }
+details[open] summary::after{ transform:rotate(45deg) }
+details p{ padding:0 0 20px; color:var(--muted) }
+
+/* Form */
+.form-sec{ background:var(--cream-2) }
+.form-box{ display:grid; gap:32px; align-items:start }
+@media (min-width:900px){ .form-box{ grid-template-columns:1fr 1.2fr } }
+.form-intro p{ color:var(--muted); max-width:42ch }
+.form-intro ul{ margin-top:20px; list-style:none; display:grid; gap:8px; font-weight:600 }
+.form-intro li::before{ content:"✓"; color:var(--red); font-weight:900; margin-right:10px }
+form{ background:var(--white); border-radius:var(--radius); padding:26px; border:1px solid var(--line); display:grid; gap:16px }
+.row{ display:grid; gap:16px }
+@media (min-width:620px){ .row{ grid-template-columns:1fr 1fr } }
+label.f{ display:grid; gap:6px; font-size:14px; font-weight:700 }
+label.f small{ font-weight:500; color:var(--muted) }
+input[type=text], input[type=url], input[type=email], input[type=tel], select{
+  font:inherit; font-size:16px; padding:13px 14px; border:1.5px solid var(--line); border-radius:var(--radius-sm); background:var(--cream); color:var(--ink); width:100% }
+input:focus, select:focus{ border-color:var(--ink); outline:none; background:#fff }
+input[aria-invalid=true]{ border-color:var(--red) }
+fieldset{ border:0; display:grid; gap:8px }
+legend{ font-size:14px; font-weight:700; margin-bottom:6px }
+.seg{ display:flex; gap:8px; flex-wrap:wrap }
+.seg label{ display:flex; align-items:center; gap:8px; padding:10px 14px; border:1.5px solid var(--line); border-radius:999px; font-weight:600; font-size:15px; cursor:pointer; background:var(--cream) }
+.seg input{ accent-color:var(--red) }
+.seg label:has(input:checked){ border-color:var(--ink); background:#fff }
+.consent{ display:flex; gap:12px; align-items:flex-start; font-size:14px; color:var(--muted) }
+.consent input{ width:20px; height:20px; flex:none; margin-top:2px; accent-color:var(--red) }
+.legal{ font-size:12.5px; color:var(--muted); background:var(--cream); border-radius:var(--radius-sm); padding:14px 16px; line-height:1.5 }
+.legal strong{ color:var(--ink) }
+.form-note{ font-size:14px; color:var(--muted); min-height:1.4em }
+.form-note.err{ color:var(--red-dark); font-weight:600 }
+.ok{ text-align:center; padding:36px 20px }
+.ok .check{ width:64px; height:64px; border-radius:50%; background:var(--red); color:#fff; display:grid; place-items:center; margin:0 auto 18px; font-size:30px; font-weight:900 }
+.ok h3{ font-size:26px; font-weight:900; letter-spacing:-.02em; margin-bottom:8px }
+.ok p{ color:var(--muted); margin-bottom:20px }
+
+/* Footer */
+footer{ background:var(--ink); color:rgba(244,239,230,.65); padding:36px 0; font-size:14px }
+footer .wrap{ display:flex; flex-wrap:wrap; gap:16px; justify-content:space-between }
+footer a{ text-decoration:none }
+footer a:hover{ color:var(--cream) }
+
+/* Sticky mobile CTA */
+.sticky{ position:fixed; left:12px; right:12px; bottom:12px; z-index:40; display:none }
+.sticky .btn{ width:100%; box-shadow:0 10px 30px rgba(0,0,0,.3) }
+@media (max-width:899px){ .sticky.show{ display:block } }
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <a class="logo" href="../" aria-label="MK Stays, ir a la web principal">
+      <svg viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="14" fill="#1A1A1A"/><path d="M14 29 32 16l18 13" fill="none" stroke="#FF3B1F" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/><text x="32" y="51" text-anchor="middle" font-family="Archivo,Arial,sans-serif" font-weight="800" font-size="22" fill="#F4EFE6">MK</text></svg>
+      <span>MK <b>Stays</b></span>
+    </a>
+    <a class="link" href="#formulario">Pedir auditoría →</a>
+  </div>
+</header>
+
+<main>
+  <!-- HERO -->
+  <section class="hero" aria-labelledby="h1">
+    <div class="wrap">
+      <div>
+        <span class="tag">Auditoría de precios · Gratis</span>
+        <h1 id="h1">¿Cuánto dinero se te queda <em>en el calendario</em>?</h1>
+        <p class="lead">Revisamos gratis los precios de tu alojamiento turístico y te decimos, con ejemplos de tu propio calendario, dónde estás cobrando de menos, dónde estás perdiendo reservas y qué cambiarías primero.</p>
+        <div class="hero__cta">
+          <a class="btn" href="#formulario">Quiero mi auditoría gratis</a>
+          <a class="btn btn--ghost" href="#como-funciona">Cómo funciona</a>
+        </div>
+        <p class="hero__note">Sin compromiso. No necesitamos tus contraseñas: nos basta el enlace de tu anuncio.</p>
+      </div>
+      <aside class="ticket" aria-label="Qué revisamos">
+        <h2>Lo que revisamos</h2>
+        <ul>
+          <li><span>1</span>Precio por noche frente a alojamientos parecidos de tu zona</li>
+          <li><span>2</span>Diferencia entre semana, fines de semana y temporada alta</li>
+          <li><span>3</span>Estancia mínima y noches sueltas entre reservas</li>
+          <li><span>4</span>Descuentos semanales, de última hora y de antelación</li>
+          <li><span>5</span>Fechas clave (puentes, festivos, eventos) con el precio mal ajustado</li>
+        </ul>
+      </aside>
+    </div>
+  </section>
+
+  <!-- BENEFICIOS -->
+  <section aria-labelledby="ben">
+    <div class="wrap">
+      <p class="kicker">Qué te llevas</p>
+      <h2 class="title" id="ben">Un diagnóstico claro, no un informe que nadie lee</h2>
+      <div class="grid grid--2">
+        <article class="card">
+          <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3v18h18"/><path d="m7 15 4-4 3 3 5-6"/></svg></div>
+          <h3>Sabes si estás caro o barato</h3>
+          <p>Comparamos tu precio con alojamientos parecidos de tu zona en las mismas fechas, para que dejes de poner precios a ojo.</p>
+        </article>
+        <article class="card">
+          <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg></div>
+          <h3>Detectas las noches que pierdes</h3>
+          <p>Señalamos las noches sueltas entre reservas y las fechas que se quedan vacías por una estancia mínima o un precio mal ajustado.</p>
+        </article>
+        <article class="card">
+          <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></div>
+          <h3>Tienes una lista de cambios</h3>
+          <p>Te damos las mejoras ordenadas por prioridad, explicadas en lenguaje normal, para que puedas aplicarlas tú mismo hoy.</p>
+        </article>
+        <article class="card">
+          <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+          <h3>Sin letra pequeña</h3>
+          <p>Es gratis y no te obliga a nada. Si después quieres que lo llevemos nosotros, lo hablamos; si no, la auditoría es tuya igualmente.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- CÓMO FUNCIONA -->
+  <section class="steps" id="como-funciona" aria-labelledby="how">
+    <div class="wrap">
+      <p class="kicker">Cómo funciona</p>
+      <h2 class="title" id="how">Tres pasos y tú no tienes que preparar nada</h2>
+      <div class="grid grid--3">
+        <article class="card">
+          <div class="num">01</div>
+          <h3>Nos mandas tu anuncio</h3>
+          <p>Rellenas el formulario de abajo con el enlace de tu anuncio en Airbnb, Booking o tu web. Te lleva un minuto.</p>
+        </article>
+        <article class="card">
+          <div class="num">02</div>
+          <h3>Analizamos tus precios</h3>
+          <p>Revisamos tu calendario de los próximos meses y lo comparamos con la competencia real de tu zona.</p>
+        </article>
+        <article class="card">
+          <div class="num">03</div>
+          <h3>Te lo explicamos</h3>
+          <p>Te enviamos la auditoría por WhatsApp o email, con capturas y los cambios concretos que haríamos. Si quieres, lo repasamos en una llamada corta.</p>
+        </article>
+      </div>
+      <div style="margin-top:32px"><a class="btn" href="#formulario">Empezar ahora</a></div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section aria-labelledby="faq">
+    <div class="wrap">
+      <p class="kicker">Preguntas frecuentes</p>
+      <h2 class="title" id="faq">Lo que suelen preguntarnos</h2>
+      <div class="faq">
+        <details>
+          <summary>¿De verdad es gratis? ¿Dónde está la trampa?</summary>
+          <p>Es gratis. Lo hacemos porque es la mejor forma de que veas cómo trabajamos. Al final te contaremos qué podríamos hacer por ti, pero no tienes ninguna obligación de contratar nada.</p>
+        </details>
+        <details>
+          <summary>¿Necesitáis acceso a mi cuenta de Airbnb o Booking?</summary>
+          <p>No. Trabajamos con la información pública de tu anuncio y de tu calendario. Nunca te pediremos contraseñas.</p>
+        </details>
+        <details>
+          <summary>¿Cuánto tardáis en enviármela?</summary>
+          <p>Normalmente en 48 horas laborables desde que recibimos tu solicitud. Si tenemos mucha demanda, te avisamos.</p>
+        </details>
+        <details>
+          <summary>¿Sirve si solo tengo un apartamento?</summary>
+          <p>Sí. La auditoría está pensada sobre todo para propietarios con uno o pocos alojamientos que gestionan los precios ellos mismos.</p>
+        </details>
+        <details>
+          <summary>¿Qué zonas cubrís?</summary>
+          <p>Cualquier zona de España. Comparamos tu alojamiento con los de tu misma zona, así que da igual que estés en la costa, en una ciudad o en un pueblo.</p>
+        </details>
+        <details>
+          <summary>¿Y si ya uso una herramienta de precios dinámicos?</summary>
+          <p>También te sirve. Muchas veces la herramienta está bien, pero la configuración (precio base, mínimos, estancias, descuentos) no. Revisamos el resultado que ven tus huéspedes.</p>
+        </details>
+        <details>
+          <summary>¿Qué hacéis con mis datos?</summary>
+          <p>Solo los usamos para preparar tu auditoría y contactarte sobre ella. No los vendemos ni los cedemos. Tienes la información completa junto al formulario.</p>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <!-- FORMULARIO -->
+  <section class="form-sec" id="formulario" aria-labelledby="formTitle">
+    <div class="wrap form-box">
+      <div class="form-intro">
+        <p class="kicker">Auditoría gratis</p>
+        <h2 class="title" id="formTitle" style="margin-bottom:16px">Pide tu auditoría de precios</h2>
+        <p>Cuéntanos qué alojamiento tienes y dónde. Con el enlace del anuncio nos basta para empezar.</p>
+        <ul>
+          <li>Gratis y sin compromiso</li>
+          <li>Sin contraseñas ni accesos</li>
+          <li>Te respondemos por WhatsApp o email</li>
+        </ul>
+      </div>
+
+      <div>
+        <form id="auditForm" novalidate>
+          <input type="text" name="_honey" class="sr-only" tabindex="-1" autocomplete="off" aria-hidden="true" />
+          <div class="row">
+            <label class="f">Nombre
+              <input type="text" name="nombre" required autocomplete="given-name" placeholder="Tu nombre" />
+            </label>
+            <label class="f">Alojamiento <small>Nombre o tipo</small>
+              <input type="text" name="alojamiento" required placeholder="Ej.: Apartamento 2 hab. con terraza" />
+            </label>
+          </div>
+          <label class="f">Zona <small>Municipio o barrio</small>
+            <input type="text" name="zona" required placeholder="Ej.: L'Escala, Girona" />
+          </label>
+          <label class="f">Enlace del anuncio <small>Airbnb, Booking, Vrbo o tu web</small>
+            <input type="url" name="anuncio" required inputmode="url" placeholder="https://www.airbnb.es/rooms/…" />
+          </label>
+          <fieldset>
+            <legend>¿Cómo prefieres que te contactemos?</legend>
+            <div class="seg">
+              <label><input type="radio" name="via" value="whatsapp" checked /> WhatsApp</label>
+              <label><input type="radio" name="via" value="email" /> Email</label>
+            </div>
+          </fieldset>
+          <label class="f" id="fWa">WhatsApp <small>Con prefijo si no es español</small>
+            <input type="tel" name="whatsapp" autocomplete="tel" inputmode="tel" placeholder="+34 600 000 000" />
+          </label>
+          <label class="f" id="fEmail" hidden>Email
+            <input type="email" name="email" autocomplete="email" placeholder="tu@email.com" />
+          </label>
+
+          <div class="legal" id="rgpd">
+            <strong>Información básica sobre protección de datos.</strong>
+            <strong>Responsable:</strong> <span data-legal="titular">[NOMBRE Y NIF/CIF DEL TITULAR]</span> (MK Stays).
+            <strong>Finalidad:</strong> preparar y enviarte la auditoría de precios solicitada y contactarte sobre ella.
+            <strong>Legitimación:</strong> tu consentimiento.
+            <strong>Destinatarios:</strong> no se ceden datos a terceros, salvo obligación legal; el envío del formulario se gestiona mediante el proveedor FormSubmit.
+            <strong>Conservación:</strong> el tiempo necesario para atender tu solicitud y, como máximo, 12 meses si no llegamos a trabajar juntos.
+            <strong>Derechos:</strong> puedes acceder, rectificar, suprimir y oponerte al tratamiento escribiendo a <a href="mailto:mkinversionesco@gmail.com">mkinversionesco@gmail.com</a>, y reclamar ante la Agencia Española de Protección de Datos (aepd.es).
+          </div>
+
+          <label class="consent">
+            <input type="checkbox" name="consentimiento" value="sí" required />
+            <span>He leído la información sobre protección de datos y acepto que MK Stays trate mis datos para preparar mi auditoría y contactarme sobre ella.</span>
+          </label>
+
+          <p class="form-note" id="formNote" aria-live="polite"></p>
+          <button class="btn" type="submit" id="sendBtn">Enviar y recibir mi auditoría</button>
+        </form>
+
+        <div class="card ok" id="okBox" hidden tabindex="-1">
+          <div class="check" aria-hidden="true">✓</div>
+          <h3>¡Recibido!</h3>
+          <p>Ya tenemos tu anuncio. Te enviaremos la auditoría en un plazo aproximado de 48 horas laborables.</p>
+          <a class="btn" id="waBtn" href="#" target="_blank" rel="noopener" hidden>Escríbenos por WhatsApp</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>© <span id="yr"></span> MK Stays · Marketing para alojamientos turísticos</span>
+    <span><a href="../">Web</a> · <a href="https://www.instagram.com/mkstays.agency/" target="_blank" rel="noopener">Instagram</a> · <a href="#rgpd">Protección de datos</a></span>
+  </div>
+</footer>
+
+<div class="sticky" id="sticky"><a class="btn" href="#formulario">Quiero mi auditoría gratis</a></div>
+
+<script>
+(function(){
+  /* Igual que en la web principal: aquí llegan las solicitudes (vía FormSubmit) */
+  var CONTACT = { email: 'mkinversionesco@gmail.com', whatsapp: '34644977487' };
+
+  var form = document.getElementById('auditForm');
+  var note = document.getElementById('formNote');
+  var btn = document.getElementById('sendBtn');
+  var fWa = document.getElementById('fWa'), fEmail = document.getElementById('fEmail');
+  var waIn = form.whatsapp, emIn = form.email;
+  document.getElementById('yr').textContent = new Date().getFullYear();
+
+  function syncVia(){
+    var via = form.querySelector('input[name=via]:checked').value;
+    fWa.hidden = via !== 'whatsapp'; fEmail.hidden = via !== 'email';
+  }
+  form.querySelectorAll('input[name=via]').forEach(function(r){ r.addEventListener('change', syncVia) });
+  syncVia();
+
+  function err(msg, el){
+    note.textContent = msg; note.className = 'form-note err';
+    if (el){ el.setAttribute('aria-invalid','true'); el.focus(); }
+  }
+  form.addEventListener('input', function(e){ e.target.removeAttribute('aria-invalid') });
+
+  function validate(){
+    var fields = [['nombre','Escribe tu nombre.'],['alojamiento','Dinos qué alojamiento tienes.'],['zona','Indica la zona del alojamiento.']];
+    for (var i=0;i<fields.length;i++){
+      var el = form[fields[i][0]];
+      if (!el.value.trim()) return err(fields[i][1], el), false;
+    }
+    var url = form.anuncio.value.trim();
+    if (!/^https?:\/\/\S+\.\S+/.test(url)) return err('Pega el enlace completo de tu anuncio (empieza por https://).', form.anuncio), false;
+    var via = form.querySelector('input[name=via]:checked').value;
+    if (via === 'whatsapp' && waIn.value.replace(/\D/g,'').length < 9) return err('Escribe un número de WhatsApp válido.', waIn), false;
+    if (via === 'email' && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(emIn.value.trim())) return err('Escribe un email válido.', emIn), false;
+    if (!form.consentimiento.checked) return err('Necesitamos tu consentimiento para poder preparar la auditoría.', form.consentimiento), false;
+    return true;
+  }
+
+  var sending = false;
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+    if (sending || form._honey.value) return;
+    note.textContent = ''; note.className = 'form-note';
+    if (!validate()) return;
+    var via = form.querySelector('input[name=via]:checked').value;
+    var contacto = via === 'whatsapp' ? waIn.value.trim() : emIn.value.trim();
+    var payload = {
+      Nombre: form.nombre.value.trim(),
+      Alojamiento: form.alojamiento.value.trim(),
+      Zona: form.zona.value.trim(),
+      Anuncio: form.anuncio.value.trim(),
+      'Contacto preferido': via === 'whatsapp' ? 'WhatsApp' : 'Email',
+      Contacto: contacto,
+      'Consentimiento RGPD': 'Sí, ' + new Date().toISOString(),
+      Origen: 'Landing auditoría gratis' + (location.search ? ' ' + location.search : ''),
+      _subject: 'Nueva auditoría gratis · ' + form.zona.value.trim(),
+      _template: 'table', _captcha: 'false'
+    };
+    if (via === 'email') payload._replyto = contacto;
+
+    sending = true; btn.disabled = true; btn.textContent = 'Enviando…';
+    fetch('https://formsubmit.co/ajax/' + CONTACT.email, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+      body: JSON.stringify(payload)
+    }).then(function(res){
+      return res.json().catch(function(){ return {} }).then(function(j){
+        if (!res.ok || String(j.success) !== 'true') throw new Error(j.message || ('HTTP ' + res.status));
+      });
+    }).then(function(){
+      form.hidden = true;
+      var ok = document.getElementById('okBox'); ok.hidden = false; ok.focus();
+      var wa = document.getElementById('waBtn');
+      wa.href = 'https://wa.me/' + CONTACT.whatsapp + '?text=' + encodeURIComponent('Hola, soy ' + payload.Nombre + '. Acabo de pedir la auditoría de precios gratis para mi alojamiento en ' + payload.Zona + ': ' + payload.Anuncio);
+      wa.hidden = false;
+      if (window.gtag) gtag('event', 'generate_lead', { form: 'auditoria' });
+    }).catch(function(e2){
+      console.error(e2);
+      err('No se pudo enviar. Inténtalo de nuevo o escríbenos por WhatsApp al +34 644 97 74 87.');
+    }).finally(function(){
+      sending = false; btn.disabled = false; btn.textContent = 'Enviar y recibir mi auditoría';
+    });
+  });
+
+  /* CTA fijo en móvil: visible fuera del hero y del formulario */
+  var sticky = document.getElementById('sticky');
+  if ('IntersectionObserver' in window){
+    var hero = document.querySelector('.hero'), fs = document.getElementById('formulario');
+    var vis = { hero:true, form:false };
+    var io = new IntersectionObserver(function(es){
+      es.forEach(function(x){ vis[x.target === hero ? 'hero' : 'form'] = x.isIntersecting });
+      sticky.classList.toggle('show', !vis.hero && !vis.form);
+    });
+    io.observe(hero); io.observe(fs);
+  }
+})();
+</script>
+</body>
+</html>
