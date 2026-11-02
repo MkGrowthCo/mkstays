@@ -83,6 +83,27 @@ h2.title{ font-size:clamp(28px,4.5vw,44px); line-height:1.05; letter-spacing:-.0
 .steps .card p{ color:rgba(244,239,230,.7) }
 .num{ font-size:56px; font-weight:900; line-height:1; color:var(--red); letter-spacing:-.04em; margin-bottom:14px }
 
+.intro{ color:var(--muted); max-width:62ch; margin:-20px 0 32px; font-size:17.5px }
+.steps .intro{ color:rgba(244,239,230,.72) }
+.card ul.mini{ list-style:none; margin-top:14px; display:grid; gap:6px; font-size:15px; color:var(--muted) }
+.card ul.mini li::before{ content:"→"; color:var(--red); font-weight:800; margin-right:8px }
+.steps .card ul.mini{ color:rgba(244,239,230,.7) }
+.when{ display:inline-block; margin-top:14px; font-size:13px; font-weight:700; text-transform:uppercase; letter-spacing:.06em; color:var(--red) }
+
+/* Banda de resultado */
+.band{ background:var(--red); color:var(--white); padding:44px 0 }
+.band .wrap{ display:grid; gap:24px; align-items:center }
+@media (min-width:900px){ .band .wrap{ grid-template-columns:auto 1fr; gap:48px } }
+.big{ font-size:clamp(64px,11vw,120px); font-weight:900; letter-spacing:-.05em; line-height:.9 }
+.band h2{ font-size:clamp(22px,3vw,30px); font-weight:800; letter-spacing:-.02em; line-height:1.15; margin-bottom:10px }
+.band p{ color:rgba(255,255,255,.9); max-width:60ch }
+.band small{ display:block; margin-top:12px; font-size:13px; color:rgba(255,255,255,.8) }
+.levers{ display:grid; gap:12px; margin-top:8px }
+@media (min-width:700px){ .levers{ grid-template-columns:repeat(3,1fr) } }
+.lever{ border-top:3px solid var(--ink); padding-top:14px }
+.lever b{ display:block; font-size:18px; margin-bottom:4px }
+.lever span{ color:var(--muted); font-size:15.5px }
+
 /* FAQ */
 .faq{ display:grid; gap:10px; max-width:820px }
 details{ background:var(--white); border:1px solid var(--line); border-radius:var(--radius-sm); padding:0 22px }
@@ -156,7 +177,7 @@ footer a:hover{ color:var(--cream) }
       <div>
         <span class="tag">Auditoría de precios · Gratis</span>
         <h1 id="h1">¿Cuánto dinero se te queda <em>en el calendario</em>?</h1>
-        <p class="lead">Revisamos gratis los precios de tu alojamiento turístico y te decimos, con ejemplos de tu propio calendario, dónde estás cobrando de menos, dónde estás perdiendo reservas y qué cambiarías primero.</p>
+        <p class="lead">Analizamos gratis la estrategia de precios de tu alojamiento turístico y te entregamos un diagnóstico con ejemplos de tu propio calendario: dónde estás cobrando de menos, qué noches se te quedan vacías y qué cambios aplicaríamos primero para subir tus ingresos. Nuestro objetivo es una mejora media del 20&nbsp;%.</p>
         <div class="hero__cta">
           <a class="btn" href="#formulario">Quiero mi auditoría gratis</a>
           <a class="btn btn--ghost" href="#como-funciona">Cómo funciona</a>
@@ -176,32 +197,59 @@ footer a:hover{ color:var(--cream) }
     </div>
   </section>
 
+  <!-- RESULTADO -->
+  <section class="band" aria-labelledby="res">
+    <div class="wrap">
+      <div class="big" aria-hidden="true">+20&nbsp;%</div>
+      <div>
+        <h2 id="res">Nuestro objetivo: que tu alojamiento facture de media un 20&nbsp;% más</h2>
+        <p>No se consigue subiendo precios a lo loco, sino cobrando lo justo cada noche: más caro cuando hay demanda, más flexible cuando el calendario se queda vacío y sin noches sueltas que nadie reserva. La auditoría te dice cuánto margen tienes tú.</p>
+        <small>* Es la mejora media que buscamos al ajustar la estrategia de precios, no una garantía. El resultado depende de la zona, la temporada, el tipo de alojamiento y de cómo esté configurado hoy.</small>
+      </div>
+    </div>
+  </section>
+
   <!-- BENEFICIOS -->
   <section aria-labelledby="ben">
     <div class="wrap">
       <p class="kicker">Qué te llevas</p>
       <h2 class="title" id="ben">Un diagnóstico claro, no un informe que nadie lee</h2>
+      <p class="intro">La auditoría es un documento corto y práctico. Cada punto viene con un ejemplo real de tu calendario y la acción concreta que recomendamos, para que sepas qué hacer y por qué.</p>
       <div class="grid grid--2">
         <article class="card">
           <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3v18h18"/><path d="m7 15 4-4 3 3 5-6"/></svg></div>
           <h3>Sabes si estás caro o barato</h3>
-          <p>Comparamos tu precio con alojamientos parecidos de tu zona en las mismas fechas, para que dejes de poner precios a ojo.</p>
+          <p>Comparamos tu precio por noche con alojamientos de características parecidas (capacidad, ubicación y valoraciones) en tu zona y en las mismas fechas. Así ves con datos si te estás quedando por debajo del mercado o si un precio demasiado alto te está frenando las reservas.</p>
         </article>
         <article class="card">
           <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg></div>
           <h3>Detectas las noches que pierdes</h3>
-          <p>Señalamos las noches sueltas entre reservas y las fechas que se quedan vacías por una estancia mínima o un precio mal ajustado.</p>
+          <p>Localizamos las noches sueltas entre reservas, los huecos que crea una estancia mínima demasiado rígida y las fechas de alta demanda (puentes, festivos, eventos locales) que tienes al mismo precio que un martes cualquiera.</p>
         </article>
         <article class="card">
           <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></div>
-          <h3>Tienes una lista de cambios</h3>
-          <p>Te damos las mejoras ordenadas por prioridad, explicadas en lenguaje normal, para que puedas aplicarlas tú mismo hoy.</p>
+          <h3>Tienes un plan de acción priorizado</h3>
+          <p>Ordenamos los cambios de mayor a menor impacto y te los explicamos sin tecnicismos: qué tocar, en qué pantalla de Airbnb o Booking y qué esperar. Puedes aplicarlos tú mismo el mismo día.</p>
         </article>
         <article class="card">
           <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
           <h3>Sin letra pequeña</h3>
-          <p>Es gratis y no te obliga a nada. Si después quieres que lo llevemos nosotros, lo hablamos; si no, la auditoría es tuya igualmente.</p>
+          <p>Es gratis y no te compromete a nada. Si después quieres que nos encarguemos nosotros de los precios, lo hablamos; si no, la auditoría es tuya igualmente y puedes usarla como quieras.</p>
         </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- CÓMO SE CONSIGUE LA MEJORA -->
+  <section style="padding-top:0" aria-labelledby="pal">
+    <div class="wrap">
+      <p class="kicker">De dónde sale la mejora</p>
+      <h2 class="title" id="pal">Tres palancas que casi nadie ajusta bien</h2>
+      <p class="intro">La mayoría de propietarios fija un precio al principio de temporada y no lo vuelve a tocar. Ahí es donde se escapa el dinero. Trabajamos sobre tres palancas:</p>
+      <div class="levers">
+        <div class="lever"><b>Precio por fecha</b><span>Subir en las noches con más demanda y ajustar en las flojas, en lugar de un precio fijo para todo el mes.</span></div>
+        <div class="lever"><b>Reglas del calendario</b><span>Estancia mínima, noches sueltas y antelación configuradas para llenar huecos sin regalar las fechas buenas.</span></div>
+        <div class="lever"><b>Descuentos con cabeza</b><span>Descuentos semanales, de última hora y de antelación solo donde ayudan a ocupar, no por defecto.</span></div>
       </div>
     </div>
   </section>
@@ -211,21 +259,30 @@ footer a:hover{ color:var(--cream) }
     <div class="wrap">
       <p class="kicker">Cómo funciona</p>
       <h2 class="title" id="how">Tres pasos y tú no tienes que preparar nada</h2>
+      <p class="intro">No hace falta que nos des accesos ni que rellenes hojas de cálculo. Trabajamos con lo que ven tus huéspedes.</p>
       <div class="grid grid--3">
         <article class="card">
           <div class="num">01</div>
           <h3>Nos mandas tu anuncio</h3>
-          <p>Rellenas el formulario de abajo con el enlace de tu anuncio en Airbnb, Booking o tu web. Te lleva un minuto.</p>
+          <p>Rellenas el formulario con el enlace de tu anuncio en Airbnb, Booking, Vrbo o tu propia web, y nos dices cómo prefieres que te contactemos.</p>
+          <span class="when">Tú · 1 minuto</span>
         </article>
         <article class="card">
           <div class="num">02</div>
           <h3>Analizamos tus precios</h3>
           <p>Revisamos tu calendario de los próximos meses y lo comparamos con la competencia real de tu zona.</p>
+          <ul class="mini">
+            <li>Precio por noche frente al mercado</li>
+            <li>Ocupación y huecos del calendario</li>
+            <li>Estancias mínimas y descuentos</li>
+          </ul>
+          <span class="when">Nosotros · ~48 h laborables</span>
         </article>
         <article class="card">
           <div class="num">03</div>
           <h3>Te lo explicamos</h3>
-          <p>Te enviamos la auditoría por WhatsApp o email, con capturas y los cambios concretos que haríamos. Si quieres, lo repasamos en una llamada corta.</p>
+          <p>Te enviamos la auditoría por WhatsApp o email, con capturas y los cambios concretos que haríamos, ordenados por impacto. Si quieres, lo repasamos juntos en una llamada corta.</p>
+          <span class="when">Juntos · 15 minutos, opcional</span>
         </article>
       </div>
       <div style="margin-top:32px"><a class="btn" href="#formulario">Empezar ahora</a></div>
@@ -241,6 +298,10 @@ footer a:hover{ color:var(--cream) }
         <details>
           <summary>¿De verdad es gratis? ¿Dónde está la trampa?</summary>
           <p>Es gratis. Lo hacemos porque es la mejor forma de que veas cómo trabajamos. Al final te contaremos qué podríamos hacer por ti, pero no tienes ninguna obligación de contratar nada.</p>
+        </details>
+        <details>
+          <summary>¿Qué significa el «+20&nbsp;% de media»?</summary>
+          <p>Es la mejora de ingresos que nos marcamos como objetivo al optimizar la estrategia de precios de un alojamiento. No es una promesa: cada caso parte de un punto distinto. En la auditoría te damos una estimación para tu alojamiento concreto, basada en tu calendario y en los precios de tu zona.</p>
         </details>
         <details>
           <summary>¿Necesitáis acceso a mi cuenta de Airbnb o Booking?</summary>
